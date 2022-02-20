@@ -1,23 +1,11 @@
 import ky, { Options } from "ky";
-import AppConfig, { AppEnv } from "./config";
 
 const joinOptions = (
   options: (Options | undefined)[]
 ): Options => {
   const incomingOptions = Object.assign({}, ...options) as Options;
-  const customHeaders = {
-    "user_client_id": "null"
-  };
-  const id = AppConfig.env === AppEnv.DEV ? "sample-id" : window.localStorage.getItem("user_client_id");
-  if (id) {
-    customHeaders["user_client_id"] = id;
-  }
-  const customOptions: Options = {
-    headers: customHeaders
-  };
   return {
     ...incomingOptions,
-    ...customOptions,
   };
 }
 
