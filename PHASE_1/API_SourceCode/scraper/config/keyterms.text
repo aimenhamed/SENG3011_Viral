@@ -1,0 +1,13 @@
+https://www.who.int/emergencies/disease-outbreak-news/
+
+
+ITEM: a.sf-list-vertical__item
+    DATE    (div.sf-list-vertical__date).span
+    TITLE   h4.sf-list-vertical__title
+
+
+https://www.who.int/emergencies/disease-outbreak-news/item/2021-DON351 
+
+TITLE: div.sf-item-header-wrapper .h1
+DATE    span.timestamp
+ARTICLE article.sf-detail-body-wrapper

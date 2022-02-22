@@ -1,7 +1,4 @@
-.idea/
-.vscode/
-node_modules/
-build/
-tmp/
-temp/
-dist/*
+/__pycache__
+
+src/WHODON_scraper/__pycache__
+src/WHODON_scraper/spiders/__pycache__
