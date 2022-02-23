@@ -1,0 +1,34 @@
+name: ci
+
+on:
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  ui-ci:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./PHASE_2/Application_SourceCode
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 16
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run test
+  api-ci:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./PHASE_1/API_SourceCode
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 16
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run test
