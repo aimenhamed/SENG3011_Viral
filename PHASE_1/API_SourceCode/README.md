@@ -1,4 +1,4 @@
-# api-template
+# viral-api
 
 ## Local development
 
@@ -21,8 +21,8 @@ Test Docker build locally:
 
 ```
 npm install && npm run build
-docker build -t api-template .
-docker run -p 3030:3030 api-template
+docker build -t viral-api .
+docker run -p 3030:3030 viral-api
 ```
 
 ## Running
