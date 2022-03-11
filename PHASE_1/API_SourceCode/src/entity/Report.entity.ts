@@ -7,7 +7,7 @@ import {
 } from "typeorm";
 import { ArticleEntity } from "./Article.entity";
 
-@Entity({ name: "report", schema: "viral" })
+@Entity({ name: "report", schema: "public" })
 export class ReportEntity {
   @PrimaryGeneratedColumn("uuid", { name: "report_id" })
   reportId: string;
@@ -16,8 +16,16 @@ export class ReportEntity {
   @JoinColumn({ name: "article_id" })
   article: ArticleEntity;
 
-  @Column("text", { name: "location", nullable: false })
-  location: string;
+  @Column("uuid", { name: "article_id", nullable: false })
+  articleId: string;
+
+  @Column("text", {
+    array: true,
+    name: "locations",
+    nullable: false,
+    default: () => "array[]::text[]",
+  })
+  locations: string[];
 
   @Column("text", { name: "event_date", nullable: false })
   eventDate: string;
