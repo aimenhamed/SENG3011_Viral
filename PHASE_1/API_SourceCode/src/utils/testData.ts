@@ -1,4 +1,5 @@
 import { Article } from "IArticle";
+import { Report } from "IReport";
 import mockArticles from "./data/small.json";
 
 export const getMockArticles = (): Article[] => {
@@ -24,5 +25,28 @@ export const getMockArticles = (): Article[] => {
       mainText: mockArticles[2].Content,
       reports: [],
     },
+  ];
+};
+
+export const getMockReports = (): Report[] => {
+  return [
+    {
+    diseases: [mockArticles[0]["Title"].split(" - ")[0]],
+    syndromes: [],
+    eventDate: mockArticles[0]["Date of publication"],
+    location: mockArticles[0]["Title"].split(" - ")[1],
+    },
+    {
+    diseases: [mockArticles[1]["Title"].split(" - ")[0]],
+    syndromes: [],
+    eventDate: mockArticles[1]["Date of publication"],
+    location: mockArticles[1]["Title"].split(" - ")[1],
+    },
+    {
+    diseases: [mockArticles[2]["Title"].split(" - ")[0]],
+    syndromes: [],
+    eventDate: mockArticles[2]["Date of publication"],
+    location: mockArticles[2]["Title"].split(" - ")[1],
+    }
   ];
 };

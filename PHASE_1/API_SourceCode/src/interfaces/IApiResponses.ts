@@ -1,4 +1,5 @@
 import { Article } from "IArticle";
+import { Report } from "IReport";
 
 export interface IHttpError {
   errorCode: number;
@@ -16,4 +17,8 @@ export interface IPostNameSuccessResponse {
 
 export interface IArticlesDumpSuccessResponse {
   articles: Article[];
+}
+
+export interface IReportsDumpSuccessResponse {
+  reports: Report[];
 }
