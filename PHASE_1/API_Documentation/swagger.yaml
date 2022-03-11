@@ -3,6 +3,9 @@ info:
   description: "This is the documentation for the interfaces and routes to the Viral API. https://github.com/aimenhamed/SENG3011_Viral"
   version: "1.0.0"
   title: "Viral API"
+servers:
+  - url: https://teamviral-api.herokuapp.com/api/v1/
+    description: Production server (uses live data)
 tags:
   - name: "Articles"
     description: "Everything related to articles"
@@ -23,20 +26,25 @@ paths:
           schema:
             $ref: "#/components/schemas/Period"
           required: true
+          example: '{"start":"2009-09-23","end":"2021-09-24"}'
+            
         - in: header
           name: location
           description: The location of where the cases were reported.
           schema:
             type: string
           required: true
+          example: '"India"'
         - in: header
           name: key_terms
           description: Key search terms that our database can query.
           schema:
-            type: "array"
+            type: "string"
             items:
               type: "string"
           required: true
+          example: '["nipha virus", "Encephalitis"]'
+        
       responses:
         "200":
           description: "Successful response"
@@ -187,7 +195,7 @@ components:
                 example: "Bad request"
   schemas:
     Period:
-      type: "object"
+      type: "string"
       properties:
         start:
           type: "string"
@@ -200,6 +208,8 @@ components:
     Report:
       type: "object"
       properties:
+        reportId:
+          type: "string"
         diseases:
           type: "array"
           items:
@@ -210,18 +220,22 @@ components:
             type: "string"
         eventDate:
           type: "string"
-        location:
-          type: "string"
+        locations:
+          type: "array"
+          items:
+            type: "string"
     Article:
       type: "object"
       properties:
+        articleId:
+          type: "string"
         url:
           type: "string"
-        date_of_publication:
+        dateOfPublication:
           type: "string"
         headline:
           type: "string"
-        main_text:
+        mainText:
           type: "string"
         reports:
           type: "array"
