@@ -29,4 +29,4 @@ export interface ISearchRequestHeaders {
   keyTerms: string[];
 }
 
-export interface ISearchSuccessResponse extends IArticlesDumpSuccessResponse {}
+export type ISearchSuccessResponse = IArticlesDumpSuccessResponse;
