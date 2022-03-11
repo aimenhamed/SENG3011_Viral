@@ -3,37 +3,35 @@ info:
   description: "This is the documentation for the interfaces and routes to the Viral API. https://github.com/aimenhamed/SENG3011_Viral"
   version: "1.0.0"
   title: "Viral API"
-  termsOfService: "http://swagger.io/terms/"
-  license:
-    name: "Apache 2.0"
-    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
 tags:
   - name: "Articles"
-    description: "Retrieve articles per a search criteria"
-    externalDocs:
-      description: "Find out more"
-      url: "http://swagger.io"
+    description: "Everything related to articles"
+  - name: "Reports"
+    description: "Everything you need to know about reports"
 paths:
-  /articles:
+  /search:
     get:
       tags:
         - "Articles"
       summary: "Retrieve articles per a search criteria"
       description: "Retrieve articles based on a criteria provided in the request."
-      operationId: "scrapeArticles"
+      operationId: "filterArticles"
       parameters:
         - in: header
           name: period_of_interest
+          description: The period of time to search through which includes the start and end times.
           schema:
             $ref: "#/components/schemas/Period"
           required: true
         - in: header
           name: location
+          description: The location of where the cases were reported.
           schema:
             type: string
           required: true
         - in: header
           name: key_terms
+          description: Key search terms that our database can query.
           schema:
             type: "array"
             items:
@@ -45,13 +43,137 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ApiResponse"
+                type: array
+                items:
+                  $ref: '#/components/schemas/Article'
         "400":
           "$ref": "#/components/responses/BadRequest"
+
+  /articles:
+    get:
+      tags: 
+        - "Articles"
+      summary: "Retrieve a select number of articles"
+      description: "Given query information, returns a list of articles constrained for pagination."
+      operationId: "listArticles"
+      parameters:
+        - name: limit
+          in: query
+          description: "Limit the number of articles on a page"
+          schema:
+            type: integer
+          required: True
+        - name: offset
+          in: query
+          description: "Specifies the page number of the articles to be displayed"
+          schema:
+            type: integer
+          required: True
+      responses:
+        "200":
+          description: "Successful response"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  "$ref": "#/components/schemas/Article"
+        "400":
+          "$ref": "#/components/responses/BadRequest"
+  
+  /articles/dump:
+    get:
+      tags:
+        - "Articles"
+      summary: "Retrieve all articles"
+      description: "Dumps all articles currently stored in the database."
+      operationId: "articlesDump"
+      responses:
+        "200":
+          description: "Successful response"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  "$ref": "#/components/schemas/Article"
+        "400":
+          "$ref": "#/components/responses/BadRequest"
+  
+  /articles/{articleId}:
+    get:
+      tags: 
+        - "Articles"
+      summary: "Retrieves an article matching id"
+      description: "Queries the database for an article with identical id"
+      operationId: "articlesOne"
+      parameters: 
+        - name: articleId
+          in: path
+          description: "a UUID representing the article being queried"
+          schema:
+            type: string
+          required: true
+      responses:
+        "200":
+          description: "Successful response"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  "$ref": "#/components/schemas/Article"
+        "400":
+          "$ref": "#/components/responses/BadRequest"
+  
+  /reports/dump:
+    get:
+      tags:
+        - "Reports"
+      summary: "Retrieve all reports"
+      description: "Dumps all reports currently stored in the database."
+      operationId: "reportDump"
+      responses:
+        "200":
+          description: "Successful response"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  "$ref": "#/components/schemas/Report"
+        "400":
+          "$ref": "#/components/responses/BadRequest"
+  
+  /reports/{reportId}:
+    get:
+      tags:
+        - "Reports"
+      summary: "Retrieve a report matching id"
+      description: "Dumps all reports currently stored in the database."
+      operationId: "reportsOne"
+      parameters:
+        - name: reportId
+          in:           "path"
+          description:  "a UUID representing the report being queried"
+          schema:
+            type:       string
+          required:     true
+      responses:
+        "200":
+          description:  "Successful response"
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  $ref: "#/components/schemas/Report"
+        "400":
+          $ref: "#/components/responses/BadRequest"
 components:
   responses:
     BadRequest:
-      description: "This request was not formed with correct inputs"
+      description: "The request was not formed with correct inputs."
       content:
         application/json:
           schema:
@@ -64,23 +186,17 @@ components:
                 type: "string"
                 example: "Bad request"
   schemas:
-    Location:
+    Period:
       type: "object"
       properties:
-        country:
+        start:
           type: "string"
-          description: "Country of location"
-        location:
+          description: "Start time"
+        end:
           type: "string"
-          description: "Location string"
-        geonames_id:
-          type: "number"
-          description: "Optional for google api"
-        google_id:
-          type: "number"
-          description: "Optional for google api"
+          description: "End time"
       xml:
-        name: "Location"
+        name: "Period"
     Report:
       type: "object"
       properties:
@@ -95,51 +211,19 @@ components:
         eventDate:
           type: "string"
         location:
-          "$ref": "#/components/schemas/Location"
+          type: "string"
     Article:
       type: "object"
       properties:
         url:
           type: "string"
-        publicationDate:
+        date_of_publication:
           type: "string"
         headline:
           type: "string"
-        mainText:
+        main_text:
           type: "string"
         reports:
           type: "array"
           items:
             "$ref": "#/components/schemas/Report"
-    Period:
-      type: "object"
-      properties:
-        start:
-          type: "string"
-          description: "Start time"
-        end:
-          type: "string"
-          description: "End time"
-      xml:
-        name: "Period"
-    ApiRequestBody:
-      type: "object"
-      properties:
-        period_of_interest:
-          "$ref": "#/components/schemas/Period"
-        key_terms:
-          type: "array"
-          items:
-            type: "string"
-        location:
-          type: "string"
-    ApiResponse:
-      type: "object"
-      properties:
-        articles:
-          type: "array"
-          items:
-            "$ref": "#/components/schemas/Article"
-externalDocs:
-  description: "Find out more about Swagger"
-  url: "http://swagger.io"
