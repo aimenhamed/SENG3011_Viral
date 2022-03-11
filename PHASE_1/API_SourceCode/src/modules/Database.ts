@@ -13,12 +13,22 @@ export default class Database {
     const databaseConfig: IDatabaseConfig = config.get("database");
     // add entities below
     await createConnection({
-      name: this.connectionName,
-      entities: [ArticleEntity, ReportEntity],
       ...databaseConfig,
-      username: "postgres",
-      password: "mysecretpassword",
-      database: "mydb",
+      name: this.connectionName,
+      type: "postgres",
+      host: process.env.POSTGRESQL_HOST,
+      port: 5432,
+      username: process.env.POSTGRESQL_USER,
+      password: process.env.POSTGRESQL_PASSWORD,
+      database: process.env.POSTGRESQL_DATABASE,
+      // schema: "public",
+      ssl: true,
+      extra: {
+        ssl: {
+          rejectUnauthorized: false,
+        },
+      },
+      entities: [ArticleEntity, ReportEntity],
     });
     this.logger.info(
       `Started connection with connection name ${this.connectionName}`

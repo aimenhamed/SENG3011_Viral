@@ -7,6 +7,18 @@ export class ArticleRepository {
   }
 
   async getArticle(articleId: string): Promise<ArticleEntity | undefined> {
-    return await getRepository(ArticleEntity).findOne({ articleId });
+    return await getRepository(ArticleEntity).findOne({
+      relations: ["reports"],
+      where: {
+        articleId,
+      },
+    });
+  }
+
+  async getArticlesById(articleIds: string[]): Promise<ArticleEntity[]> {
+    return await getRepository(ArticleEntity)
+      .createQueryBuilder("article")
+      .where("article.article_id = ANY (:articleIds)", { articleIds })
+      .getMany();
   }
 }

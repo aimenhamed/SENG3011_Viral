@@ -5,7 +5,7 @@ import Joi from "@hapi/joi";
 const logger = getLogger();
 
 const validationMiddleware =
-  (schema: Joi.ObjectSchema, property: "body" | "query") =>
+  (schema: Joi.ObjectSchema, property: "body" | "query" | "headers") =>
   (req: Request, res: Response, next: NextFunction): void => {
     const result = schema.validate(req[property]);
     const { error } = result;

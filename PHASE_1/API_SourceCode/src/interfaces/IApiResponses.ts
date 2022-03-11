@@ -5,6 +5,11 @@ export interface IHttpError {
   errorMessage: string;
 }
 
+export interface IPeriodOfInterest {
+  start: string;
+  end: string;
+}
+
 export interface IPostNameRequestBody {
   name: string;
 }
@@ -17,3 +22,11 @@ export interface IPostNameSuccessResponse {
 export interface IArticlesDumpSuccessResponse {
   articles: Article[];
 }
+
+export interface ISearchRequestHeaders {
+  periodOfInterest: IPeriodOfInterest;
+  location: string;
+  keyTerms: string[];
+}
+
+export interface ISearchSuccessResponse extends IArticlesDumpSuccessResponse {}
