@@ -23,4 +23,16 @@ export class ReportRepository {
 
     return reports;
   }
+
+  async getAllReports(): Promise<ReportEntity[]> {
+    return await getRepository(ReportEntity).find();
+  }
+
+  async getReport(reportId: string): Promise<ReportEntity | undefined> {
+    return await getRepository(ReportEntity).findOne({
+      where: {
+        reportId,
+      },
+    });
+  }
 }

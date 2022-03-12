@@ -10,6 +10,8 @@ import { ArticleRouter } from "./api/routes/Article.router";
 import { SearchRouter } from "./api/routes/Search.router";
 import { SearchService } from "./api/services/Search.service";
 import { ReportRepository } from "./repositories/Report.repository";
+import { ReportRouter } from "./api/routes/Report.router";
+import { ReportService } from "./api/services/Report.service";
 
 export default class App {
   readonly logger = getLogger();
@@ -25,18 +27,21 @@ export default class App {
     this.reportRepository,
     this.articleRepository
   );
+  private readonly reportService = new ReportService(this.reportRepository);
 
   constructor() {
     // add routers here .. e.g.
     const nameRouter = new NameRouter(this.nameService);
     const articleRouter = new ArticleRouter(this.articleService);
     const searchRouter = new SearchRouter(this.searchService);
+    const reportRouter = new ReportRouter(this.reportService);
 
     this.ex.addRouters(
       // ... add routers here
       nameRouter,
       articleRouter,
-      searchRouter
+      searchRouter,
+      reportRouter
     );
   }
 

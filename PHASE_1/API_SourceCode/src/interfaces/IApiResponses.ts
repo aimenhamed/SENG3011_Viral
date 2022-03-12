@@ -1,4 +1,5 @@
 import { Article } from "IArticle";
+import { Report } from "IReport";
 
 export interface IHttpError {
   errorCode: number;
@@ -23,6 +24,9 @@ export interface IArticlesDumpSuccessResponse {
   articles: Article[];
 }
 
+export interface IReportsDumpSuccessResponse {
+  reports: Report[];
+}
 export interface ISearchRequestHeaders {
   periodOfInterest: IPeriodOfInterest;
   location: string;
