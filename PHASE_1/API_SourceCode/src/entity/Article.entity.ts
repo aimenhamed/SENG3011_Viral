@@ -1,7 +1,7 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { ReportEntity } from "./Report.entity";
 
-@Entity({ name: "article", schema: "viral" })
+@Entity({ name: "article", schema: "public" })
 export class ArticleEntity {
   @PrimaryGeneratedColumn("uuid", { name: "article_id" })
   articleId: string;
