@@ -12,6 +12,7 @@ import { SearchService } from "./api/services/Search.service";
 import { ReportRepository } from "./repositories/Report.repository";
 import { ReportRouter } from "./api/routes/Report.router";
 import { ReportService } from "./api/services/Report.service";
+import { ReportSpecificRouter } from "./api/routes/ReportSpecific.router";
 
 export default class App {
   readonly logger = getLogger();
@@ -35,13 +36,15 @@ export default class App {
     const articleRouter = new ArticleRouter(this.articleService);
     const searchRouter = new SearchRouter(this.searchService);
     const reportRouter = new ReportRouter(this.reportService);
+    const reportSpecificRouter = new ReportSpecificRouter(this.reportService);
 
     this.ex.addRouters(
       // ... add routers here
       nameRouter,
       articleRouter,
       searchRouter,
-      reportRouter
+      reportRouter,
+      reportSpecificRouter,
     );
   }
 

@@ -1,9 +1,11 @@
 import { getLogger } from "../../utils/Logger";
 import { IReportsDumpSuccessResponse } from "IApiResponses";
+import { IReportSpecificSuccessResponse } from "IApiResponses";
 import { ReportRepository } from "../../repositories/Report.repository";
 import { ReportEntity } from "../../entity/Report.entity";
 import { HTTPError } from "../../utils/Errors";
 import { internalServerError } from "../../utils/Constants";
+import { IReportRequestHeaders } from "IApiResponses";
 
 export class ReportService {
   private logger = getLogger();
@@ -23,4 +25,24 @@ export class ReportService {
     };
     return result;
   }
+
+  async getSpecificReport(
+    reportCriteria: IReportRequestHeaders
+  ): Promise<IReportSpecificSuccessResponse> {
+    const report: ReportEntity = await this.reportRepository.getSpecificReport(
+      reportCriteria.reportId,
+    );
+
+    if (report === undefined) {
+      this.logger.error(`No report found in db`);
+      throw new HTTPError(internalServerError);
+    }
+
+    this.logger.info(`Report found, responding to client`);
+    const result = {
+      report,
+    };
+    return result;
+  }
+
 }

@@ -1,5 +1,6 @@
 import { Article } from "IArticle";
 import { Report } from "IReport";
+import { SignatureHelpTriggerCharacter } from "typescript";
 
 export interface IHttpError {
   errorCode: number;
@@ -24,9 +25,26 @@ export interface IArticlesDumpSuccessResponse {
   articles: Article[];
 }
 
+export interface IArticleSpecificSuccessResponse {
+  article: Article;
+}
+
+export interface IArticleRequestHeaders {
+  articleId: string;
+}
+
 export interface IReportsDumpSuccessResponse {
   reports: Report[];
 }
+
+export interface IReportSpecificSuccessResponse {
+  report: Report;
+}
+
+export interface IReportRequestHeaders {
+  reportId: string;
+}
+
 export interface ISearchRequestHeaders {
   periodOfInterest: IPeriodOfInterest;
   location: string;
