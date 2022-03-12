@@ -35,25 +35,25 @@ export const getMockArticles = (): Article[] => {
 export const getMockReports = (): Report[] => {
   return [
     {
-    reportId: "rep-123",
-    diseases: [mockArticles[0]["Title"].split(" - ")[0]],
-    syndromes: [],
-    eventDate: mockArticles[0]["Date of publication"],
-    locations: [mockArticles[0]["Title"].split(" - ")[1]],
+      reportId: "rep-123",
+      diseases: [mockArticles[0]["Title"].split(" - ")[0]],
+      syndromes: [],
+      eventDate: mockArticles[0]["Date of publication"],
+      locations: [mockArticles[0]["Title"].split(" - ")[1]],
     },
     {
-    reportId: "rep-1234",
-    diseases: [mockArticles[1]["Title"].split(" - ")[0]],
-    syndromes: [],
-    eventDate: mockArticles[1]["Date of publication"],
-    locations: [mockArticles[1]["Title"].split(" - ")[1]],
+      reportId: "rep-1234",
+      diseases: [mockArticles[1]["Title"].split(" - ")[0]],
+      syndromes: [],
+      eventDate: mockArticles[1]["Date of publication"],
+      locations: [mockArticles[1]["Title"].split(" - ")[1]],
     },
     {
       reportId: "rep-12345",
-    diseases: [mockArticles[2]["Title"].split(" - ")[0]],
-    syndromes: [],
-    eventDate: mockArticles[2]["Date of publication"],
-    locations: [mockArticles[2]["Title"].split(" - ")[1]],
-    }
+      diseases: [mockArticles[2]["Title"].split(" - ")[0]],
+      syndromes: [],
+      eventDate: mockArticles[2]["Date of publication"],
+      locations: [mockArticles[2]["Title"].split(" - ")[1]],
+    },
   ];
 };

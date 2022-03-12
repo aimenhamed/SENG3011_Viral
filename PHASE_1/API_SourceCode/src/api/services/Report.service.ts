@@ -6,25 +6,21 @@ import { HTTPError } from "../../utils/Errors";
 import { internalServerError } from "../../utils/Constants";
 
 export class ReportService {
-    private logger = getLogger();
-    constructor(readonly reportRepository : ReportRepository) {}
+  private logger = getLogger();
+  constructor(readonly reportRepository: ReportRepository) {}
 
-    async getAllReports(): Promise<IReportsDumpSuccessResponse | undefined> {
-        const reports: ReportEntity[] =
-            await this.reportRepository.getAllReports();
-        
-        // if no reports in db then error
-        if (reports.length === 0) {
-            this.logger.error(`No reports found in db`);
-            throw new HTTPError(internalServerError);
-        }
+  async getAllReports(): Promise<IReportsDumpSuccessResponse | undefined> {
+    const reports: ReportEntity[] = await this.reportRepository.getAllReports();
 
-        // otherwise return reports
-        this.logger.info(`Reports found, responding to client`);
-        const result = {
-            reports,
-        };
-        return result;
+    if (reports.length === 0) {
+      this.logger.error(`No reports found in db`);
+      throw new HTTPError(internalServerError);
     }
 
+    this.logger.info(`Reports found, responding to client`);
+    const result = {
+      reports,
+    };
+    return result;
+  }
 }
