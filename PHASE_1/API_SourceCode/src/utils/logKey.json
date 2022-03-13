@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "team-viral-api",
+  "private_key_id": "e97e92df2f0a5377cd0d324b40f29d1c648eab73",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDtFKtnYNlKYxBW\nUHajb4dRNBV1WPHLMwGA1mCcOP59aQYd51y2I6q/UDugL+NHEP26RLXkcsKte6SA\nzRBUaW4Y3fg7A0jIg/fN4gIyWm5A5fmyYU6NFXDibwrrBbO9yT/2flamErrjnEMf\nYWuJ9vxwQmF2uJ5v1gjvhH3Ug+7iINivfkODOnWno12vqHyrhf4C7IHJvoysVJrM\nXY/gtuLhkTOcgRjihx28MQftnG8RHhEI0BnHCj2hE74JddIsEGCGL26/hU6UbGJp\nTDwJU3mCQdZ29OcKN512Rm0jaUS9j3YwxaY4LFt+9tFs+CLuvSm2ZFUA5NMTc3qW\n8mvrbPd/AgMBAAECggEAIadYeXFHBwcu74G2hZa0V7OUBDdfA2A3K2nDBwoUHgtF\nggMwpu5DM6sY+7Ewiwr/aWyNgWNE/Ula3am+Uq0workHnqDluQj6qTAW7bzmf7Hl\nkwu7Ec3kW1A19Yy2qg8iVEQ02pg4DU1GPfMfR9NWnDzgBvFIFEoGtLFTB1K/GzwW\ndH054+ipCugzyPHBkrMZkhEYjs2QhxGbV93df45v6G3/El7JHynbw4XjtOLiqv+U\nim7aTySnfLQn6Bj0p2Al5KfWpvFk7YA9PyjNJEjesFZ3eaPRHj635TUI0AVn64J3\nIMUOvumt5RH80dVfGepsQnHK776P8bjoGiFAFtdgKQKBgQD4IPmoAaVpnQKnQXLO\nxTVgbCMubgvWCq0wxgq5FAI+h+TC4qfkvhAL81wip0sdDX/F6APTywHv13AVMUqw\nSeVcpCGPOl+5mHvqMjlgPoghsxYaYw9gOOSlp4lhQnGW0PdvKMTCob4yDa1BwfwI\nGAUaIsd8Y5ieQQpVLPYLt0pNSwKBgQD0mflpMxXxVVwlbyFiYLJMDG9hLM3WSYmg\n2uT6Jg7xfKbQF+GjXyJQ5nph7/o16+QXgQR/8AIRRAWNQ69kBxM7coDq3RDIK6al\nTmFN2hgQXecHAZ3ZUKB7e7f0fKiKCwSmqCAprUIxgx9L7GrWzmvw8+WQ1SxLRM6j\nK5fDkZLiHQKBgEDd9gZ677BtkJ0DGi1+FtcvTf88W7HINsCydWkvFuscAa0FLhk5\nqt5E78hLbfKZbdbiMeXzg30dGDsiGMF/gAu5COD1xMKzX2m5WZCUqGgO9m9NiF6C\nYRwBcYPQp/tig902jkHHoP5a3vl66hV/mg3cG8SkEOkGXdool+Y2M6GDAoGBAJa3\nYYU+4yBnVnYCefGiX3qYlvCrqNGHUnR5LGoulTqbcjX64R/HeN+chIBgXC5pgYwy\nBVHH055L6ZfXwvTBn0ocDe+p87NDolVtbGuKHRXIppgcmOTU123/F6RgQ4F7tIv0\nQI0towHbJ6eir1pYqw43WpbZo4dliGXmcIci5fzJAoGBAK+ARnYNHQcNn66tIgpu\nB2g0KFJd/YjKLtAL89n1PjK3oithLQFBpRVpJyCevOrU2nCp3FgSj7mr1cyj1yKZ\nlglWSPjLjVq54pfMvONNMHZETvz+XJdpiiSsqh+QDViFSycNRVxhD22WxyEuMxRU\n54PxRGfHIzYMnXn0ximtIXng\n-----END PRIVATE KEY-----\n",
+  "client_email": "viral-logging@team-viral-api.iam.gserviceaccount.com",
+  "client_id": "109292828543133114939",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/viral-logging%40team-viral-api.iam.gserviceaccount.com"
+}
