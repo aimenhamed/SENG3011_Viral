@@ -44,7 +44,7 @@ export default class App {
       articleRouter,
       searchRouter,
       reportRouter,
-      reportSpecificRouter,
+      reportSpecificRouter
     );
   }
 

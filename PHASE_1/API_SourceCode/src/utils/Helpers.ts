@@ -1,5 +1,9 @@
 import { IncomingHttpHeaders } from "http";
-import { ISearchRequestHeaders, IPeriodOfInterest, IReportRequestHeaders } from "IApiResponses";
+import {
+  ISearchRequestHeaders,
+  IPeriodOfInterest,
+  IReportRequestHeaders,
+} from "IApiResponses";
 
 export const parseHeaders = (
   headers: IncomingHttpHeaders
@@ -22,7 +26,8 @@ export const parseHeaders = (
 export const parseReportHeaders = (
   headers: IncomingHttpHeaders
 ): IReportRequestHeaders => {
-  const reportId: string = JSON.parse(headers.reportId as string);
+  const reportIdString = String(headers.report_id);
+  const reportId: string = JSON.parse(reportIdString);
 
   return {
     reportId,

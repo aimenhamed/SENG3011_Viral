@@ -19,7 +19,8 @@ export default class Database {
       host: "ec2-18-210-191-5.compute-1.amazonaws.com",
       port: 5432,
       username: "fsggrwwrbsxbkk",
-      password: "0bbabdc7704f4a9cc4b6fbf80a2acc5c8f5f0c70e6a9bcc5238a0e31b5191f56",
+      password:
+        "0bbabdc7704f4a9cc4b6fbf80a2acc5c8f5f0c70e6a9bcc5238a0e31b5191f56",
       database: "dd4u9qmc5pk0gv",
       // schema: "public",
       ssl: true,

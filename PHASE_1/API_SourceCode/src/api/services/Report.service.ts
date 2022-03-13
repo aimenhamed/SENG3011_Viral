@@ -30,9 +30,8 @@ export class ReportService {
     reportCriteria: IReportRequestHeaders
   ): Promise<IReportSpecificSuccessResponse> {
     const report: ReportEntity = await this.reportRepository.getSpecificReport(
-      reportCriteria.reportId,
+      reportCriteria.reportId
     );
-
     if (report === undefined) {
       this.logger.error(`No report found in db`);
       throw new HTTPError(internalServerError);
@@ -44,5 +43,4 @@ export class ReportService {
     };
     return result;
   }
-
 }

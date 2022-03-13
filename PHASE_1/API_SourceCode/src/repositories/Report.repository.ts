@@ -28,13 +28,11 @@ export class ReportRepository {
     return await getRepository(ReportEntity).find();
   }
 
-  async getSpecificReport(
-    reportId: string
-  ): Promise<ReportEntity> {
-    const report: ReportEntity = await getRepository(ReportEntity)
-    .createQueryBuilder("report")
-    .where("report.reportId === :reportId", {reportId})
-    .getOne() as ReportEntity;
+  async getSpecificReport(reportId: string): Promise<ReportEntity> {
+    const report: ReportEntity = (await getRepository(ReportEntity)
+      .createQueryBuilder("report")
+      .where("report.reportId === :reportId", { reportId })
+      .getOne()) as ReportEntity;
 
     return report;
   }

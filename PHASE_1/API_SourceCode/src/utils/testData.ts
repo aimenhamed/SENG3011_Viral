@@ -36,10 +36,10 @@ export const getMockReports = (): Report[] => {
   return [
     {
       reportId: "rep-123",
-      diseases: [mockArticles[0]["Title"].split(" - ")[0]],
+      diseases: ["Measles"],
       syndromes: [],
       eventDate: mockArticles[0]["Date of publication"],
-      locations: [mockArticles[0]["Title"].split(" - ")[1]],
+      locations: ["Afghanistan"],
     },
     {
       reportId: "rep-1234",

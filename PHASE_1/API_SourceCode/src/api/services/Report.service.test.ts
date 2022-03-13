@@ -3,6 +3,7 @@ import { internalServerError } from "../../utils/Constants";
 import { ReportRepository } from "../../repositories/Report.repository";
 import { ReportService } from "./Report.service";
 import { getMockReports } from "../../utils/testData";
+import { IReportRequestHeaders } from "../../interfaces/IApiResponses";
 
 describe("ReportService", () => {
   let repository: ReportRepository;
@@ -30,6 +31,36 @@ describe("ReportService", () => {
 
       expect(service.getAllReports()).resolves.toEqual({
         reports,
+      });
+    });
+  });
+
+  describe("getSpecificReport", () => {
+    it("should resolve and return a specific report", () => {
+      const service = reportService();
+      const report = getMockReports()[0];
+      repository.getSpecificReport = jest.fn().mockReturnValue(report);
+
+      const reportCriteria: IReportRequestHeaders = {
+        reportId: "rep-123",
+      };
+
+      expect(service.getSpecificReport(reportCriteria)).resolves.toEqual({
+        report,
+      });
+    });
+
+    it("should resolve and return a specific report", () => {
+      const service = reportService();
+      const report = getMockReports()[1];
+      repository.getSpecificReport = jest.fn().mockReturnValue(report);
+
+      const reportCriteria: IReportRequestHeaders = {
+        reportId: "rep-1234",
+      };
+
+      expect(service.getSpecificReport(reportCriteria)).resolves.toEqual({
+        report,
       });
     });
   });
