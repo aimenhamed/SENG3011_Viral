@@ -18,17 +18,16 @@ export class ReportSpecificRouter implements IRouter {
 
   setupRoutes(): Router {
     return Router().get(
-      "/reports/specific",
-      validationMiddleware(ReportSchema, "headers"),
+      "/reports/:reportId",
       async (req: Request, res: Response, next: NextFunction) => {
         this.logger.info(`Received /reports/specific request`);
-        const requestCriteria: IReportRequestHeaders = parseReportHeaders(
-          req.headers
-        );
         try {
+          const reportId: string = req.params.reportId;
+          console.log(typeof(reportId));
           const result = await this.reportService.getSpecificReport(
-            requestCriteria
+            reportId
           );
+
           this.logger.info(`Responding to client in GET /reports/specific`);
           return res.status(200).json(result);
         } catch (err: any) {

@@ -41,13 +41,12 @@ describe("ReportService", () => {
       const report = getMockReports()[0];
       repository.getSpecificReport = jest.fn().mockReturnValue(report);
 
-      const reportCriteria: IReportRequestHeaders = {
-        reportId: "rep-123",
-      };
+      const reportId: string = "rep-123",
 
-      expect(service.getSpecificReport(reportCriteria)).resolves.toEqual({
+      expect(service.getSpecificReport(reportId)).resolves.toEqual({
         report,
       });
+
     });
 
     it("should resolve and return a specific report", () => {
