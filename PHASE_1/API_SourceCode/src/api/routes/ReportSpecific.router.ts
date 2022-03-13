@@ -23,10 +23,7 @@ export class ReportSpecificRouter implements IRouter {
         this.logger.info(`Received /reports/specific request`);
         try {
           const reportId: string = req.params.reportId;
-          console.log(typeof(reportId));
-          const result = await this.reportService.getSpecificReport(
-            reportId
-          );
+          const result = await this.reportService.getSpecificReport(reportId);
 
           this.logger.info(`Responding to client in GET /reports/specific`);
           return res.status(200).json(result);

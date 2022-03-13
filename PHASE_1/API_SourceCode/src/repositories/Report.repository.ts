@@ -29,10 +29,6 @@ export class ReportRepository {
   }
 
   async getSpecificReport(reportId: string): Promise<ReportEntity> {
-    console.log(typeof(reportId));
-    console.log(reportId);
-    console.log("1c86d233-9cc8-469b-83da-c9e78ba8d2f6");
-
     const report: ReportEntity = (await getRepository(ReportEntity)
       .createQueryBuilder("report")
       .where("report.report_id::text = :reportId", { reportId })

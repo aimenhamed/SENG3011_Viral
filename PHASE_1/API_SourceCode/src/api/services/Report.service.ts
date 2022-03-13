@@ -29,14 +29,16 @@ export class ReportService {
   async getSpecificReport(
     reportId: string
   ): Promise<IReportSpecificSuccessResponse> {
-
     const report: ReportEntity = await this.reportRepository.getSpecificReport(
       reportId
     );
-    
+
     if (report === undefined) {
       this.logger.error(`No report found in db`);
-      throw new HTTPError({errorCode: 404, errorMessage: "Resource not found."});
+      throw new HTTPError({
+        errorCode: 404,
+        errorMessage: "Resource not found.",
+      });
     }
 
     this.logger.info(`Report found, responding to client`);

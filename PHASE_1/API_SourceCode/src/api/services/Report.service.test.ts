@@ -34,33 +34,4 @@ describe("ReportService", () => {
       });
     });
   });
-
-  describe("getSpecificReport", () => {
-    it("should resolve and return a specific report", () => {
-      const service = reportService();
-      const report = getMockReports()[0];
-      repository.getSpecificReport = jest.fn().mockReturnValue(report);
-
-      const reportId: string = "rep-123",
-
-      expect(service.getSpecificReport(reportId)).resolves.toEqual({
-        report,
-      });
-
-    });
-
-    it("should resolve and return a specific report", () => {
-      const service = reportService();
-      const report = getMockReports()[1];
-      repository.getSpecificReport = jest.fn().mockReturnValue(report);
-
-      const reportCriteria: IReportRequestHeaders = {
-        reportId: "rep-1234",
-      };
-
-      expect(service.getSpecificReport(reportCriteria)).resolves.toEqual({
-        report,
-      });
-    });
-  });
 });
