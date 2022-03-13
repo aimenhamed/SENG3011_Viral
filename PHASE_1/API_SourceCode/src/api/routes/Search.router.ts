@@ -6,6 +6,7 @@ import validationMiddleware from "../middlewares/validation";
 import { SearchSchema } from "../schemas/Search.schema";
 import { parseHeaders } from "../../utils/Helpers";
 import { ISearchRequestHeaders } from "IApiResponses";
+import { inspect } from "util";
 
 export class SearchRouter implements IRouter {
   private readonly logger = getLogger();
@@ -21,9 +22,13 @@ export class SearchRouter implements IRouter {
       "/search",
       validationMiddleware(SearchSchema, "headers"),
       async (req: Request, res: Response, next: NextFunction) => {
-        this.logger.info(`Received /search request`);
-        const searchCriteria: ISearchRequestHeaders = parseHeaders(req.headers);
+        this.logger.info(
+          `Received /search request with headers ${inspect(req.headers)}`
+        );
         try {
+          const searchCriteria: ISearchRequestHeaders = parseHeaders(
+            req.headers
+          );
           const result = await this.searchService.getSearch(searchCriteria);
           this.logger.info(`Responding to client in GET /search`);
           return res.status(200).json(result);
