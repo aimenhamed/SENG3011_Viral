@@ -33,4 +33,28 @@ describe("ReportService", () => {
       });
     });
   });
+
+  describe("getSpecificReport", () => {
+    it("should throw HTTP 404 error if the report is not found", () => {
+      const service = reportService();
+      repository.getSpecificReport = jest.fn().mockReturnValue(undefined);
+
+      const errorResult = new HTTPError({
+        errorCode: 404,
+        errorMessage: "Resource not found",
+      });
+      getMockReports();
+      expect(service.getSpecificReport("rep-abc")).rejects.toThrow(errorResult);
+    });
+
+    it("should resolve and return expected report", () => {
+      const service = reportService();
+      const report = getMockReports()[0];
+      repository.getSpecificReport = jest.fn().mockReturnValue(report);
+
+      expect(service.getSpecificReport("rep-123")).resolves.toEqual({
+        report,
+      });
+    });
+  });
 });

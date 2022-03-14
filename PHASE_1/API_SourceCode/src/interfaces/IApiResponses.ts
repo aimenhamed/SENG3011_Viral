@@ -24,9 +24,18 @@ export interface IArticlesDumpSuccessResponse {
   articles: Article[];
 }
 
+export interface IArticleSpecificSuccessResponse {
+  article: Article;
+}
+
 export interface IReportsDumpSuccessResponse {
   reports: Report[];
 }
+
+export interface IReportSpecificSuccessResponse {
+  report: Report;
+}
+
 export interface ISearchRequestHeaders {
   periodOfInterest: IPeriodOfInterest;
   location: string;
