@@ -22,6 +22,7 @@
   },
   "homepage": "https://github.com/aimenhamed/seng3011_viral#readme",
   "dependencies": {
+    "@google-cloud/logging-winston": "^4.1.3",
     "@hapi/joi": "^17.1.1",
     "config": "^3.3.6",
     "cors": "^2.8.5",
