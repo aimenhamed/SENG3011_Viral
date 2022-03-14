@@ -2,7 +2,6 @@ import { Router, Request, Response, NextFunction } from "express";
 import { formatError, getLogger } from "../../utils/Logger";
 import { IRouter } from "../../interfaces/IRouter";
 import { ReportService } from "../services/Report.service";
-import { RequestSchema } from "../schemas/Request.schema";
 
 export class ReportRouter implements IRouter {
   private readonly logger = getLogger();

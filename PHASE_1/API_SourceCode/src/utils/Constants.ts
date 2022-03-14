@@ -11,6 +11,11 @@ export const badRequest: IHttpError = {
   errorMessage: "Bad request",
 };
 
+export const notFoundError: IHttpError = {
+  errorCode: 404,
+  errorMessage: "Resource not found",
+};
+
 export const timeoutError: IHttpError = {
   errorCode: 408,
   errorMessage: "Timeout, the transaction hasn't completed yet, please retry",

@@ -41,7 +41,7 @@ describe("ReportService", () => {
 
       const errorResult = new HTTPError({
         errorCode: 404,
-        errorMessage: "Resource not found.",
+        errorMessage: "Resource not found",
       });
       getMockReports();
       expect(service.getSpecificReport("rep-abc")).rejects.toThrow(errorResult);
