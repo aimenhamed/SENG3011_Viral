@@ -1,6 +1,8 @@
 import { getLogger } from "../../utils/Logger";
-import { IReportsDumpSuccessResponse } from "IApiResponses";
-import { IReportSpecificSuccessResponse } from "IApiResponses";
+import {
+  IReportsDumpSuccessResponse,
+  IReportSpecificSuccessResponse,
+} from "IApiResponses";
 import { ReportRepository } from "../../repositories/Report.repository";
 import { ReportEntity } from "../../entity/Report.entity";
 import { HTTPError } from "../../utils/Errors";

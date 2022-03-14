@@ -21,4 +21,13 @@ export class ArticleRepository {
       .where("article.article_id = ANY (:articleIds)", { articleIds })
       .getMany();
   }
+
+  async getSpecificArticle(articleId: string): Promise<ArticleEntity> {
+    const article: ArticleEntity = (await getRepository(ArticleEntity)
+      .createQueryBuilder("article")
+      .where("article.article_id::text = :articleId", { articleId })
+      .getOne()) as ArticleEntity;
+
+    return article;
+  }
 }
