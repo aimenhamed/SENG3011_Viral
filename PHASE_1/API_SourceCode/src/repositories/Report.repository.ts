@@ -32,10 +32,7 @@ export class ReportRepository {
     const report: ReportEntity = (await getRepository(ReportEntity)
       .createQueryBuilder("report")
       .where("report.report_id::text = :reportId", { reportId })
-      //.where("report.report_id::text = :reportId", { reportId: "1c86d233-9cc8-469b-83da-c9e78ba8d2f6"})
       .getOne()) as ReportEntity;
-
-    console.log(report);
 
     return report;
   }

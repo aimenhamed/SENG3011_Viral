@@ -3,7 +3,6 @@ import { internalServerError } from "../../utils/Constants";
 import { ReportRepository } from "../../repositories/Report.repository";
 import { ReportService } from "./Report.service";
 import { getMockReports } from "../../utils/testData";
-import { IReportRequestHeaders } from "../../interfaces/IApiResponses";
 
 describe("ReportService", () => {
   let repository: ReportRepository;

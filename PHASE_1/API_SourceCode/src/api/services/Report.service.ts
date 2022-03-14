@@ -5,7 +5,6 @@ import { ReportRepository } from "../../repositories/Report.repository";
 import { ReportEntity } from "../../entity/Report.entity";
 import { HTTPError } from "../../utils/Errors";
 import { internalServerError } from "../../utils/Constants";
-import { IReportRequestHeaders } from "IApiResponses";
 
 export class ReportService {
   private logger = getLogger();
