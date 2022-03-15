@@ -56,38 +56,11 @@ paths:
                   $ref: '#/components/schemas/Article'
         "400":
           "$ref": "#/components/responses/BadRequest"
+        "405":
+          "$ref": "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/ServerError"
 
-  /articles:
-    get:
-      tags: 
-        - "Articles"
-      summary: "Retrieve a select number of articles"
-      description: "Given query information, returns a list of articles constrained for pagination."
-      operationId: "listArticles"
-      parameters:
-        - name: limit
-          in: query
-          description: "Limit the number of articles on a page"
-          schema:
-            type: integer
-          required: True
-        - name: offset
-          in: query
-          description: "Specifies the page number of the articles to be displayed"
-          schema:
-            type: integer
-          required: True
-      responses:
-        "200":
-          description: "Successful response"
-          content:
-            application/json:
-              schema:
-                type: "array"
-                items:
-                  "$ref": "#/components/schemas/Article"
-        "400":
-          "$ref": "#/components/responses/BadRequest"
   
   /articles/dump:
     get:
@@ -107,6 +80,8 @@ paths:
                   "$ref": "#/components/schemas/Article"
         "400":
           "$ref": "#/components/responses/BadRequest"
+        "500":
+          $ref: "#/components/responses/ServerError"
   
   /articles/{articleId}:
     get:
@@ -122,6 +97,7 @@ paths:
           schema:
             type: string
           required: true
+          example: '8f2ad839-f617-4d0c-8755-b870b8c67735'
       responses:
         "200":
           description: "Successful response"
@@ -133,6 +109,10 @@ paths:
                   "$ref": "#/components/schemas/Article"
         "400":
           "$ref": "#/components/responses/BadRequest"
+        "405":
+          "$ref": "#/components/responses/NotFound" 
+        "500":
+          $ref: "#/components/responses/ServerError"
   
   /reports/dump:
     get:
@@ -152,6 +132,8 @@ paths:
                   "$ref": "#/components/schemas/Report"
         "400":
           "$ref": "#/components/responses/BadRequest"
+        "500":
+          $ref: "#/components/responses/ServerError"
   
   /reports/{reportId}:
     get:
@@ -167,6 +149,7 @@ paths:
           schema:
             type:       string
           required:     true
+          example: "06144fdf-07e0-4ea2-8a91-af7fe47fc3f8"
       responses:
         "200":
           description:  "Successful response"
@@ -178,6 +161,10 @@ paths:
                   $ref: "#/components/schemas/Report"
         "400":
           $ref: "#/components/responses/BadRequest"
+        "405":
+          "$ref": "#/components/responses/NotFound" 
+        "500":
+          $ref: "#/components/responses/ServerError"
 components:
   responses:
     BadRequest:
@@ -193,6 +180,32 @@ components:
               errorMessage:
                 type: "string"
                 example: "Bad request"
+    NotFound:
+      description: "The requested resource was not found"
+      content:
+        application/json:
+          schema:
+            type: "object"
+            properties:
+              errorCode:
+                type: "integer"
+                example: 404
+              errorMessage:
+                type: "string"
+                example: "Not found"
+    ServerError:
+      description: "Internal server error"
+      content:
+        application/json:
+          schema:
+            type: "object"
+            properties:
+              errorCode:
+                type: "integer"
+                example: 500
+              errorMessage:
+                type: "string"
+                example: "Internal server error"
   schemas:
     Period:
       type: "string"
