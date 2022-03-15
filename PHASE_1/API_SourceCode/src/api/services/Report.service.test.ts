@@ -1,5 +1,5 @@
 import { HTTPError } from "../../utils/Errors";
-import { internalServerError } from "../../utils/Constants";
+import { internalServerError, notFoundError } from "../../utils/Constants";
 import { ReportRepository } from "../../repositories/Report.repository";
 import { ReportService } from "./Report.service";
 import { getMockReports } from "../../utils/testData";
@@ -39,10 +39,7 @@ describe("ReportService", () => {
       const service = reportService();
       repository.getSpecificReport = jest.fn().mockReturnValue(undefined);
 
-      const errorResult = new HTTPError({
-        errorCode: 404,
-        errorMessage: "Resource not found",
-      });
+      const errorResult = new HTTPError(notFoundError);
       getMockReports();
       expect(service.getSpecificReport("rep-abc")).rejects.toThrow(errorResult);
     });
