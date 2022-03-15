@@ -45,7 +45,7 @@ export class ArticleRouter implements IRouter {
             return res.status(200).json(result);
           } catch (err: any) {
             this.logger.warn(
-              `An error occurred when trying to GET specific report ${formatError(
+              `An error occurred when trying to GET specific article ${formatError(
                 err
               )}`
             );
