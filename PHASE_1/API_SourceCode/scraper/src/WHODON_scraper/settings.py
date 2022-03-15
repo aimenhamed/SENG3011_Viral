@@ -62,9 +62,11 @@ CONCURRENT_REQUESTS = 32
 
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
-#ITEM_PIPELINES = {
-#    'WHODON_scraper.pipelines.WhodonScraperPipeline': 300,
-#}
+ITEM_PIPELINES = {
+   'WHODON_scraper.pipelines.DuplicatesPipeline': 200,
+   'WHODON_scraper.pipelines.WhodonScraperPipeline': 300,
+   
+}
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/autothrottle.html
