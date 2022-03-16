@@ -81,3 +81,10 @@ export interface IPostDashboardSuccessResponse {
   dashboard: Dashboard;
   user: User;
 }
+
+export interface IUserDashboardRequestBody {
+  userId: string;
+  dashboardId: string;
+}
+
+export type IUserDashboardSuccessResponse = IPostDashboardSuccessResponse;
