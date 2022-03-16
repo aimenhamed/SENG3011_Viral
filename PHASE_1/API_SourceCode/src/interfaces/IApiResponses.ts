@@ -54,3 +54,13 @@ export interface IUserRegisterRequestBody {
 export interface IUserRegisterSuccessResponse {
   user: User;
 }
+
+export interface IUserBookmarkArticleRequestBody {
+  userId: string;
+  articleId: string;
+}
+
+export interface IUserBookmarkArticleSuccessResponse {
+  user: User;
+  article: Article;
+}

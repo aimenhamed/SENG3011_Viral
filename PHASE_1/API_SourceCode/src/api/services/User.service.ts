@@ -2,6 +2,8 @@ import { getLogger } from "../../utils/Logger";
 import {
   IUserRegisterRequestBody,
   IUserRegisterSuccessResponse,
+  IUserBookmarkArticleRequestBody,
+  IUserBookmarkArticleSuccessResponse,
 } from "IApiResponses";
 import { UserRepository } from "../../repositories/User.respository";
 import { UserEntity } from "../../entity/User.entity";
@@ -36,5 +38,11 @@ export class UserService {
     return {
       user: convertUserEntityToInterface(userEntity),
     };
+  }
+
+  async bookmarkArticle(
+    bookmarkDetails: IUserBookmarkArticleRequestBody
+  ): Promise<IUserBookmarkArticleSuccessResponse | undefined> {
+
   }
 }

@@ -3,8 +3,8 @@ import { formatError, getLogger } from "../../utils/Logger";
 import { IRouter } from "../../interfaces/IRouter";
 import { UserService } from "../services/User.service";
 import validationMiddleware from "../middlewares/validation";
-import { UserRegisterSchema } from "../schemas/User.schema";
-import { IUserRegisterRequestBody } from "IApiResponses";
+import { UserRegisterSchema, UserBookmarkArticleSchema } from "../schemas/User.schema";
+import { IUserRegisterRequestBody, IUserBookmarkArticleRequestBody } from "IApiResponses";
 import { HTTPError } from "../../utils/Errors";
 import { badRequest } from "../../utils/Constants";
 
@@ -36,6 +36,27 @@ export class UserRouter implements IRouter {
             `An error occurred when trying to POST register user ${formatError(
               err
             )}`
+          );
+          return next(err);
+        }
+      }
+    ).put(
+      "/users/bookmark-article",
+      validationMiddleware(UserBookmarkArticleSchema, "body"),
+      async (req: Request, res: Response, next: NextFunction) => {
+        this.logger.info(`Received /users/bookmark-article request`);
+        
+        const bookmarkDetails = req.body as IUserBookmarkArticleRequestBody;
+        if (!bookmarkDetails) throw new HTTPError(badRequest);
+
+        try {
+          const result = await this.userService.bookmarkArticle(bookmarkDetails);
+          return res.status(200).json(result);
+        } catch (err: any) {
+          this.logger.warn(
+            `An error occured when trying to PUT bookmark article for user ${formatError(
+              err
+            )}` 
           );
           return next(err);
         }
