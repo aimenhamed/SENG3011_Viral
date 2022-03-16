@@ -27,7 +27,6 @@ paths:
             $ref: "#/components/schemas/Period"
           required: true
           example: '{"start":"2009-09-23","end":"2021-09-24"}'
-
         - in: header
           name: location
           description: The location of where the cases were reported.
@@ -44,7 +43,6 @@ paths:
               type: "string"
           required: true
           example: '["nipha virus", "Encephalitis"]'
-
       responses:
         "200":
           description: "Successful response"
@@ -133,7 +131,6 @@ paths:
           "$ref": "#/components/responses/BadRequest"
         "500":
           $ref: "#/components/responses/ServerError"
-
   /reports/{reportId}:
     get:
       tags:

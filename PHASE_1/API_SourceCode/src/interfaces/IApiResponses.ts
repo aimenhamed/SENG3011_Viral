@@ -1,6 +1,8 @@
 import { Article } from "IArticle";
+import { Dashboard } from "IDashboard";
 import { Report } from "IReport";
 import { User } from "IUser";
+import { WidgetType } from "IWidget";
 
 export interface IHttpError {
   errorCode: number;
@@ -63,4 +65,19 @@ export interface IUserBookmarkArticleRequestBody {
 export interface IUserBookmarkArticleSuccessResponse {
   user: User;
   article: Article;
+}
+
+export interface WidgetRequest {
+  widgetType: WidgetType;
+  articleId: string;
+}
+
+export interface IPostDashboardRequestBody {
+  userId: string;
+  widgets: WidgetRequest[];
+}
+
+export interface IPostDashboardSuccessResponse {
+  dashboard: Dashboard;
+  user: User;
 }
