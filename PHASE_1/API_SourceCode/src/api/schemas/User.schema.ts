@@ -8,5 +8,5 @@ export const UserRegisterSchema = Joi.object({
 
 export const UserBookmarkArticleSchema =  Joi.object({
   userId: Joi.string().required(),
-  dashboardId: Joi.string().required(),
+  articleId: Joi.string().required(),
 });
