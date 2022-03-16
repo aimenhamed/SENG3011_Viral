@@ -195,7 +195,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/User"
+                {
+                  type: "object",
+                  properties: { "user": { $ref: "#/components/schemas/User" } },
+                }
         "400":
           $ref: "#/components/responses/BadRequest"
         "405":
@@ -232,7 +235,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/User"
+                {
+                  type: "object",
+                  properties: { "user": { $ref: "#/components/schemas/User" } },
+                }
         "400":
           $ref: "#/components/responses/BadRequest"
         "405":
@@ -261,7 +267,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/User"
+                {
+                  type: "object",
+                  properties: { "user": { $ref: "#/components/schemas/User" } },
+                }
         "400":
           $ref: "#/components/responses/BadRequest"
         "405":

@@ -1,5 +1,6 @@
 import { Article } from "IArticle";
 import { Report } from "IReport";
+import { User } from "IUser";
 
 export interface IHttpError {
   errorCode: number;
@@ -43,3 +44,13 @@ export interface ISearchRequestHeaders {
 }
 
 export type ISearchSuccessResponse = IArticlesDumpSuccessResponse;
+
+export interface IUserRegisterRequestBody {
+  name: string;
+  email: string;
+  password: string;
+}
+
+export interface IUserRegisterSuccessResponse {
+  user: User;
+}
