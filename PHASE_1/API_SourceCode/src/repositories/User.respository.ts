@@ -9,4 +9,8 @@ export class UserRepository {
   async saveUser(newUser: UserEntity): Promise<UserEntity> {
     return await getRepository(UserEntity).save(newUser);
   }
+
+  async getUserByEmail(email: string): Promise<UserEntity | undefined> {
+    return await getRepository(UserEntity).findOne({ email });
+  }
 }

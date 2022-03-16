@@ -62,12 +62,14 @@ export interface WidgetRequest {
   articleId: string;
 }
 
-export interface IPostDashboardRequestBody {
+export interface ICommonDashboardRequestBody {
   userId: string;
   widgets: WidgetRequest[];
 }
 
-export interface IPostDashboardSuccessResponse {
+export interface ICommonDashboardSuccessResponse {
   dashboard: Dashboard;
   user: User;
 }
+
+export type IDeleteDashboardSuccessResponse = IUserRegisterSuccessResponse;
