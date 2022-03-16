@@ -23,4 +23,33 @@ CREATE TABLE viral.report (
     CONSTRAINT pk_report_id PRIMARY KEY (report_id)
 );
 
+CREATE TYPE widget AS ENUM ('article');
+CREATE TABLE viral.widgets (
+    widget_id uuid NOT NULL DEFAULT gen_random_uuid(),
+    dashboard_id uuid NOT NULL,
+    widget_type widget NOT NULL,
+    article_id uuid NOT NULL,
+    CONSTRAINT fk_dashboard_id_widget FOREIGN KEY (dashboard_id) references viral.dashboard(dashboard_id),
+    CONSTRAINT fk_article_id_widget FOREIGN KEY (article_id) references viral.article(article_id),
+    CONSTRAINT pk_widget_id PRIMARY KEY (widget_id)
+);
+
+CREATE TABLE viral.dashboard (
+    dashboard_id uuid NOT NULL DEFAULT gen_random_uuid(),
+    user_id uuid NOT NULL,
+    widgets uuid[] NOT NULL,
+    CONSTRAINT fk_user_id_dashboard FOREIGN KEY (user_id) references viral.user(user_id),
+    CONSTRAINT pk_dashboard_id PRIMARY KEY (dashboard_id),
+);
+
+CREATE TABLE viral.user (
+    user_id uuid NOT NULL DEFAULT gen_random_uuid(),
+    name text NOT NULL,
+    email text NOT NULL,
+    password text NOT NULL,
+    dashboard_id uuid[] NULL,
+    bookmarked_articles uuid[] NULL,
+    CONSTRAINT pk_user_id PRIMARY KEY (user_id),
+);
+
 COMMIT;
