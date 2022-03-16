@@ -43,9 +43,9 @@ export class ReportRouter implements IRouter {
             return res.status(200).json(result);
           } catch (err: any) {
             this.logger.warn(
-              `An error occurred when trying to GET specific report with id: ` +
-                req.params.reportId +
-                ` ${formatError(err)}`
+              `An error occurred when trying to GET specific report with reportId ${
+                req.params.reportId
+              }.${formatError(err)}`
             );
             return next(err);
           }

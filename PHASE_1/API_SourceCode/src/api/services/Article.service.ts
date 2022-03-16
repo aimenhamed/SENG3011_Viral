@@ -34,7 +34,7 @@ export class ArticleService {
     const article = await this.articleRepository.getSpecificArticle(articleId);
 
     if (article === undefined) {
-      this.logger.error(`No article with id: ` + articleId + ` found in db`);
+      this.logger.error(`No article with articleId ${articleId} found in db`);
       throw new HTTPError(notFoundError);
     }
 

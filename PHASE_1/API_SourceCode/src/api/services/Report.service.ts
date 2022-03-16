@@ -34,7 +34,7 @@ export class ReportService {
     const report = await this.reportRepository.getSpecificReport(reportId);
 
     if (report === undefined) {
-      this.logger.error(`No report with id: ` + reportId + ` found in db`);
+      this.logger.error(`No report with reportId ${reportId} found in db`);
       throw new HTTPError(notFoundError);
     }
 

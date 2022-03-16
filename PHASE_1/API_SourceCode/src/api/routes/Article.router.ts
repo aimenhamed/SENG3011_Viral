@@ -45,9 +45,9 @@ export class ArticleRouter implements IRouter {
             return res.status(200).json(result);
           } catch (err: any) {
             this.logger.warn(
-              `An error occurred when trying to GET specific article with id: ` +
-                req.params.articleId +
-                ` ${formatError(err)}`
+              `An error occurred when trying to GET specific article with articleId ${
+                req.params.articleId
+              }.${formatError(err)}`
             );
             return next(err);
           }
