@@ -3,55 +3,172 @@ info:
   description: "This is the documentation for the interfaces and routes to the Viral API. https://github.com/aimenhamed/SENG3011_Viral"
   version: "1.0.0"
   title: "Viral API"
-  termsOfService: "http://swagger.io/terms/"
-  license:
-    name: "Apache 2.0"
-    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+servers:
+  - url: https://teamviral-api.herokuapp.com/api/v1/
+    description: Production server (uses live data)
 tags:
   - name: "Articles"
-    description: "Retrieve articles per a search criteria"
-    externalDocs:
-      description: "Find out more"
-      url: "http://swagger.io"
+    description: "Everything related to articles"
+  - name: "Reports"
+    description: "Everything you need to know about reports"
 paths:
-  /articles:
+  /search:
     get:
       tags:
         - "Articles"
       summary: "Retrieve articles per a search criteria"
       description: "Retrieve articles based on a criteria provided in the request."
-      operationId: "scrapeArticles"
+      operationId: "filterArticles"
       parameters:
         - in: header
           name: period_of_interest
+          description: The period of time to search through which includes the start and end times.
           schema:
             $ref: "#/components/schemas/Period"
           required: true
+          example: '{"start":"2009-09-23","end":"2021-09-24"}'
+            
         - in: header
           name: location
+          description: The location of where the cases were reported.
           schema:
             type: string
           required: true
+          example: '"India"'
         - in: header
           name: key_terms
+          description: Key search terms that our database can query.
           schema:
-            type: "array"
+            type: "string"
             items:
               type: "string"
           required: true
+          example: '["nipha virus", "Encephalitis"]'
+        
       responses:
         "200":
           description: "Successful response"
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ApiResponse"
+                type: array
+                items:
+                  $ref: '#/components/schemas/Article'
         "400":
           "$ref": "#/components/responses/BadRequest"
+        "405":
+          "$ref": "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/ServerError"
+
+  
+  /articles/dump:
+    get:
+      tags:
+        - "Articles"
+      summary: "Retrieve all articles"
+      description: "Dumps all articles currently stored in the database."
+      operationId: "articlesDump"
+      responses:
+        "200":
+          description: "Successful response"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  "$ref": "#/components/schemas/Article"
+        "400":
+          "$ref": "#/components/responses/BadRequest"
+        "500":
+          $ref: "#/components/responses/ServerError"
+  
+  /articles/{articleId}:
+    get:
+      tags: 
+        - "Articles"
+      summary: "Retrieves an article matching id"
+      description: "Queries the database for an article with identical id"
+      operationId: "articlesOne"
+      parameters: 
+        - name: articleId
+          in: path
+          description: "a UUID representing the article being queried"
+          schema:
+            type: string
+          required: true
+          example: '8f2ad839-f617-4d0c-8755-b870b8c67735'
+      responses:
+        "200":
+          description: "Successful response"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  "$ref": "#/components/schemas/Article"
+        "400":
+          "$ref": "#/components/responses/BadRequest"
+        "405":
+          "$ref": "#/components/responses/NotFound" 
+        "500":
+          $ref: "#/components/responses/ServerError"
+  
+  /reports/dump:
+    get:
+      tags:
+        - "Reports"
+      summary: "Retrieve all reports"
+      description: "Dumps all reports currently stored in the database."
+      operationId: "reportDump"
+      responses:
+        "200":
+          description: "Successful response"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  "$ref": "#/components/schemas/Report"
+        "400":
+          "$ref": "#/components/responses/BadRequest"
+        "500":
+          $ref: "#/components/responses/ServerError"
+  
+  /reports/{reportId}:
+    get:
+      tags:
+        - "Reports"
+      summary: "Retrieve a report matching id"
+      description: "Dumps all reports currently stored in the database."
+      operationId: "reportsOne"
+      parameters:
+        - name: reportId
+          in:           "path"
+          description:  "a UUID representing the report being queried"
+          schema:
+            type:       string
+          required:     true
+          example: "06144fdf-07e0-4ea2-8a91-af7fe47fc3f8"
+      responses:
+        "200":
+          description:  "Successful response"
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  $ref: "#/components/schemas/Report"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "405":
+          "$ref": "#/components/responses/NotFound" 
+        "500":
+          $ref: "#/components/responses/ServerError"
 components:
   responses:
     BadRequest:
-      description: "This request was not formed with correct inputs"
+      description: "The request was not formed with correct inputs."
       content:
         application/json:
           schema:
@@ -63,27 +180,49 @@ components:
               errorMessage:
                 type: "string"
                 example: "Bad request"
+    NotFound:
+      description: "The requested resource was not found"
+      content:
+        application/json:
+          schema:
+            type: "object"
+            properties:
+              errorCode:
+                type: "integer"
+                example: 404
+              errorMessage:
+                type: "string"
+                example: "Not found"
+    ServerError:
+      description: "Internal server error"
+      content:
+        application/json:
+          schema:
+            type: "object"
+            properties:
+              errorCode:
+                type: "integer"
+                example: 500
+              errorMessage:
+                type: "string"
+                example: "Internal server error"
   schemas:
-    Location:
-      type: "object"
+    Period:
+      type: "string"
       properties:
-        country:
+        start:
           type: "string"
-          description: "Country of location"
-        location:
+          description: "Start time"
+        end:
           type: "string"
-          description: "Location string"
-        geonames_id:
-          type: "number"
-          description: "Optional for google api"
-        google_id:
-          type: "number"
-          description: "Optional for google api"
+          description: "End time"
       xml:
-        name: "Location"
+        name: "Period"
     Report:
       type: "object"
       properties:
+        reportId:
+          type: "string"
         diseases:
           type: "array"
           items:
@@ -94,14 +233,18 @@ components:
             type: "string"
         eventDate:
           type: "string"
-        location:
-          "$ref": "#/components/schemas/Location"
+        locations:
+          type: "array"
+          items:
+            type: "string"
     Article:
       type: "object"
       properties:
+        articleId:
+          type: "string"
         url:
           type: "string"
-        publicationDate:
+        dateOfPublication:
           type: "string"
         headline:
           type: "string"
@@ -111,35 +254,3 @@ components:
           type: "array"
           items:
             "$ref": "#/components/schemas/Report"
-    Period:
-      type: "object"
-      properties:
-        start:
-          type: "string"
-          description: "Start time"
-        end:
-          type: "string"
-          description: "End time"
-      xml:
-        name: "Period"
-    ApiRequestBody:
-      type: "object"
-      properties:
-        period_of_interest:
-          "$ref": "#/components/schemas/Period"
-        key_terms:
-          type: "array"
-          items:
-            type: "string"
-        location:
-          type: "string"
-    ApiResponse:
-      type: "object"
-      properties:
-        articles:
-          type: "array"
-          items:
-            "$ref": "#/components/schemas/Article"
-externalDocs:
-  description: "Find out more about Swagger"
-  url: "http://swagger.io"
