@@ -15,6 +15,10 @@ import { ReportService } from "./api/services/Report.service";
 import { UserRepository } from "./repositories/User.respository";
 import { UserService } from "./api/services/User.service";
 import { UserRouter } from "./api/routes/User.router";
+import { DashboardRepository } from "./repositories/Dashboard.repository";
+import { DashboardService } from "./api/services/Dashboard.service";
+import { WidgetRepository } from "./repositories/Widget.repository";
+import { DashboardRouter } from "./api/routes/Dashboard.router";
 
 export default class App {
   readonly logger = getLogger();
@@ -24,6 +28,8 @@ export default class App {
   private readonly articleRepository = new ArticleRepository();
   private readonly reportRepository = new ReportRepository();
   private readonly userRepository = new UserRepository();
+  private readonly dashboardRepository = new DashboardRepository();
+  private readonly widgetRepository = new WidgetRepository();
   // add services here
   private readonly nameService = new NameService();
   private readonly articleService = new ArticleService(this.articleRepository);
@@ -33,6 +39,11 @@ export default class App {
   );
   private readonly reportService = new ReportService(this.reportRepository);
   private readonly userService = new UserService(this.userRepository);
+  private readonly dashboardService = new DashboardService(
+    this.widgetRepository,
+    this.userRepository,
+    this.dashboardRepository
+  );
 
   constructor() {
     // add routers here .. e.g.
@@ -41,6 +52,7 @@ export default class App {
     const searchRouter = new SearchRouter(this.searchService);
     const reportRouter = new ReportRouter(this.reportService);
     const userRouter = new UserRouter(this.userService);
+    const dashboardRouter = new DashboardRouter(this.dashboardService);
 
     this.ex.addRouters(
       // ... add routers here
@@ -48,7 +60,8 @@ export default class App {
       articleRouter,
       searchRouter,
       reportRouter,
-      userRouter
+      userRouter,
+      dashboardRouter
     );
   }
 

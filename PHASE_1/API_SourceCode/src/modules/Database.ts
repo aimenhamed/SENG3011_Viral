@@ -5,6 +5,8 @@ import config from "config";
 import { ArticleEntity } from "../entity/Article.entity";
 import { ReportEntity } from "../entity/Report.entity";
 import { UserEntity } from "../entity/User.entity";
+import { DashboardEntity } from "../entity/Dashboard.entity";
+import { WidgetEntity } from "../entity/Widget.entity";
 
 export default class Database {
   private logger = getLogger();
@@ -31,7 +33,13 @@ export default class Database {
           rejectUnauthorized: false,
         },
       },
-      entities: [ArticleEntity, ReportEntity, UserEntity],
+      entities: [
+        ArticleEntity,
+        ReportEntity,
+        UserEntity,
+        DashboardEntity,
+        WidgetEntity,
+      ],
     });
     this.logger.info(
       `Started connection with connection name ${this.connectionName}`

@@ -19,7 +19,6 @@ export class UserService {
     const newUser = new UserEntity();
     newUser.name = userDetails.name;
     newUser.email = userDetails.email;
-    // TODO: hash password
     newUser.password = userDetails.password;
 
     const userEntity: UserEntity = await this.userRepository.saveUser(newUser);
