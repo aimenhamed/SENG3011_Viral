@@ -27,7 +27,6 @@ paths:
             $ref: "#/components/schemas/Period"
           required: true
           example: '{"start":"2009-09-23","end":"2021-09-24"}'
-            
         - in: header
           name: location
           description: The location of where the cases were reported.
@@ -44,7 +43,6 @@ paths:
               type: "string"
           required: true
           example: '["nipha virus", "Encephalitis"]'
-        
       responses:
         "200":
           description: "Successful response"
@@ -53,7 +51,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Article'
+                  $ref: "#/components/schemas/Article"
         "400":
           "$ref": "#/components/responses/BadRequest"
         "405":
@@ -61,7 +59,6 @@ paths:
         "500":
           $ref: "#/components/responses/ServerError"
 
-  
   /articles/dump:
     get:
       tags:
@@ -82,22 +79,22 @@ paths:
           "$ref": "#/components/responses/BadRequest"
         "500":
           $ref: "#/components/responses/ServerError"
-  
+
   /articles/{articleId}:
     get:
-      tags: 
+      tags:
         - "Articles"
       summary: "Retrieves an article matching id"
       description: "Queries the database for an article with identical id"
       operationId: "articlesOne"
-      parameters: 
+      parameters:
         - name: articleId
           in: path
           description: "a UUID representing the article being queried"
           schema:
             type: string
           required: true
-          example: '8f2ad839-f617-4d0c-8755-b870b8c67735'
+          example: "8f2ad839-f617-4d0c-8755-b870b8c67735"
       responses:
         "200":
           description: "Successful response"
@@ -110,10 +107,10 @@ paths:
         "400":
           "$ref": "#/components/responses/BadRequest"
         "405":
-          "$ref": "#/components/responses/NotFound" 
+          "$ref": "#/components/responses/NotFound"
         "500":
           $ref: "#/components/responses/ServerError"
-  
+
   /reports/dump:
     get:
       tags:
@@ -134,7 +131,6 @@ paths:
           "$ref": "#/components/responses/BadRequest"
         "500":
           $ref: "#/components/responses/ServerError"
-  
   /reports/{reportId}:
     get:
       tags:
@@ -144,25 +140,407 @@ paths:
       operationId: "reportsOne"
       parameters:
         - name: reportId
-          in:           "path"
-          description:  "a UUID representing the report being queried"
+          in: "path"
+          description: "a UUID representing the report being queried"
           schema:
-            type:       string
-          required:     true
+            type: string
+          required: true
           example: "06144fdf-07e0-4ea2-8a91-af7fe47fc3f8"
       responses:
         "200":
-          description:  "Successful response"
+          description: "Successful response"
           content:
             application/json:
               schema:
                 type: array
-                items: 
+                items:
                   $ref: "#/components/schemas/Report"
         "400":
           $ref: "#/components/responses/BadRequest"
         "405":
-          "$ref": "#/components/responses/NotFound" 
+          "$ref": "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/ServerError"
+
+  /users/register:
+    post:
+      tags:
+        - "Users"
+      summary: "Registers a user"
+      description: "Creates new user in database and registers them."
+      operationId: "createUser"
+      requestBody:
+        "content":
+          {
+            "application/json":
+              {
+                schema:
+                  {
+                    type: "object",
+                    properties:
+                      {
+                        "name": { type: "string" },
+                        "email": { type: "string" },
+                        "password": { type: "string" },
+                      },
+                  },
+              },
+          }
+      responses:
+        "200":
+          description: "Successful response"
+          content:
+            application/json:
+              schema:
+                {
+                  type: "object",
+                  properties: { "user": { $ref: "#/components/schemas/User" } },
+                }
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "405":
+          "$ref": "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/ServerError"
+
+  /users/login:
+    post:
+      tags:
+        - "Users"
+      summary: "User logs in"
+      description: "Logs existing user in."
+      operationId: "loginUser"
+      requestBody:
+        "content":
+          {
+            "application/json":
+              {
+                schema:
+                  {
+                    type: "object",
+                    properties:
+                      {
+                        "email": { type: "string" },
+                        "password": { type: "string" },
+                      },
+                  },
+              },
+          }
+      responses:
+        "200":
+          description: "Successful response"
+          content:
+            application/json:
+              schema:
+                {
+                  type: "object",
+                  properties: { "user": { $ref: "#/components/schemas/User" } },
+                }
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "405":
+          "$ref": "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/ServerError"
+
+  /users/{userId}:
+    get:
+      tags:
+        - "Users"
+      summary: "Retrieve specific user"
+      description: "Retrieve specific user."
+      operationId: "getUser"
+      parameters:
+        - name: userId
+          in: "path"
+          description: "a UUID representing the user being queried"
+          schema:
+            type: string
+          required: true
+          example: "06144fdf-07e0-4ea2-8a91-af7fe47fc3f8"
+      responses:
+        "200":
+          description: "Successful response"
+          content:
+            application/json:
+              schema:
+                {
+                  type: "object",
+                  properties: { "user": { $ref: "#/components/schemas/User" } },
+                }
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "405":
+          "$ref": "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/ServerError"
+
+  /users/dashboard:
+    put:
+      tags:
+        - "Users"
+      summary: "Adds a dashboard under user profile"
+      description: "Adds a dashboard under user profile."
+      operationId: "addDashboardToUser"
+      requestBody:
+        "content":
+          {
+            "application/json":
+              {
+                schema:
+                  {
+                    type: "object",
+                    properties:
+                      {
+                        userId: { type: "string" },
+                        dashboardId: { type: "string" },
+                      },
+                  },
+              },
+          }
+      responses:
+        "200":
+          description: "Successful response"
+          content:
+            application/json:
+              {
+                schema:
+                  {
+                    type: "object",
+                    properties:
+                      {
+                        user: { $ref: "#/components/schemas/User" },
+                        dashboard: { $ref: "#/components/schemas/Dashboard" },
+                      },
+                  },
+              }
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "405":
+          "$ref": "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/ServerError"
+
+  /users/bookmark-article:
+    put:
+      tags:
+        - "Users"
+      summary: "Bookmarks article under user profile"
+      description: "Bookmarks article under user profile."
+      operationId: "addArticleToUser"
+      requestBody:
+        "content":
+          {
+            "application/json":
+              {
+                schema:
+                  {
+                    type: "object",
+                    properties:
+                      {
+                        userId: { type: "string" },
+                        articleId: { type: "string" },
+                      },
+                  },
+              },
+          }
+      responses:
+        "200":
+          description: "Successful response"
+          content:
+            application/json:
+              {
+                schema:
+                  {
+                    type: "object",
+                    properties:
+                      {
+                        user: { $ref: "#/components/schemas/User" },
+                        article: { $ref: "#/components/schemas/Article" },
+                      },
+                  },
+              }
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "405":
+          "$ref": "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/ServerError"
+
+  /dashboard:
+    post:
+      tags:
+        - "Dashboards"
+      summary: "Creates a new dashboard"
+      description: "Adds a new dashboard into the database"
+      operationId: "createDashboard"
+      requestBody:
+        "content":
+          {
+            "application/json":
+              {
+                schema:
+                  {
+                    type: "object",
+                    properties:
+                      {
+                        widgets:
+                          {
+                            type: "array",
+                            items:
+                              {
+                                "$ref": "#/components/schemas/WidgetRequestBody",
+                              },
+                          },
+                      },
+                  },
+              },
+          }
+      responses:
+        "200":
+          description: "Successful response"
+          content:
+            application/json:
+              {
+                schema:
+                  {
+                    type: "object",
+                    properties:
+                      {
+                        dashboard: { $ref: "#/components/schemas/Dashboard" },
+                        user: { $ref: "#/components/schemas/User" },
+                      },
+                  },
+              }
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "405":
+          "$ref": "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/ServerError"
+
+  /dashboard/{dashboardId}:
+    put:
+      tags:
+        - "Dashboards"
+      summary: "Updates an existing dashboard"
+      description: "Updates an existing dashboard and saves it into the database"
+      operationId: "updateDashboard"
+      parameters:
+        - name: dashboardId
+          in: "path"
+          description: "a UUID representing the dashboard being queried"
+          schema:
+            type: string
+          required: true
+          example: "06144fdf-07e0-4ea2-8a91-af7fe47fc3f8"
+      requestBody:
+        "content":
+          {
+            "application/json":
+              {
+                schema:
+                  {
+                    type: "object",
+                    properties:
+                      {
+                        widgets:
+                          {
+                            type: "array",
+                            items:
+                              {
+                                "$ref": "#/components/schemas/WidgetRequestBody",
+                              },
+                          },
+                      },
+                  },
+              },
+          }
+      responses:
+        "200":
+          description: "Successful response"
+          content:
+            application/json:
+              {
+                schema:
+                  {
+                    type: "object",
+                    properties:
+                      {
+                        dashboard: { $ref: "#/components/schemas/Dashboard" },
+                        user: { $ref: "#/components/schemas/User" },
+                      },
+                  },
+              }
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "405":
+          "$ref": "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/ServerError"
+    delete:
+      tags:
+        - "Dashboards"
+      summary: "Deletes a dashboard"
+      description: "Deletes a dashboard and removes it from the database"
+      operationId: "deleteDashboard"
+      parameters:
+        - name: dashboardId
+          in: "path"
+          description: "a UUID representing the dashboard being deleted"
+          schema:
+            type: string
+          required: true
+          example: "06144fdf-07e0-4ea2-8a91-af7fe47fc3f8"
+      responses:
+        "200":
+          description: "Successful response"
+          content:
+            application/json:
+              {
+                schema:
+                  {
+                    type: "object",
+                    properties: { user: { $ref: "#/components/schemas/User" } },
+                  },
+              }
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "405":
+          "$ref": "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/ServerError"
+    get:
+      tags:
+        - "Dashboards"
+      summary: "Retrieves a dashboard"
+      description: "Retrieves a dashboard from the database"
+      operationId: "etDashboard"
+      parameters:
+        - name: dashboardId
+          in: "path"
+          description: "a UUID representing the dashboard being deleted"
+          schema:
+            type: string
+          required: true
+          example: "06144fdf-07e0-4ea2-8a91-af7fe47fc3f8"
+      responses:
+        "200":
+          description: "Successful response"
+          content:
+            application/json:
+              {
+                schema:
+                  {
+                    type: "object",
+                    properties:
+                      { dashboard: { $ref: "#/components/schemas/Dashboard" } },
+                  },
+              }
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "405":
+          "$ref": "#/components/responses/NotFound"
         "500":
           $ref: "#/components/responses/ServerError"
 components:
@@ -254,3 +632,49 @@ components:
           type: "array"
           items:
             "$ref": "#/components/schemas/Report"
+    User:
+      type: "object"
+      properties:
+        userId:
+          type: "string"
+        name:
+          type: "string"
+        email:
+          type: "string"
+        password:
+          type: "string"
+        dashboards:
+          type: "array"
+          items:
+            type: "string"
+        bookmarkedArticles:
+          type: "array"
+          items:
+            type: "string"
+    Dashboard:
+      type: "object"
+      properties:
+        dashboardId:
+          type: "string"
+        userId:
+          type: "string"
+        widgets:
+          type: "array"
+          items:
+            "$ref": "#/components/schemas/Widget"
+    Widget:
+      type: "object"
+      properties:
+        widgetId:
+          type: "string"
+        widgetType:
+          type: "string"
+        articleId:
+          type: "string"
+    WidgetRequestBody:
+      type: "object"
+      properties:
+        widgetType:
+          type: "string"
+        articleId:
+          type: "string"
