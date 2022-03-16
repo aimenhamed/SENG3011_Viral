@@ -9,15 +9,17 @@ import {
 } from "IApiResponses";
 import { UserRepository } from "../../repositories/User.respository";
 import { ArticleRepository } from "../../repositories/Article.repository";
+import { DashboardRepository } from "../../repositories/Dashboard.repository";
 import { UserEntity } from "../../entity/User.entity";
 import { HTTPError } from "../../utils/Errors";
 import { internalServerError, badRequest } from "../../utils/Constants";
 import { convertUserEntityToInterface } from "../../converters/User.converter";
 import { convertArticleEntityToInterface } from "../../converters/Article.converter";
+import { convertDashboardEntityToInterface } from "../../converters/Dashboard.converter";
 
 export class UserService {
   private logger = getLogger();
-  constructor(readonly userRepository: UserRepository, readonly articleRepository: ArticleRepository) {}
+  constructor(readonly userRepository: UserRepository, readonly articleRepository: ArticleRepository, readonly dashboardRepository: DashboardRepository) {}
 
   async registerUser(
     userDetails: IUserRegisterRequestBody
@@ -90,7 +92,7 @@ export class UserService {
       throw new HTTPError(badRequest);
     }
 
-    const dashboard = await this.articleRepository.getArticle(userDashboard.dashboardId);
+    const dashboard = await this.dashboardRepository.getDashboard(userDashboard.dashboardId);
 
     if (dashboard === undefined) {
       this.logger.error(
@@ -111,7 +113,7 @@ export class UserService {
 
     return {
       user: convertUserEntityToInterface(user),
-      dashboard: convertDashboardEntityToInterface(dashboard),
+      dashboard: convertDashboardEntityToInterface(dashboard, []),
     }
   }
 }
