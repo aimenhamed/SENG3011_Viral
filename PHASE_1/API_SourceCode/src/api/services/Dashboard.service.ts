@@ -128,19 +128,32 @@ export class DashboardService {
       throw new HTTPError(notFoundError);
     }
 
+    // proceed once all linked widgets are deleted
     const deletePromises: Promise<DeleteResult>[] =
       this.getDeletePromises(dashboard);
-    Promise.all([...deletePromises]);
-
+    Promise.allSettled([...deletePromises]);
+    
     dashboard = await this.dashboardRepository.saveDashboard({
       ...dashboard,
       widgets: [],
     });
-    await this.dashboardRepository.deleteDashboard(dashboardId);
 
-    const user = (await this.userRepository.getUser(
+    // get user object
+    let user = (await this.userRepository.getUser(
       dashboard.userId
     )) as UserEntity;
+    if (!user) {
+      this.logger.error(`Dashboard has nonexisting user ${dashboard.userId}. Is the dashboard's creator missing?`);
+      throw new HTTPError(notFoundError);
+    }
+
+    // remove dashboard from user
+    user.dashboards = user.dashboards.filter((e)=>{return e !== dashboardId});
+    user = await this.userRepository.saveUser(user)
+    
+    // remove dashboard
+    await this.dashboardRepository.deleteDashboard(dashboardId); 
+
     return {
       user: convertUserEntityToInterface(user),
     };
