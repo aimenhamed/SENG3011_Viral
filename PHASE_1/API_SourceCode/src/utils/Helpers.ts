@@ -1,5 +1,6 @@
 import { IncomingHttpHeaders } from "http";
-import { ISearchRequestHeaders, IPeriodOfInterest } from "IApiResponses";
+import { ISearchRequestHeaders, IPeriodOfInterest, Log } from "IApiResponses";
+import { baseLog } from "./Constants";
 
 export const parseHeaders = (
   headers: IncomingHttpHeaders
@@ -16,5 +17,12 @@ export const parseHeaders = (
     periodOfInterest,
     location,
     keyTerms,
+  };
+};
+
+export const getLog = (date: Date): Log => {
+  return {
+    ...baseLog,
+    accessTime: date.toTimeString(),
   };
 };
