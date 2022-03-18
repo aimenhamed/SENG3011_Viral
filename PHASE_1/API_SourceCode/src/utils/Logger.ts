@@ -22,10 +22,6 @@ export const getLogger = (): Logger => {
       new transports.Console({
         silent: process.env.NODE_ENV === "test" && !process.env.LOG_LEVEL,
       }),
-      new transports.File({
-        silent: process.env.NODE_ENV !== "test",
-        filename: "src/utils/logDump.json",
-      }),
       loggingWinston,
     ],
   });

@@ -1,5 +1,9 @@
 import { HTTPError } from "../../utils/Errors";
-import { internalServerError, notFoundError } from "../../utils/Constants";
+import {
+  baseLog,
+  internalServerError,
+  notFoundError,
+} from "../../utils/Constants";
 import { ArticleRepository } from "../../repositories/Article.repository";
 import { ArticleService } from "./Article.service";
 import { getMockArticles } from "../../utils/testData";
@@ -10,6 +14,10 @@ describe("ArticleService", () => {
     jest.clearAllMocks();
     jest.resetAllMocks();
     repository = new ArticleRepository();
+  });
+  afterAll(() => {
+    jest.clearAllMocks();
+    jest.resetAllMocks();
   });
   const articleService = () => new ArticleService(repository);
 
@@ -30,6 +38,10 @@ describe("ArticleService", () => {
 
       expect(service.getAllArticles()).resolves.toEqual({
         articles,
+        log: {
+          ...baseLog,
+          accessTime: expect.any(String),
+        },
       });
     });
   });
@@ -53,6 +65,10 @@ describe("ArticleService", () => {
 
       expect(service.getSpecificArticle("art-123")).resolves.toEqual({
         article,
+        log: {
+          ...baseLog,
+          accessTime: expect.any(String),
+        },
       });
     });
   });
