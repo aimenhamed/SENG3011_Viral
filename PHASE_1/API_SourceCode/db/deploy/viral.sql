@@ -16,7 +16,7 @@ CREATE TABLE public.report (
     report_id uuid NOT NULL DEFAULT gen_random_uuid(),
     article_id uuid NOT NULL,
     event_date text NOT NULL,
-    location text[] NOT NULL,
+    locations text[] NOT NULL,
     diseases text[],
     syndromes text[],
     CONSTRAINT fk_report_id_article FOREIGN KEY (article_id) references public.article(article_id),
