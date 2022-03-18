@@ -22,7 +22,13 @@ export class ExpressWrapper {
     const app = express()
       .use(cors())
       .use(express.urlencoded({ extended: true }))
+<<<<<<< Updated upstream
       .use(bodyParser.json());
+=======
+      .use(bodyParser.json())
+      .get("/", (req, res) => res.redirect("/docs"))
+      .use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+>>>>>>> Stashed changes
 
     this.logger.info("Setup Express");
     return app;
