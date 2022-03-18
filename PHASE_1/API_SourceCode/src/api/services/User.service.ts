@@ -16,7 +16,10 @@ import { getLog } from "../../utils/Helpers";
 
 export class UserService {
   private logger = getLogger();
-  constructor(readonly userRepository: UserRepository, readonly articleRepository: ArticleRepository) {}
+  constructor(
+    readonly userRepository: UserRepository,
+    readonly articleRepository: ArticleRepository
+  ) {}
 
   async registerUser(
     userDetails: IUserRegisterRequestBody
@@ -66,7 +69,9 @@ export class UserService {
       throw new HTTPError(badRequest);
     }
 
-    const bookmarkedArticle = await this.articleRepository.getArticle(bookmarkDetails.articleId);
+    const bookmarkedArticle = await this.articleRepository.getArticle(
+      bookmarkDetails.articleId
+    );
 
     if (bookmarkedArticle === undefined) {
       this.logger.error(
@@ -75,20 +80,24 @@ export class UserService {
       throw new HTTPError(badRequest);
     }
 
-
-    if (user.bookmarkedArticles && user.bookmarkedArticles.includes(bookmarkedArticle.articleId)) {
+    if (
+      user.bookmarkedArticles &&
+      user.bookmarkedArticles.includes(bookmarkedArticle.articleId)
+    ) {
       this.logger.error(
         `User with userId ${user.userId} has already bookmarked article with articleId ${bookmarkedArticle.articleId}`
       );
       throw new HTTPError(badRequest);
     }
-    user.bookmarkedArticles = user.bookmarkedArticles ? [...user.bookmarkedArticles, bookmarkedArticle.articleId] : [bookmarkedArticle.articleId];
+    user.bookmarkedArticles = user.bookmarkedArticles
+      ? [...user.bookmarkedArticles, bookmarkedArticle.articleId]
+      : [bookmarkedArticle.articleId];
 
     user = await this.userRepository.saveUser(user);
-    
+
     return {
       user: convertUserEntityToInterface(user),
       article: convertArticleEntityToInterface(bookmarkedArticle),
-    }
+    };
   }
 }

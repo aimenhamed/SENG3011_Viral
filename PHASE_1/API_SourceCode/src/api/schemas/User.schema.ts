@@ -6,7 +6,7 @@ export const UserRegisterSchema = Joi.object({
   password: Joi.string().required(),
 });
 
-export const UserBookmarkArticleSchema =  Joi.object({
+export const UserBookmarkArticleSchema = Joi.object({
   userId: Joi.string().required(),
   articleId: Joi.string().required(),
 });
