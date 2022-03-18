@@ -91,3 +91,10 @@ export interface IGetDashboardSuccessResponse {
   dashboard: Dashboard;
   log: Log;
 }
+
+export interface IUserDashboardRequestBody {
+  userId: string;
+  dashboardId: string;
+}
+
+export type IUserDashboardSuccessResponse = IPostDashboardSuccessResponse;

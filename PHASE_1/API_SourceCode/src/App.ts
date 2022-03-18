@@ -37,7 +37,8 @@ export default class App {
   private readonly reportService = new ReportService(this.reportRepository);
   private readonly userService = new UserService(
     this.userRepository,
-    this.articleRepository
+    this.articleRepository,
+    this.dashboardRepository
   );
   private readonly dashboardService = new DashboardService(
     this.widgetRepository,

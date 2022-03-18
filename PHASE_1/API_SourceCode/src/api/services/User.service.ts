@@ -4,21 +4,26 @@ import {
   IUserRegisterSuccessResponse,
   IUserBookmarkArticleRequestBody,
   IUserBookmarkArticleSuccessResponse,
+  IUserDashboardRequestBody,
+  IUserDashboardSuccessResponse,
 } from "IApiResponses";
 import { UserRepository } from "../../repositories/User.respository";
 import { ArticleRepository } from "../../repositories/Article.repository";
+import { DashboardRepository } from "../../repositories/Dashboard.repository";
 import { UserEntity } from "../../entity/User.entity";
 import { HTTPError } from "../../utils/Errors";
 import { internalServerError, badRequest } from "../../utils/Constants";
 import { convertArticleEntityToInterface } from "../../converters/Article.converter";
 import { convertUserEntityToInterface } from "../../converters/User.converter";
 import { getLog } from "../../utils/Helpers";
+import { convertDashboardEntityToInterface } from "../../converters/Dashboard.converter";
 
 export class UserService {
   private logger = getLogger();
   constructor(
     readonly userRepository: UserRepository,
-    readonly articleRepository: ArticleRepository
+    readonly articleRepository: ArticleRepository,
+    readonly dashboardRepository: DashboardRepository
   ) {}
 
   async registerUser(
@@ -98,6 +103,49 @@ export class UserService {
     return {
       user: convertUserEntityToInterface(user),
       article: convertArticleEntityToInterface(bookmarkedArticle),
+    };
+  }
+
+  async addDashboard(
+    userDashboard: IUserDashboardRequestBody
+  ): Promise<IUserDashboardSuccessResponse | undefined> {
+    let user = await this.userRepository.getUser(userDashboard.userId);
+    if (user === undefined) {
+      this.logger.error(
+        `Failed to find user with userId ${userDashboard.userId}`
+      );
+      throw new HTTPError(badRequest);
+    }
+
+    const dashboard = await this.dashboardRepository.getDashboard(
+      userDashboard.dashboardId
+    );
+
+    if (dashboard === undefined) {
+      this.logger.error(
+        `Failed to find article with articleId ${userDashboard.dashboardId}`
+      );
+      throw new HTTPError(badRequest);
+    }
+
+    if (
+      user.dashboards &&
+      user.dashboards.includes(userDashboard.dashboardId)
+    ) {
+      this.logger.error(
+        `User with userId ${user.userId} has already bookmarked article with articleId ${userDashboard.dashboardId}`
+      );
+      throw new HTTPError(badRequest);
+    }
+    user.dashboards = user.dashboards
+      ? [...user.dashboards, userDashboard.dashboardId]
+      : [userDashboard.dashboardId];
+
+    user = await this.userRepository.saveUser(user);
+
+    return {
+      user: convertUserEntityToInterface(user),
+      dashboard: convertDashboardEntityToInterface(dashboard, []),
     };
   }
 }

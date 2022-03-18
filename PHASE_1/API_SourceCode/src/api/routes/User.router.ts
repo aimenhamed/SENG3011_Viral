@@ -6,10 +6,12 @@ import validationMiddleware from "../middlewares/validation";
 import {
   UserRegisterSchema,
   UserBookmarkArticleSchema,
+  UserDashboardSchema,
 } from "../schemas/User.schema";
 import {
   IUserRegisterRequestBody,
   IUserBookmarkArticleRequestBody,
+  IUserDashboardRequestBody,
 } from "IApiResponses";
 import { HTTPError } from "../../utils/Errors";
 import { badRequest } from "../../utils/Constants";
@@ -65,6 +67,28 @@ export class UserRouter implements IRouter {
           } catch (err: any) {
             this.logger.warn(
               `An error occured when trying to PUT bookmark article for user ${formatError(
+                err
+              )}`
+            );
+            return next(err);
+          }
+        }
+      )
+      .put(
+        "/users/dashboard",
+        validationMiddleware(UserDashboardSchema, "body"),
+        async (req: Request, res: Response, next: NextFunction) => {
+          this.logger.info(`Received /users/dashboard request`);
+
+          const userDashboard = req.body as IUserDashboardRequestBody;
+          if (!userDashboard) throw new HTTPError(badRequest);
+
+          try {
+            const result = await this.userService.addDashboard(userDashboard);
+            return res.status(200).json(result);
+          } catch (err: any) {
+            this.logger.warn(
+              `An error occurred when trying to PUT dashboard for user ${formatError(
                 err
               )}`
             );
