@@ -21,7 +21,6 @@ import { convertDashboardEntityToInterface } from "../../converters/Dashboard.co
 import { ArticleEntity } from "../../entity/Article.entity";
 
 export class UserService {
-  
   private logger = getLogger();
   constructor(
     readonly userRepository: UserRepository,
@@ -95,11 +94,13 @@ export class UserService {
     };
   }
 
-  async removeBookmark(bookmarkDetails: IUserBookmarkArticleRequestBody): Promise<IUserRemoveBookmarkSuccessResponse | undefined> {
+  async removeBookmark(
+    bookmarkDetails: IUserBookmarkArticleRequestBody
+  ): Promise<IUserRemoveBookmarkSuccessResponse | undefined> {
     let user = await this.getUser(bookmarkDetails.userId);
 
     if (
-      !user.bookmarkedArticles || 
+      !user.bookmarkedArticles ||
       user.bookmarkedArticles.length === 0 ||
       !user.bookmarkedArticles.includes(bookmarkDetails.articleId)
     ) {
@@ -109,7 +110,9 @@ export class UserService {
       throw new HTTPError(badRequest);
     }
 
-    user.bookmarkedArticles = user.bookmarkedArticles.filter((e)=> e !== bookmarkDetails.articleId);
+    user.bookmarkedArticles = user.bookmarkedArticles.filter(
+      (e) => e !== bookmarkDetails.articleId
+    );
 
     user = await this.userRepository.saveUser(user);
 
@@ -163,26 +166,22 @@ export class UserService {
     };
   }
 
-  async getUser(userId: string):Promise<UserEntity> {
+  async getUser(userId: string): Promise<UserEntity> {
     const user = await this.userRepository.getUser(userId);
 
     if (user === undefined) {
-      this.logger.error(
-        `Failed to find user with userId ${userId}`
-      );
+      this.logger.error(`Failed to find user with userId ${userId}`);
       throw new HTTPError(badRequest);
     }
 
     return user;
   }
 
-  async getArticle(articleId: string):Promise<ArticleEntity> {
+  async getArticle(articleId: string): Promise<ArticleEntity> {
     const article = await this.articleRepository.getArticle(articleId);
 
     if (article === undefined) {
-      this.logger.error(
-        `Failed to find article with articleId ${articleId}`
-      );
+      this.logger.error(`Failed to find article with articleId ${articleId}`);
       throw new HTTPError(badRequest);
     }
 
