@@ -8,6 +8,7 @@ import { ReportEntity } from "../../entity/Report.entity";
 import { HTTPError } from "../../utils/Errors";
 import { internalServerError, notFoundError } from "../../utils/Constants";
 import { convertReportEntityToInterface } from "../../converters/Report.converter";
+import { getLog } from "../../utils/Helpers";
 
 export class ReportService {
   private logger = getLogger();
@@ -25,6 +26,7 @@ export class ReportService {
 
     return {
       reports: reports.map(convertReportEntityToInterface),
+      log: getLog(new Date()),
     };
   }
 
@@ -38,10 +40,12 @@ export class ReportService {
       throw new HTTPError(notFoundError);
     }
 
-    this.logger.info(`Report found, responding to client`);
-    const result = {
-      report,
+    this.logger.info(
+      `Report found with reportId ${reportId}, responding to client`
+    );
+    return {
+      report: convertReportEntityToInterface(report),
+      log: getLog(new Date()),
     };
-    return result;
   }
 }

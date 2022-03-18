@@ -1,5 +1,9 @@
 import { HTTPError } from "../../utils/Errors";
-import { internalServerError, notFoundError } from "../../utils/Constants";
+import {
+  baseLog,
+  internalServerError,
+  notFoundError,
+} from "../../utils/Constants";
 import { ReportRepository } from "../../repositories/Report.repository";
 import { ReportService } from "./Report.service";
 import { getMockReports } from "../../utils/testData";
@@ -10,6 +14,10 @@ describe("ReportService", () => {
     jest.clearAllMocks();
     jest.resetAllMocks();
     repository = new ReportRepository();
+  });
+  afterAll(() => {
+    jest.clearAllMocks();
+    jest.resetAllMocks();
   });
   const reportService = () => new ReportService(repository);
 
@@ -30,6 +38,10 @@ describe("ReportService", () => {
 
       expect(service.getAllReports()).resolves.toEqual({
         reports,
+        log: {
+          ...baseLog,
+          accessTime: expect.any(String),
+        },
       });
     });
   });
@@ -51,6 +63,10 @@ describe("ReportService", () => {
 
       expect(service.getSpecificReport("rep-123")).resolves.toEqual({
         report,
+        log: {
+          ...baseLog,
+          accessTime: expect.any(String),
+        },
       });
     });
   });

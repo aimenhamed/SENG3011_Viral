@@ -90,6 +90,29 @@ export class DashboardRouter implements IRouter {
             return next(err);
           }
         }
+      )
+      .get(
+        "/dashboards/:dashboardId",
+        async (req: Request, res: Response, next: NextFunction) => {
+          this.logger.info(
+            `Received GET /dashboards request with for dashboardId ${req.params.dashboardId}`
+          );
+          const { dashboardId } = req.params;
+          try {
+            const result = await this.dashboardService.getDashboard(
+              dashboardId
+            );
+            this.logger.info(`Responding to client in GET /dashboards`);
+            return res.status(200).json(result);
+          } catch (err: any) {
+            this.logger.warn(
+              `An error occurred when trying to GET dashboard ${formatError(
+                err
+              )}`
+            );
+            return next(err);
+          }
+        }
       );
   }
 

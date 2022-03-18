@@ -8,6 +8,7 @@ import { UserEntity } from "../../entity/User.entity";
 import { HTTPError } from "../../utils/Errors";
 import { badRequest, internalServerError } from "../../utils/Constants";
 import { convertUserEntityToInterface } from "../../converters/User.converter";
+import { getLog } from "../../utils/Helpers";
 
 export class UserService {
   private logger = getLogger();
@@ -45,6 +46,7 @@ export class UserService {
     );
     return {
       user: convertUserEntityToInterface(userEntity),
+      log: getLog(new Date()),
     };
   }
 }

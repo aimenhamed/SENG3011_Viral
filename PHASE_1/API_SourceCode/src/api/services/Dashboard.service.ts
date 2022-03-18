@@ -3,6 +3,7 @@ import {
   ICommonDashboardRequestBody,
   ICommonDashboardSuccessResponse,
   IDeleteDashboardSuccessResponse,
+  IGetDashboardSuccessResponse,
 } from "IApiResponses";
 import { WidgetRepository } from "../../repositories/Widget.repository";
 import { UserRepository } from "../../repositories/User.respository";
@@ -15,6 +16,7 @@ import { notFoundError } from "../../utils/Constants";
 import { convertUserEntityToInterface } from "../../converters/User.converter";
 import { convertDashboardEntityToInterface } from "../../converters/Dashboard.converter";
 import { DeleteResult } from "typeorm";
+import { getLog } from "../../utils/Helpers";
 
 export class DashboardService {
   private logger = getLogger();
@@ -68,6 +70,7 @@ export class DashboardService {
         widgetEntites
       ),
       user: convertUserEntityToInterface(user),
+      log: getLog(new Date()),
     };
   }
 
@@ -115,6 +118,7 @@ export class DashboardService {
         widgetEntites
       ),
       user: convertUserEntityToInterface(user),
+      log: getLog(new Date()),
     };
   }
 
@@ -160,6 +164,28 @@ export class DashboardService {
 
     return {
       user: convertUserEntityToInterface(user),
+      log: getLog(new Date()),
+    };
+  }
+
+  async getDashboard(
+    dashboardId: string
+  ): Promise<IGetDashboardSuccessResponse | undefined> {
+    const dashboard = await this.dashboardRepository.getDashboard(dashboardId);
+
+    if (!dashboard) {
+      this.logger.error(`No dashboard found with dashboardId ${dashboardId}`);
+      throw new HTTPError(notFoundError);
+    }
+    this.logger.info(`Found dashboard with dashboardId ${dashboardId}`);
+
+    const widgets: WidgetEntity[] = await this.widgetRepository.getWidgetById(
+      dashboard.widgets
+    );
+
+    return {
+      dashboard: convertDashboardEntityToInterface(dashboard, widgets),
+      log: getLog(new Date()),
     };
   }
 

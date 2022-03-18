@@ -8,6 +8,7 @@ import { ArticleEntity } from "../../entity/Article.entity";
 import { HTTPError } from "../../utils/Errors";
 import { internalServerError, notFoundError } from "../../utils/Constants";
 import { convertArticleEntityToInterface } from "../../converters/Article.converter";
+import { getLog } from "../../utils/Helpers";
 
 export class ArticleService {
   private logger = getLogger();
@@ -25,6 +26,7 @@ export class ArticleService {
 
     return {
       articles: articles.map(convertArticleEntityToInterface),
+      log: getLog(new Date()),
     };
   }
 
@@ -38,10 +40,12 @@ export class ArticleService {
       throw new HTTPError(notFoundError);
     }
 
-    this.logger.info(`Article found, responding to client`);
-    const result = {
-      article,
+    this.logger.info(
+      `Article found with articleId ${articleId}, responding to client`
+    );
+    return {
+      article: convertArticleEntityToInterface(article),
+      log: getLog(new Date()),
     };
-    return result;
   }
 }
