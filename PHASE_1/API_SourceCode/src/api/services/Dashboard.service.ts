@@ -75,14 +75,14 @@ export class DashboardService {
     dashboardId: string,
     dashboardDetails: ICommonDashboardRequestBody
   ): Promise<ICommonDashboardSuccessResponse | undefined> {
-    let user = await this.userRepository.getUser(dashboardDetails.userId);
+    const user = await this.userRepository.getUser(dashboardDetails.userId);
 
     if (!user) {
       this.logger.error(`No user found with userId ${dashboardDetails.userId}`);
       throw new HTTPError(notFoundError);
     }
 
-    let dashboard = await this.dashboardRepository.getDashboard(dashboardId);
+    const dashboard = await this.dashboardRepository.getDashboard(dashboardId);
 
     if (!dashboard) {
       this.logger.error(`No dashboard found with dashboardId ${dashboardId}`);
@@ -132,7 +132,7 @@ export class DashboardService {
     const deletePromises: Promise<DeleteResult>[] =
       this.getDeletePromises(dashboard);
     Promise.allSettled([...deletePromises]);
-    
+
     dashboard = await this.dashboardRepository.saveDashboard({
       ...dashboard,
       widgets: [],
@@ -143,16 +143,20 @@ export class DashboardService {
       dashboard.userId
     )) as UserEntity;
     if (!user) {
-      this.logger.error(`Dashboard has nonexisting user ${dashboard.userId}. Is the dashboard's creator missing?`);
+      this.logger.error(
+        `Dashboard has nonexisting user ${dashboard.userId}. Is the dashboard's creator missing?`
+      );
       throw new HTTPError(notFoundError);
     }
 
     // remove dashboard from user
-    user.dashboards = user.dashboards.filter((e)=>{return e !== dashboardId});
-    user = await this.userRepository.saveUser(user)
-    
+    user.dashboards = user.dashboards.filter((e) => {
+      return e !== dashboardId;
+    });
+    user = await this.userRepository.saveUser(user);
+
     // remove dashboard
-    await this.dashboardRepository.deleteDashboard(dashboardId); 
+    await this.dashboardRepository.deleteDashboard(dashboardId);
 
     return {
       user: convertUserEntityToInterface(user),
