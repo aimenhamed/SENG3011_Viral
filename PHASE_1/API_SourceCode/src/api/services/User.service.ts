@@ -2,17 +2,24 @@ import { getLogger } from "../../utils/Logger";
 import {
   IUserRegisterRequestBody,
   IUserRegisterSuccessResponse,
+  IUserBookmarkArticleRequestBody,
+  IUserBookmarkArticleSuccessResponse,
 } from "IApiResponses";
 import { UserRepository } from "../../repositories/User.respository";
+import { ArticleRepository } from "../../repositories/Article.repository";
 import { UserEntity } from "../../entity/User.entity";
 import { HTTPError } from "../../utils/Errors";
-import { badRequest, internalServerError } from "../../utils/Constants";
+import { internalServerError, badRequest } from "../../utils/Constants";
+import { convertArticleEntityToInterface } from "../../converters/Article.converter";
 import { convertUserEntityToInterface } from "../../converters/User.converter";
 import { getLog } from "../../utils/Helpers";
 
 export class UserService {
   private logger = getLogger();
-  constructor(readonly userRepository: UserRepository) {}
+  constructor(
+    readonly userRepository: UserRepository,
+    readonly articleRepository: ArticleRepository
+  ) {}
 
   async registerUser(
     userDetails: IUserRegisterRequestBody
@@ -47,6 +54,50 @@ export class UserService {
     return {
       user: convertUserEntityToInterface(userEntity),
       log: getLog(new Date()),
+    };
+  }
+
+  async bookmarkArticle(
+    bookmarkDetails: IUserBookmarkArticleRequestBody
+  ): Promise<IUserBookmarkArticleSuccessResponse | undefined> {
+    let user = await this.userRepository.getUser(bookmarkDetails.userId);
+
+    if (user === undefined) {
+      this.logger.error(
+        `Failed to find user with userId ${bookmarkDetails.userId}`
+      );
+      throw new HTTPError(badRequest);
+    }
+
+    const bookmarkedArticle = await this.articleRepository.getArticle(
+      bookmarkDetails.articleId
+    );
+
+    if (bookmarkedArticle === undefined) {
+      this.logger.error(
+        `Failed to find article with articleId ${bookmarkDetails.articleId}`
+      );
+      throw new HTTPError(badRequest);
+    }
+
+    if (
+      user.bookmarkedArticles &&
+      user.bookmarkedArticles.includes(bookmarkedArticle.articleId)
+    ) {
+      this.logger.error(
+        `User with userId ${user.userId} has already bookmarked article with articleId ${bookmarkedArticle.articleId}`
+      );
+      throw new HTTPError(badRequest);
+    }
+    user.bookmarkedArticles = user.bookmarkedArticles
+      ? [...user.bookmarkedArticles, bookmarkedArticle.articleId]
+      : [bookmarkedArticle.articleId];
+
+    user = await this.userRepository.saveUser(user);
+
+    return {
+      user: convertUserEntityToInterface(user),
+      article: convertArticleEntityToInterface(bookmarkedArticle),
     };
   }
 }

@@ -59,6 +59,16 @@ export interface IUserRegisterSuccessResponse {
   log: Log;
 }
 
+export interface IUserBookmarkArticleRequestBody {
+  userId: string;
+  articleId: string;
+}
+
+export interface IUserBookmarkArticleSuccessResponse {
+  user: User;
+  article: Article;
+}
+
 export interface WidgetRequest {
   widgetType: WidgetType;
   articleId: string;

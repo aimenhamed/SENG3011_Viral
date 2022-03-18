@@ -135,7 +135,7 @@ export class DashboardService {
     // proceed once all linked widgets are deleted
     const deletePromises: Promise<DeleteResult>[] =
       this.getDeletePromises(dashboard);
-    Promise.allSettled([...deletePromises]);
+    Promise.all([...deletePromises]);
 
     dashboard = await this.dashboardRepository.saveDashboard({
       ...dashboard,
