@@ -1,5 +1,8 @@
 import { Article } from "IArticle";
 import { Report } from "IReport";
+import { User } from "IUser";
+import { Dashboard } from "IDashboard";
+import { WidgetType } from "../interfaces/IWidget";
 import mockArticles from "./data/small.json";
 
 export const getMockArticles = (): Article[] => {
@@ -57,3 +60,30 @@ export const getMockReports = (): Report[] => {
     },
   ];
 };
+
+export const getMockUsers = (): User[] => {
+  return [
+    {
+      userId: "user1",
+      name: "Bob",
+      email: "bobthebuilder@gmail.com",
+      password: "abc123",
+      dashboards: [],
+      bookmarkedArticles: []
+    }
+  ]
+}
+
+export const getMockDashboards = (): Dashboard[] => {
+  return [
+    {
+      dashboardId: "dashboard1",
+      userId: "user1",
+      widgets: [ {
+        widgetId: "widget1",
+        widgetType: WidgetType.ARTICLE,
+        articleId: "art-123"
+      } ]
+    }
+  ]
+}
