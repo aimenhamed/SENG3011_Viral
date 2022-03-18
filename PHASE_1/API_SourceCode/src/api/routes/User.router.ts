@@ -97,6 +97,25 @@ export class UserRouter implements IRouter {
             return next(err);
           }
         }
+      )
+      .get(
+        "/users/:userId",
+        async (req: Request, res: Response, next: NextFunction) => {
+          this.logger.info(`Received /users/:userId request`);
+          try {
+            const userId: string = req.params.userId;
+            const result = await this.userService.getSpecificUser(userId);
+            this.logger.info(`Responding to client in GET /users/:userId`);
+            return res.status(200).json(result);
+          } catch (err: any) {
+            this.logger.warn(
+              `An error occurred when trying to GET specific user with userId ${
+                req.params.userId
+              }.${formatError(err)}`
+            );
+            return next(err);
+          }
+        }
       );
   }
 

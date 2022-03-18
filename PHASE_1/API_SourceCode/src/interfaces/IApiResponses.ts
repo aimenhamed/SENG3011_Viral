@@ -98,4 +98,9 @@ export interface IUserDashboardRequestBody {
   dashboardId: string;
 }
 
+export interface IUserSpecificSuccessResponse {
+  user: User;
+  log: Log;
+}
+
 export type IUserDashboardSuccessResponse = ICommonDashboardSuccessResponse;

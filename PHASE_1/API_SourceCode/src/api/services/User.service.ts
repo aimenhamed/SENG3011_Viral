@@ -6,17 +6,23 @@ import {
   IUserBookmarkArticleSuccessResponse,
   IUserDashboardRequestBody,
   IUserDashboardSuccessResponse,
+  IUserSpecificSuccessResponse,
 } from "IApiResponses";
 import { UserRepository } from "../../repositories/User.respository";
 import { ArticleRepository } from "../../repositories/Article.repository";
 import { DashboardRepository } from "../../repositories/Dashboard.repository";
 import { UserEntity } from "../../entity/User.entity";
 import { HTTPError } from "../../utils/Errors";
-import { internalServerError, badRequest } from "../../utils/Constants";
+import {
+  internalServerError,
+  badRequest,
+  notFoundError,
+} from "../../utils/Constants";
 import { convertArticleEntityToInterface } from "../../converters/Article.converter";
 import { convertUserEntityToInterface } from "../../converters/User.converter";
 import { getLog } from "../../utils/Helpers";
 import { convertDashboardEntityToInterface } from "../../converters/Dashboard.converter";
+import { SimpleConsoleLogger } from "typeorm";
 
 export class UserService {
   private logger = getLogger();
@@ -147,6 +153,20 @@ export class UserService {
     return {
       user: convertUserEntityToInterface(user),
       dashboard: convertDashboardEntityToInterface(dashboard, []),
+      log: getLog(new Date()),
+    };
+  }
+
+  async getSpecificUser(userId: string): Promise<IUserSpecificSuccessResponse> {
+    const user = await this.userRepository.getUser(userId);
+    if (user === undefined) {
+      this.logger.error(`No user with userId ${userId} found in db`);
+      throw new HTTPError(notFoundError);
+    }
+
+    this.logger.info(`User found with userId ${userId}, responding to client`);
+    return {
+      user: convertUserEntityToInterface(user),
       log: getLog(new Date()),
     };
   }
