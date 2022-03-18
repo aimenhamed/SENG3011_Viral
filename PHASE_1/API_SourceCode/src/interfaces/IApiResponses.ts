@@ -97,4 +97,4 @@ export interface IUserDashboardRequestBody {
   dashboardId: string;
 }
 
-export type IUserDashboardSuccessResponse = IPostDashboardSuccessResponse;
+export type IUserDashboardSuccessResponse = ICommonDashboardSuccessResponse;
