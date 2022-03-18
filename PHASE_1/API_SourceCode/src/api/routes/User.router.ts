@@ -84,7 +84,9 @@ export class UserRouter implements IRouter {
           if (!userDashboard) throw new HTTPError(badRequest);
 
           try {
-            const result = await this.userService.addDashboard(userDashboard);
+            const result = await this.userService.addDashboardToUser(
+              userDashboard
+            );
             return res.status(200).json(result);
           } catch (err: any) {
             this.logger.warn(

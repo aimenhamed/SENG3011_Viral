@@ -1,0 +1,945 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "description": "This is the documentation for the interfaces and routes to the Viral API. https://github.com/aimenhamed/SENG3011_Viral",
+    "version": "1.0.0",
+    "title": "Viral API"
+  },
+  "servers": [
+    {
+      "url": "https://teamviral-api.herokuapp.com/api/v1/",
+      "description": "Production server (uses live data)"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Articles",
+      "description": "Everything related to articles"
+    },
+    {
+      "name": "Reports",
+      "description": "Everything you need to know about reports"
+    }
+  ],
+  "paths": {
+    "/search": {
+      "get": {
+        "tags": [
+          "Articles"
+        ],
+        "summary": "Retrieve articles per a search criteria",
+        "description": "Retrieve articles based on a criteria provided in the request.",
+        "operationId": "filterArticles",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "period_of_interest",
+            "description": "The period of time to search through which includes the start and end times.",
+            "schema": {
+              "$ref": "#/components/schemas/Period"
+            },
+            "required": true,
+            "example": "{\"start\":\"2009-09-23\",\"end\":\"2021-09-24\"}"
+          },
+          {
+            "in": "header",
+            "name": "location",
+            "description": "The location of where the cases were reported.",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "example": "\"India\""
+          },
+          {
+            "in": "header",
+            "name": "key_terms",
+            "description": "Key search terms that our database can query.",
+            "schema": {
+              "type": "string",
+              "items": {
+                "type": "string"
+              }
+            },
+            "required": true,
+            "example": "[\"nipha virus\", \"Encephalitis\"]"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Article"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "405": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          }
+        }
+      }
+    },
+    "/articles/dump": {
+      "get": {
+        "tags": [
+          "Articles"
+        ],
+        "summary": "Retrieve all articles",
+        "description": "Dumps all articles currently stored in the database.",
+        "operationId": "articlesDump",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Article"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          }
+        }
+      }
+    },
+    "/articles/{articleId}": {
+      "get": {
+        "tags": [
+          "Articles"
+        ],
+        "summary": "Retrieves an article matching id",
+        "description": "Queries the database for an article with identical id",
+        "operationId": "articlesOne",
+        "parameters": [
+          {
+            "name": "articleId",
+            "in": "path",
+            "description": "a UUID representing the article being queried",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "example": "8f2ad839-f617-4d0c-8755-b870b8c67735"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Article"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "405": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          }
+        }
+      }
+    },
+    "/reports/dump": {
+      "get": {
+        "tags": [
+          "Reports"
+        ],
+        "summary": "Retrieve all reports",
+        "description": "Dumps all reports currently stored in the database.",
+        "operationId": "reportDump",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Report"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          }
+        }
+      }
+    },
+    "/reports/{reportId}": {
+      "get": {
+        "tags": [
+          "Reports"
+        ],
+        "summary": "Retrieve a report matching id",
+        "description": "Dumps all reports currently stored in the database.",
+        "operationId": "reportsOne",
+        "parameters": [
+          {
+            "name": "reportId",
+            "in": "path",
+            "description": "a UUID representing the report being queried",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "example": "06144fdf-07e0-4ea2-8a91-af7fe47fc3f8"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Report"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "405": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          }
+        }
+      }
+    },
+    "/users/register": {
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Registers a user",
+        "description": "Creates new user in database and registers them.",
+        "operationId": "createUser",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "user": {
+                      "$ref": "#/components/schemas/User"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "405": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          }
+        }
+      }
+    },
+    "/users/login": {
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "User logs in",
+        "description": "Logs existing user in.",
+        "operationId": "loginUser",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "user": {
+                      "$ref": "#/components/schemas/User"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "405": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          }
+        }
+      }
+    },
+    "/users/{userId}": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Retrieve specific user",
+        "description": "Retrieve specific user.",
+        "operationId": "getUser",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "a UUID representing the user being queried",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "example": "06144fdf-07e0-4ea2-8a91-af7fe47fc3f8"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "user": {
+                      "$ref": "#/components/schemas/User"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "405": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          }
+        }
+      }
+    },
+    "/users/dashboard": {
+      "put": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Adds a dashboard under user profile",
+        "description": "Adds a dashboard under user profile.",
+        "operationId": "addDashboardToUser",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "userId": {
+                    "type": "string"
+                  },
+                  "dashboardId": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "user": {
+                      "$ref": "#/components/schemas/User"
+                    },
+                    "dashboard": {
+                      "$ref": "#/components/schemas/Dashboard"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "405": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          }
+        }
+      }
+    },
+    "/users/bookmark-article": {
+      "put": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Bookmarks article under user profile",
+        "description": "Bookmarks article under user profile.",
+        "operationId": "addArticleToUser",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "userId": {
+                    "type": "string"
+                  },
+                  "articleId": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "user": {
+                      "$ref": "#/components/schemas/User"
+                    },
+                    "article": {
+                      "$ref": "#/components/schemas/Article"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "405": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          }
+        }
+      }
+    },
+    "/dashboard": {
+      "post": {
+        "tags": [
+          "Dashboards"
+        ],
+        "summary": "Creates a new dashboard",
+        "description": "Adds a new dashboard into the database",
+        "operationId": "createDashboard",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "userId": {
+                    "type": "string"
+                  },
+                  "widgets": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/WidgetRequestBody"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "dashboard": {
+                      "$ref": "#/components/schemas/Dashboard"
+                    },
+                    "user": {
+                      "$ref": "#/components/schemas/User"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "405": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          }
+        }
+      }
+    },
+    "/dashboard/{dashboardId}": {
+      "put": {
+        "tags": [
+          "Dashboards"
+        ],
+        "summary": "Updates an existing dashboard",
+        "description": "Updates an existing dashboard and saves it into the database",
+        "operationId": "updateDashboard",
+        "parameters": [
+          {
+            "name": "dashboardId",
+            "in": "path",
+            "description": "a UUID representing the dashboard being queried",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "example": "06144fdf-07e0-4ea2-8a91-af7fe47fc3f8"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "widgets": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/WidgetRequestBody"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "dashboard": {
+                      "$ref": "#/components/schemas/Dashboard"
+                    },
+                    "user": {
+                      "$ref": "#/components/schemas/User"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "405": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Dashboards"
+        ],
+        "summary": "Deletes a dashboard",
+        "description": "Deletes a dashboard and removes it from the database",
+        "operationId": "deleteDashboard",
+        "parameters": [
+          {
+            "name": "dashboardId",
+            "in": "path",
+            "description": "a UUID representing the dashboard being deleted",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "example": "06144fdf-07e0-4ea2-8a91-af7fe47fc3f8"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "user": {
+                      "$ref": "#/components/schemas/User"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "405": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Dashboards"
+        ],
+        "summary": "Retrieves a dashboard",
+        "description": "Retrieves a dashboard from the database",
+        "operationId": "etDashboard",
+        "parameters": [
+          {
+            "name": "dashboardId",
+            "in": "path",
+            "description": "a UUID representing the dashboard being deleted",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "example": "06144fdf-07e0-4ea2-8a91-af7fe47fc3f8"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "dashboard": {
+                      "$ref": "#/components/schemas/Dashboard"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "405": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "responses": {
+      "BadRequest": {
+        "description": "The request was not formed with correct inputs.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "errorCode": {
+                  "type": "integer",
+                  "example": 400
+                },
+                "errorMessage": {
+                  "type": "string",
+                  "example": "Bad request"
+                }
+              }
+            }
+          }
+        }
+      },
+      "NotFound": {
+        "description": "The requested resource was not found",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "errorCode": {
+                  "type": "integer",
+                  "example": 404
+                },
+                "errorMessage": {
+                  "type": "string",
+                  "example": "Not found"
+                }
+              }
+            }
+          }
+        }
+      },
+      "ServerError": {
+        "description": "Internal server error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "errorCode": {
+                  "type": "integer",
+                  "example": 500
+                },
+                "errorMessage": {
+                  "type": "string",
+                  "example": "Internal server error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "schemas": {
+      "Period": {
+        "type": "string",
+        "properties": {
+          "start": {
+            "type": "string",
+            "description": "Start time"
+          },
+          "end": {
+            "type": "string",
+            "description": "End time"
+          }
+        },
+        "xml": {
+          "name": "Period"
+        }
+      },
+      "Report": {
+        "type": "object",
+        "properties": {
+          "reportId": {
+            "type": "string"
+          },
+          "diseases": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "syndromes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "eventDate": {
+            "type": "string"
+          },
+          "locations": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "Article": {
+        "type": "object",
+        "properties": {
+          "articleId": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          },
+          "dateOfPublication": {
+            "type": "string"
+          },
+          "headline": {
+            "type": "string"
+          },
+          "mainText": {
+            "type": "string"
+          },
+          "reports": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Report"
+            }
+          }
+        }
+      },
+      "User": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "dashboards": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "bookmarkedArticles": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "Dashboard": {
+        "type": "object",
+        "properties": {
+          "dashboardId": {
+            "type": "string"
+          },
+          "userId": {
+            "type": "string"
+          },
+          "widgets": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Widget"
+            }
+          }
+        }
+      },
+      "Widget": {
+        "type": "object",
+        "properties": {
+          "widgetId": {
+            "type": "string"
+          },
+          "widgetType": {
+            "type": "string"
+          },
+          "articleId": {
+            "type": "string"
+          }
+        }
+      },
+      "WidgetRequestBody": {
+        "type": "object",
+        "properties": {
+          "widgetType": {
+            "type": "string"
+          },
+          "articleId": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

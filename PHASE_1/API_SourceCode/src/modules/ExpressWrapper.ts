@@ -6,6 +6,8 @@ import bodyParser from "body-parser";
 import { promisify } from "util";
 import { IRouter } from "../interfaces/IRouter";
 import { errorHandlerMiddleware } from "../api/middlewares/errorHandler";
+import swaggerUi from "swagger-ui-express";
+import swaggerDocument from "../utils/openapi.json";
 
 export class ExpressWrapper {
   private logger = getLogger();
@@ -22,13 +24,9 @@ export class ExpressWrapper {
     const app = express()
       .use(cors())
       .use(express.urlencoded({ extended: true }))
-<<<<<<< Updated upstream
-      .use(bodyParser.json());
-=======
       .use(bodyParser.json())
       .get("/", (req, res) => res.redirect("/docs"))
       .use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
->>>>>>> Stashed changes
 
     this.logger.info("Setup Express");
     return app;
