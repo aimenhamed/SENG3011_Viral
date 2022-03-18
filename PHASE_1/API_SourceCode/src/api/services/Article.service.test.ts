@@ -49,7 +49,7 @@ describe("ArticleService", () => {
   describe("getSpecificArticle", () => {
     it("should throw HTTP 404 error if the article is not found", () => {
       const service = articleService();
-      repository.getSpecificArticle = jest.fn().mockReturnValue(undefined);
+      repository.getArticle = jest.fn().mockReturnValue(undefined);
 
       const errorResult = new HTTPError(notFoundError);
       getMockArticles();
@@ -61,7 +61,7 @@ describe("ArticleService", () => {
     it("should resolve and return expected article", () => {
       const service = articleService();
       const article = getMockArticles()[0];
-      repository.getSpecificArticle = jest.fn().mockReturnValue(article);
+      repository.getArticle = jest.fn().mockReturnValue(article);
 
       expect(service.getSpecificArticle("art-123")).resolves.toEqual({
         article,

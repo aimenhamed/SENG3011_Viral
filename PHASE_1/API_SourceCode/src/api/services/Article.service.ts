@@ -33,7 +33,7 @@ export class ArticleService {
   async getSpecificArticle(
     articleId: string
   ): Promise<IArticleSpecificSuccessResponse> {
-    const article = await this.articleRepository.getSpecificArticle(articleId);
+    const article = await this.articleRepository.getArticle(articleId);
 
     if (article === undefined) {
       this.logger.error(`No article with articleId ${articleId} found in db`);
