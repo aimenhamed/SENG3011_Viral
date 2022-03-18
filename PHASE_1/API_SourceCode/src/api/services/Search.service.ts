@@ -1,9 +1,13 @@
 import { getLogger } from "../../utils/Logger";
-import { ISearchRequestHeaders, ISearchSuccessResponse } from "IApiResponses";
+import {
+  IPeriodOfInterest,
+  ISearchRequestHeaders,
+  ISearchSuccessResponse,
+} from "IApiResponses";
 import { ArticleRepository } from "../../repositories/Article.repository";
 import { ReportRepository } from "../../repositories/Report.repository";
 import { HTTPError } from "../../utils/Errors";
-import { internalServerError } from "../../utils/Constants";
+import { badRequest, internalServerError } from "../../utils/Constants";
 import { convertArticleEntityToInterface } from "../../converters/Article.converter";
 import { ArticleEntity } from "../../entity/Article.entity";
 import { ReportEntity } from "../../entity/Report.entity";
@@ -19,6 +23,8 @@ export class SearchService {
   async getSearch(
     searchCriteria: ISearchRequestHeaders
   ): Promise<ISearchSuccessResponse | undefined> {
+    this.validateDates(searchCriteria.periodOfInterest);
+
     const reports: ReportEntity[] = await this.reportRepository.findReports(
       [searchCriteria.location],
       searchCriteria.keyTerms,
@@ -49,5 +55,15 @@ export class SearchService {
       articles: articleEntities.map(convertArticleEntityToInterface),
       log: getLog(new Date()),
     };
+  }
+
+  validateDates(dates: IPeriodOfInterest): void {
+    const { start, end } = dates;
+    const startDate = new Date(start);
+    const endDate = new Date(end);
+    if (startDate.getTime() > endDate.getTime()) {
+      this.logger.error(`Invalid input, start end is after end date.`);
+      throw new HTTPError(badRequest);
+    }
   }
 }

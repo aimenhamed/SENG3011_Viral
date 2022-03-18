@@ -25,7 +25,8 @@ export class ExpressWrapper {
       .use(cors())
       .use(express.urlencoded({ extended: true }))
       .use(bodyParser.json())
-      .use("/", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+      .get("/", (req, res) => res.redirect("/docs"))
+      .use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
     this.logger.info("Setup Express");
     return app;
