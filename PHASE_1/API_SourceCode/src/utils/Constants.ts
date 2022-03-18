@@ -32,3 +32,8 @@ export const getResponseFromHttpError = (error: HTTPError): IHttpError => {
     errorMessage: error.errorMessage,
   };
 };
+
+export const baseLog = {
+  teamName: "Team Viral",
+  dataSource: "https://www.who.int/csr/don/en/",
+};

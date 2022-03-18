@@ -7,6 +7,8 @@ import { ArticleRepository } from "../../repositories/Article.repository";
 import { ArticleEntity } from "../../entity/Article.entity";
 import { HTTPError } from "../../utils/Errors";
 import { internalServerError, notFoundError } from "../../utils/Constants";
+import { convertArticleEntityToInterface } from "../../converters/Article.converter";
+import { getLog } from "../../utils/Helpers";
 
 export class ArticleService {
   private logger = getLogger();
@@ -21,27 +23,29 @@ export class ArticleService {
       throw new HTTPError(internalServerError);
     }
     this.logger.info(`Articles found, responding to client`);
-    const result = {
-      articles,
+
+    return {
+      articles: articles.map(convertArticleEntityToInterface),
+      log: getLog(new Date()),
     };
-    return result;
   }
 
   async getSpecificArticle(
     articleId: string
   ): Promise<IArticleSpecificSuccessResponse> {
-    const article: ArticleEntity =
-      await this.articleRepository.getSpecificArticle(articleId);
+    const article = await this.articleRepository.getSpecificArticle(articleId);
 
     if (article === undefined) {
-      this.logger.error(`No article found in db`);
+      this.logger.error(`No article with articleId ${articleId} found in db`);
       throw new HTTPError(notFoundError);
     }
 
-    this.logger.info(`Article found, responding to client`);
-    const result = {
-      article,
+    this.logger.info(
+      `Article found with articleId ${articleId}, responding to client`
+    );
+    return {
+      article: convertArticleEntityToInterface(article),
+      log: getLog(new Date()),
     };
-    return result;
   }
 }

@@ -7,6 +7,8 @@ import { ReportRepository } from "../../repositories/Report.repository";
 import { ReportEntity } from "../../entity/Report.entity";
 import { HTTPError } from "../../utils/Errors";
 import { internalServerError, notFoundError } from "../../utils/Constants";
+import { convertReportEntityToInterface } from "../../converters/Report.converter";
+import { getLog } from "../../utils/Helpers";
 
 export class ReportService {
   private logger = getLogger();
@@ -21,28 +23,29 @@ export class ReportService {
     }
 
     this.logger.info(`Reports found, responding to client`);
-    const result = {
-      reports,
+
+    return {
+      reports: reports.map(convertReportEntityToInterface),
+      log: getLog(new Date()),
     };
-    return result;
   }
 
   async getSpecificReport(
     reportId: string
   ): Promise<IReportSpecificSuccessResponse> {
-    const report: ReportEntity = await this.reportRepository.getSpecificReport(
-      reportId
-    );
+    const report = await this.reportRepository.getSpecificReport(reportId);
 
     if (report === undefined) {
-      this.logger.error(`No report found in db`);
+      this.logger.error(`No report with reportId ${reportId} found in db`);
       throw new HTTPError(notFoundError);
     }
 
-    this.logger.info(`Report found, responding to client`);
-    const result = {
-      report,
+    this.logger.info(
+      `Report found with reportId ${reportId}, responding to client`
+    );
+    return {
+      report: convertReportEntityToInterface(report),
+      log: getLog(new Date()),
     };
-    return result;
   }
 }

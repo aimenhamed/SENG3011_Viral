@@ -22,11 +22,13 @@ export class ArticleRepository {
       .getMany();
   }
 
-  async getSpecificArticle(articleId: string): Promise<ArticleEntity> {
-    const article: ArticleEntity = (await getRepository(ArticleEntity)
+  async getSpecificArticle(
+    articleId: string
+  ): Promise<ArticleEntity | undefined> {
+    const article = await getRepository(ArticleEntity)
       .createQueryBuilder("article")
       .where("article.article_id::text = :articleId", { articleId })
-      .getOne()) as ArticleEntity;
+      .getOne();
 
     return article;
   }

@@ -7,6 +7,7 @@ import { internalServerError } from "../../utils/Constants";
 import { convertArticleEntityToInterface } from "../../converters/Article.converter";
 import { ArticleEntity } from "../../entity/Article.entity";
 import { ReportEntity } from "../../entity/Report.entity";
+import { getLog } from "../../utils/Helpers";
 
 export class SearchService {
   private logger = getLogger();
@@ -24,11 +25,16 @@ export class SearchService {
       searchCriteria.periodOfInterest
     );
 
+    if (!reports) {
+      this.logger.error(`Failed to retrieve reports in search.`);
+      throw new HTTPError(internalServerError);
+    }
+
+    this.logger.info(`Found ${reports.length} reports.`);
     const articleIds = reports.map((report) => report.articleId);
 
     const articleEntities: ArticleEntity[] =
       await this.articleRepository.getArticlesById(articleIds);
-    // console.log(articleEntities);
 
     articleEntities.forEach((entity) => {
       entity.reports = [];
@@ -40,9 +46,8 @@ export class SearchService {
     });
 
     return {
-      articles: articleEntities.map((article) =>
-        convertArticleEntityToInterface(article)
-      ),
+      articles: articleEntities.map(convertArticleEntityToInterface),
+      log: getLog(new Date()),
     };
   }
 }

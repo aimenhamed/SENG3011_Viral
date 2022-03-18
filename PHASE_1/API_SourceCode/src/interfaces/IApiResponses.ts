@@ -9,34 +9,35 @@ export interface IHttpError {
   errorMessage: string;
 }
 
+export interface Log {
+  teamName: string;
+  accessTime: string;
+  dataSource: string;
+}
+
 export interface IPeriodOfInterest {
   start: string;
   end: string;
 }
 
-export interface IPostNameRequestBody {
-  name: string;
-}
-
-export interface IPostNameSuccessResponse {
-  nameId: string;
-  fullName: string;
-}
-
 export interface IArticlesDumpSuccessResponse {
   articles: Article[];
+  log: Log;
 }
 
 export interface IArticleSpecificSuccessResponse {
   article: Article;
+  log: Log;
 }
 
 export interface IReportsDumpSuccessResponse {
   reports: Report[];
+  log: Log;
 }
 
 export interface IReportSpecificSuccessResponse {
   report: Report;
+  log: Log;
 }
 
 export interface ISearchRequestHeaders {
@@ -55,6 +56,7 @@ export interface IUserRegisterRequestBody {
 
 export interface IUserRegisterSuccessResponse {
   user: User;
+  log: Log;
 }
 
 export interface IUserBookmarkArticleRequestBody {
@@ -72,12 +74,20 @@ export interface WidgetRequest {
   articleId: string;
 }
 
-export interface IPostDashboardRequestBody {
+export interface ICommonDashboardRequestBody {
   userId: string;
   widgets: WidgetRequest[];
 }
 
-export interface IPostDashboardSuccessResponse {
+export interface ICommonDashboardSuccessResponse {
   dashboard: Dashboard;
   user: User;
+  log: Log;
+}
+
+export type IDeleteDashboardSuccessResponse = IUserRegisterSuccessResponse;
+
+export interface IGetDashboardSuccessResponse {
+  dashboard: Dashboard;
+  log: Log;
 }
