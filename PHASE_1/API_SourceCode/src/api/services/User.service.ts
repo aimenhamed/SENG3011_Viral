@@ -103,10 +103,11 @@ export class UserService {
     return {
       user: convertUserEntityToInterface(user),
       article: convertArticleEntityToInterface(bookmarkedArticle),
+      log: getLog(new Date()),
     };
   }
 
-  async addDashboard(
+  async addDashboardToUser(
     userDashboard: IUserDashboardRequestBody
   ): Promise<IUserDashboardSuccessResponse | undefined> {
     let user = await this.userRepository.getUser(userDashboard.userId);
@@ -146,6 +147,7 @@ export class UserService {
     return {
       user: convertUserEntityToInterface(user),
       dashboard: convertDashboardEntityToInterface(dashboard, []),
+      log: getLog(new Date()),
     };
   }
 }

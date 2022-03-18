@@ -6,6 +6,8 @@ import bodyParser from "body-parser";
 import { promisify } from "util";
 import { IRouter } from "../interfaces/IRouter";
 import { errorHandlerMiddleware } from "../api/middlewares/errorHandler";
+import swaggerUi from "swagger-ui-express";
+import swaggerDocument from "../utils/openapi.json";
 
 export class ExpressWrapper {
   private logger = getLogger();
@@ -22,7 +24,8 @@ export class ExpressWrapper {
     const app = express()
       .use(cors())
       .use(express.urlencoded({ extended: true }))
-      .use(bodyParser.json());
+      .use(bodyParser.json())
+      .use("/", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
     this.logger.info("Setup Express");
     return app;

@@ -67,6 +67,7 @@ export interface IUserBookmarkArticleRequestBody {
 export interface IUserBookmarkArticleSuccessResponse {
   user: User;
   article: Article;
+  log: Log;
 }
 
 export interface WidgetRequest {
