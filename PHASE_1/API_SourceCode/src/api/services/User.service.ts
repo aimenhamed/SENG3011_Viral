@@ -103,6 +103,7 @@ export class UserService {
     return {
       user: convertUserEntityToInterface(user),
       article: convertArticleEntityToInterface(bookmarkedArticle),
+      log: getLog(new Date()),
     };
   }
 
@@ -146,6 +147,7 @@ export class UserService {
     return {
       user: convertUserEntityToInterface(user),
       dashboard: convertDashboardEntityToInterface(dashboard, []),
+      log: getLog(new Date()),
     };
   }
 }
