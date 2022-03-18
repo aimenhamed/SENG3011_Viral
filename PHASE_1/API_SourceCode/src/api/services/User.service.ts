@@ -107,7 +107,7 @@ export class UserService {
     };
   }
 
-  async addDashboard(
+  async addDashboardToUser(
     userDashboard: IUserDashboardRequestBody
   ): Promise<IUserDashboardSuccessResponse | undefined> {
     let user = await this.userRepository.getUser(userDashboard.userId);
