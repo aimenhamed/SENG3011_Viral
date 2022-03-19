@@ -3,7 +3,10 @@ import { getRepository } from "typeorm";
 
 export class ArticleRepository {
   async getAllArticles(): Promise<ArticleEntity[]> {
-    return await getRepository(ArticleEntity).find();
+    return await getRepository(ArticleEntity).find({
+      relations: ["reports"],
+      select: ["articleId", "url", "dateOfPublication", "headline"],
+    });
   }
 
   async getArticle(articleId: string): Promise<ArticleEntity | undefined> {

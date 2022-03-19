@@ -36,7 +36,7 @@
             "name": "period_of_interest",
             "description": "The period of time to search through which includes the start and end times.",
             "schema": {
-              "$ref": "#/components/schemas/Period"
+              "type": "string"
             },
             "required": true,
             "example": "{\"start\":\"2009-09-23\",\"end\":\"2021-09-24\"}"
@@ -62,7 +62,7 @@
               }
             },
             "required": true,
-            "example": "[\"nipha virus\", \"Encephalitis\"]"
+            "example": "[\"nipah virus\"]"
           }
         ],
         "responses": {
@@ -82,7 +82,7 @@
           "400": {
             "$ref": "#/components/responses/BadRequest"
           },
-          "405": {
+          "404": {
             "$ref": "#/components/responses/NotFound"
           },
           "500": {
@@ -97,7 +97,7 @@
           "Articles"
         ],
         "summary": "Retrieve all articles",
-        "description": "Dumps all articles currently stored in the database.",
+        "description": "Dumps all articles currently stored in the database. Main text is excluded.",
         "operationId": "articlesDump",
         "responses": {
           "200": {
@@ -107,7 +107,27 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Article"
+                    "type": "object",
+                    "properties": {
+                      "articleId": {
+                        "type": "string"
+                      },
+                      "url": {
+                        "type": "string"
+                      },
+                      "dateOfPublication": {
+                        "type": "string"
+                      },
+                      "headline": {
+                        "type": "string"
+                      },
+                      "reports": {
+                        "type": "array",
+                        "items": {
+                          "$ref": "#/components/schemas/Report"
+                        }
+                      }
+                    }
                   }
                 }
               }
@@ -139,7 +159,7 @@
               "type": "string"
             },
             "required": true,
-            "example": "8f2ad839-f617-4d0c-8755-b870b8c67735"
+            "example": "c4ebd485-a22a-4ac3-882b-eec4daabd2b0"
           }
         ],
         "responses": {
@@ -159,7 +179,7 @@
           "400": {
             "$ref": "#/components/responses/BadRequest"
           },
-          "405": {
+          "404": {
             "$ref": "#/components/responses/NotFound"
           },
           "500": {
@@ -216,7 +236,7 @@
               "type": "string"
             },
             "required": true,
-            "example": "06144fdf-07e0-4ea2-8a91-af7fe47fc3f8"
+            "example": "8cf91f9d-4484-469e-b668-225ed3bb5006"
           }
         ],
         "responses": {
@@ -236,7 +256,7 @@
           "400": {
             "$ref": "#/components/responses/BadRequest"
           },
-          "405": {
+          "404": {
             "$ref": "#/components/responses/NotFound"
           },
           "500": {
@@ -268,6 +288,11 @@
                   "password": {
                     "type": "string"
                   }
+                },
+                "example": {
+                  "name": "Bob",
+                  "email": "bobthebuilder@gmail.com",
+                  "password": "password"
                 }
               }
             }
@@ -292,7 +317,7 @@
           "400": {
             "$ref": "#/components/responses/BadRequest"
           },
-          "405": {
+          "404": {
             "$ref": "#/components/responses/NotFound"
           },
           "500": {
@@ -321,6 +346,10 @@
                   "password": {
                     "type": "string"
                   }
+                },
+                "example": {
+                  "email": "bobthebuilder@gmail.com",
+                  "password": "password"
                 }
               }
             }
@@ -345,7 +374,7 @@
           "400": {
             "$ref": "#/components/responses/BadRequest"
           },
-          "405": {
+          "404": {
             "$ref": "#/components/responses/NotFound"
           },
           "500": {
@@ -371,7 +400,7 @@
               "type": "string"
             },
             "required": true,
-            "example": "06144fdf-07e0-4ea2-8a91-af7fe47fc3f8"
+            "example": "7bb72fe5-6b8c-4984-8efc-758322e8c8a2"
           }
         ],
         "responses": {
@@ -393,7 +422,7 @@
           "400": {
             "$ref": "#/components/responses/BadRequest"
           },
-          "405": {
+          "404": {
             "$ref": "#/components/responses/NotFound"
           },
           "500": {
@@ -422,6 +451,10 @@
                   "dashboardId": {
                     "type": "string"
                   }
+                },
+                "example": {
+                  "userId": "7bb72fe5-6b8c-4984-8efc-758322e8c8a2",
+                  "dashboardId": "fba554c5-8d7c-4a0a-8780-f0d0d8b2e0d8"
                 }
               }
             }
@@ -449,7 +482,7 @@
           "400": {
             "$ref": "#/components/responses/BadRequest"
           },
-          "405": {
+          "404": {
             "$ref": "#/components/responses/NotFound"
           },
           "500": {
@@ -478,6 +511,10 @@
                   "articleId": {
                     "type": "string"
                   }
+                },
+                "example": {
+                  "userId": "7bb72fe5-6b8c-4984-8efc-758322e8c8a2",
+                  "articleId": "c4ebd485-a22a-4ac3-882b-eec4daabd2b0"
                 }
               }
             }
@@ -505,7 +542,64 @@
           "400": {
             "$ref": "#/components/responses/BadRequest"
           },
-          "405": {
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          }
+        }
+      }
+    },
+    "/users/remove-bookmark": {
+      "put": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Removes a bookmarked article under user profile",
+        "description": "Removes bookmark under user profile",
+        "operationId": "removeArticleFromUser",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "userId": {
+                    "type": "string"
+                  },
+                  "articleId": {
+                    "type": "string"
+                  }
+                },
+                "example": {
+                  "userId": "7bb72fe5-6b8c-4984-8efc-758322e8c8a2",
+                  "articleId": "c4ebd485-a22a-4ac3-882b-eec4daabd2b0"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "user": {
+                      "$ref": "#/components/schemas/User"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "404": {
             "$ref": "#/components/responses/NotFound"
           },
           "500": {
@@ -528,15 +622,25 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "userId": {
-                    "type": "string"
-                  },
                   "widgets": {
                     "type": "array",
                     "items": {
                       "$ref": "#/components/schemas/WidgetRequestBody"
                     }
                   }
+                },
+                "example": {
+                  "userId": "7bb72fe5-6b8c-4984-8efc-758322e8c8a2",
+                  "widgets": [
+                    {
+                      "widgetType": "ARTICLE",
+                      "articleId": "c4ebd485-a22a-4ac3-882b-eec4daabd2b0"
+                    },
+                    {
+                      "widgetType": "ARTICLE",
+                      "articleId": "0cc1c698-efe4-45a1-a476-cfd6ef27f11c"
+                    }
+                  ]
                 }
               }
             }
@@ -590,7 +694,7 @@
               "type": "string"
             },
             "required": true,
-            "example": "06144fdf-07e0-4ea2-8a91-af7fe47fc3f8"
+            "example": "fba554c5-8d7c-4a0a-8780-f0d0d8b2e0d8"
           }
         ],
         "requestBody": {
@@ -599,12 +703,24 @@
               "schema": {
                 "type": "object",
                 "properties": {
+                  "user_id": {
+                    "type": "string"
+                  },
                   "widgets": {
                     "type": "array",
                     "items": {
                       "$ref": "#/components/schemas/WidgetRequestBody"
                     }
                   }
+                },
+                "example": {
+                  "userId": "2f683119-ca8d-4e14-8ef0-9ed1bae37e00",
+                  "widgets": [
+                    {
+                      "widgetType": "ARTICLE",
+                      "articleId": "014bb811-b1f1-4a92-8306-4f079e8eee85"
+                    }
+                  ]
                 }
               }
             }
@@ -632,7 +748,7 @@
           "400": {
             "$ref": "#/components/responses/BadRequest"
           },
-          "405": {
+          "404": {
             "$ref": "#/components/responses/NotFound"
           },
           "500": {
@@ -656,7 +772,7 @@
               "type": "string"
             },
             "required": true,
-            "example": "06144fdf-07e0-4ea2-8a91-af7fe47fc3f8"
+            "example": "fba554c5-8d7c-4a0a-8780-f0d0d8b2e0d8"
           }
         ],
         "responses": {
@@ -678,7 +794,7 @@
           "400": {
             "$ref": "#/components/responses/BadRequest"
           },
-          "405": {
+          "404": {
             "$ref": "#/components/responses/NotFound"
           },
           "500": {
@@ -702,7 +818,7 @@
               "type": "string"
             },
             "required": true,
-            "example": "06144fdf-07e0-4ea2-8a91-af7fe47fc3f8"
+            "example": "fba554c5-8d7c-4a0a-8780-f0d0d8b2e0d8"
           }
         ],
         "responses": {
@@ -724,7 +840,7 @@
           "400": {
             "$ref": "#/components/responses/BadRequest"
           },
-          "405": {
+          "404": {
             "$ref": "#/components/responses/NotFound"
           },
           "500": {
@@ -799,7 +915,7 @@
     },
     "schemas": {
       "Period": {
-        "type": "string",
+        "type": "object",
         "properties": {
           "start": {
             "type": "string",

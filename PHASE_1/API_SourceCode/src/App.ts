@@ -38,7 +38,8 @@ export default class App {
   private readonly userService = new UserService(
     this.userRepository,
     this.articleRepository,
-    this.dashboardRepository
+    this.dashboardRepository,
+    this.widgetRepository
   );
   private readonly dashboardService = new DashboardService(
     this.widgetRepository,

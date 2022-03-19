@@ -70,6 +70,11 @@ export interface IUserBookmarkArticleSuccessResponse {
   log: Log;
 }
 
+export interface IUserRemoveBookmarkSuccessResponse {
+  user: User;
+  log: Log;
+}
+
 export interface WidgetRequest {
   widgetType: WidgetType;
   articleId: string;

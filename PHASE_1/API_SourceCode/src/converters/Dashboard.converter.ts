@@ -5,11 +5,11 @@ import { convertWidgetEntityToInterface } from "./Widget.converter";
 
 export const convertDashboardEntityToInterface = (
   entity: DashboardEntity,
-  widgetEntites: WidgetEntity[]
+  widgetEntities: WidgetEntity[]
 ): Dashboard => {
   return {
     dashboardId: entity.dashboardId,
     userId: entity.userId,
-    widgets: widgetEntites.map(convertWidgetEntityToInterface),
+    widgets: widgetEntities.map(convertWidgetEntityToInterface),
   };
 };

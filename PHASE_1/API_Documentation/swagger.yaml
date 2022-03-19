@@ -24,9 +24,10 @@ paths:
           name: period_of_interest
           description: The period of time to search through which includes the start and end times.
           schema:
-            $ref: "#/components/schemas/Period"
+            type: string # stringified json
           required: true
           example: '{"start":"2009-09-23","end":"2021-09-24"}'
+
         - in: header
           name: location
           description: The location of where the cases were reported.
@@ -42,7 +43,8 @@ paths:
             items:
               type: "string"
           required: true
-          example: '["nipha virus", "Encephalitis"]'
+          example: '["nipah virus"]'
+
       responses:
         "200":
           description: "Successful response"
@@ -52,9 +54,10 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/Article"
+                
         "400":
           "$ref": "#/components/responses/BadRequest"
-        "405":
+        "404":
           "$ref": "#/components/responses/NotFound"
         "500":
           $ref: "#/components/responses/ServerError"
@@ -64,7 +67,7 @@ paths:
       tags:
         - "Articles"
       summary: "Retrieve all articles"
-      description: "Dumps all articles currently stored in the database."
+      description: "Dumps all articles currently stored in the database. Main text is excluded."
       operationId: "articlesDump"
       responses:
         "200":
@@ -74,11 +77,25 @@ paths:
               schema:
                 type: "array"
                 items:
-                  "$ref": "#/components/schemas/Article"
+                  type: "object"
+                  properties:
+                    articleId:
+                      type: "string"
+                    url:
+                      type: "string"
+                    dateOfPublication:
+                      type: "string"
+                    headline:
+                      type: "string"
+                    reports:
+                      type: "array"
+                      items:
+                        "$ref": "#/components/schemas/Report"
         "400":
           "$ref": "#/components/responses/BadRequest"
         "500":
-          $ref: "#/components/responses/ServerError"
+          "$ref": "#/components/responses/ServerError"
+                
 
   /articles/{articleId}:
     get:
@@ -94,7 +111,7 @@ paths:
           schema:
             type: string
           required: true
-          example: "8f2ad839-f617-4d0c-8755-b870b8c67735"
+          example: "c4ebd485-a22a-4ac3-882b-eec4daabd2b0"
       responses:
         "200":
           description: "Successful response"
@@ -106,10 +123,10 @@ paths:
                   "$ref": "#/components/schemas/Article"
         "400":
           "$ref": "#/components/responses/BadRequest"
-        "405":
+        "404":
           "$ref": "#/components/responses/NotFound"
         "500":
-          $ref: "#/components/responses/ServerError"
+          "$ref": "#/components/responses/ServerError"
 
   /reports/dump:
     get:
@@ -131,6 +148,7 @@ paths:
           "$ref": "#/components/responses/BadRequest"
         "500":
           $ref: "#/components/responses/ServerError"
+
   /reports/{reportId}:
     get:
       tags:
@@ -145,7 +163,7 @@ paths:
           schema:
             type: string
           required: true
-          example: "06144fdf-07e0-4ea2-8a91-af7fe47fc3f8"
+          example: "8cf91f9d-4484-469e-b668-225ed3bb5006"
       responses:
         "200":
           description: "Successful response"
@@ -157,7 +175,7 @@ paths:
                   $ref: "#/components/schemas/Report"
         "400":
           $ref: "#/components/responses/BadRequest"
-        "405":
+        "404":
           "$ref": "#/components/responses/NotFound"
         "500":
           $ref: "#/components/responses/ServerError"
@@ -170,22 +188,22 @@ paths:
       description: "Creates new user in database and registers them."
       operationId: "createUser"
       requestBody:
-        "content":
-          {
-            "application/json":
-              {
-                schema:
-                  {
-                    type: "object",
-                    properties:
-                      {
-                        "name": { type: "string" },
-                        "email": { type: "string" },
-                        "password": { type: "string" },
-                      },
-                  },
-              },
-          }
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                password: 
+                  type: string
+              example:
+                name: "Bob"
+                email: "bobthebuilder@gmail.com"
+                password: "password"
+        
       responses:
         "200":
           description: "Successful response"
@@ -198,7 +216,7 @@ paths:
                 }
         "400":
           $ref: "#/components/responses/BadRequest"
-        "405":
+        "404":
           "$ref": "#/components/responses/NotFound"
         "500":
           $ref: "#/components/responses/ServerError"
@@ -211,21 +229,19 @@ paths:
       description: "Logs existing user in."
       operationId: "loginUser"
       requestBody:
-        "content":
-          {
-            "application/json":
-              {
-                schema:
-                  {
-                    type: "object",
-                    properties:
-                      {
-                        "email": { type: "string" },
-                        "password": { type: "string" },
-                      },
-                  },
-              },
-          }
+        content:
+          application/json:
+              schema:
+                type: "object"
+                properties:
+                  email:
+                    type: string
+                  password: 
+                    type: string
+                example:
+                  email: "bobthebuilder@gmail.com"
+                  password: "password"
+
       responses:
         "200":
           description: "Successful response"
@@ -238,7 +254,7 @@ paths:
                 }
         "400":
           $ref: "#/components/responses/BadRequest"
-        "405":
+        "404":
           "$ref": "#/components/responses/NotFound"
         "500":
           $ref: "#/components/responses/ServerError"
@@ -257,7 +273,7 @@ paths:
           schema:
             type: string
           required: true
-          example: "06144fdf-07e0-4ea2-8a91-af7fe47fc3f8"
+          example: "7bb72fe5-6b8c-4984-8efc-758322e8c8a2"
       responses:
         "200":
           description: "Successful response"
@@ -270,7 +286,7 @@ paths:
                 }
         "400":
           $ref: "#/components/responses/BadRequest"
-        "405":
+        "404":
           "$ref": "#/components/responses/NotFound"
         "500":
           $ref: "#/components/responses/ServerError"
@@ -283,21 +299,18 @@ paths:
       description: "Adds a dashboard under user profile."
       operationId: "addDashboardToUser"
       requestBody:
-        "content":
-          {
-            "application/json":
-              {
-                schema:
-                  {
-                    type: "object",
-                    properties:
-                      {
-                        userId: { type: "string" },
-                        dashboardId: { type: "string" },
-                      },
-                  },
-              },
-          }
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                userId:
+                  type: string
+                dashboardId:
+                  type: string
+              example:
+                  userId: "7bb72fe5-6b8c-4984-8efc-758322e8c8a2"
+                  dashboardId: "fba554c5-8d7c-4a0a-8780-f0d0d8b2e0d8"
       responses:
         "200":
           description: "Successful response"
@@ -313,10 +326,11 @@ paths:
                         dashboard: { $ref: "#/components/schemas/Dashboard" },
                       },
                   },
+                
               }
         "400":
           $ref: "#/components/responses/BadRequest"
-        "405":
+        "404":
           "$ref": "#/components/responses/NotFound"
         "500":
           $ref: "#/components/responses/ServerError"
@@ -341,6 +355,11 @@ paths:
                         userId: { type: "string" },
                         articleId: { type: "string" },
                       },
+                    example:
+                      {
+                        userId: "7bb72fe5-6b8c-4984-8efc-758322e8c8a2",
+                        articleId: "c4ebd485-a22a-4ac3-882b-eec4daabd2b0"
+                      }
                   },
               },
           }
@@ -362,11 +381,61 @@ paths:
               }
         "400":
           $ref: "#/components/responses/BadRequest"
-        "405":
+        "404":
           "$ref": "#/components/responses/NotFound"
         "500":
           $ref: "#/components/responses/ServerError"
-
+  
+  /users/remove-bookmark:
+    put:
+      tags:
+        - "Users"
+      summary: "Removes a bookmarked article under user profile"
+      description: "Removes bookmark under user profile"
+      operationId: "removeArticleFromUser"
+      requestBody:
+        "content":
+          {
+            "application/json":
+              {
+                schema:
+                  {
+                    type: "object",
+                    properties:
+                      {
+                        userId: { type: "string" },
+                        articleId: { type: "string" },
+                      },
+                    example:
+                      {
+                        userId: "7bb72fe5-6b8c-4984-8efc-758322e8c8a2",
+                        articleId: "c4ebd485-a22a-4ac3-882b-eec4daabd2b0"
+                      }
+                  },
+              },
+          }
+      responses:
+        "200":
+          description: "Successful response"
+          content:
+            application/json:
+              {
+                schema:
+                  {
+                    type: "object",
+                    properties:
+                      {
+                        user: { $ref: "#/components/schemas/User" },
+                      },
+                  },
+              }
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "404":
+          "$ref": "#/components/responses/NotFound"
+        "500":
+          "$ref": "#/components/responses/ServerError"      
+  
   /dashboard:
     post:
       tags:
@@ -393,6 +462,17 @@ paths:
                               },
                           },
                       },
+                    example:
+                      {
+                        "userId": "7bb72fe5-6b8c-4984-8efc-758322e8c8a2",
+                        "widgets": [{
+                            "widgetType": "ARTICLE",
+                            "articleId": "c4ebd485-a22a-4ac3-882b-eec4daabd2b0"
+                        },{
+                            "widgetType": "ARTICLE",
+                            "articleId": "0cc1c698-efe4-45a1-a476-cfd6ef27f11c"
+                        }]
+                      }
                   },
               },
           }
@@ -433,7 +513,7 @@ paths:
           schema:
             type: string
           required: true
-          example: "06144fdf-07e0-4ea2-8a91-af7fe47fc3f8"
+          example: "fba554c5-8d7c-4a0a-8780-f0d0d8b2e0d8"
       requestBody:
         "content":
           {
@@ -444,6 +524,10 @@ paths:
                     type: "object",
                     properties:
                       {
+                        user_id: 
+                          {
+                            type: string
+                          },
                         widgets:
                           {
                             type: "array",
@@ -453,7 +537,17 @@ paths:
                               },
                           },
                       },
-                  },
+                    example:
+                    {
+                      "userId": "2f683119-ca8d-4e14-8ef0-9ed1bae37e00",
+                      "widgets": [
+                        {
+                          "widgetType": "ARTICLE",
+                          "articleId": "014bb811-b1f1-4a92-8306-4f079e8eee85"
+                        }
+                      ]
+                    },
+                },
               },
           }
       responses:
@@ -474,7 +568,7 @@ paths:
               }
         "400":
           $ref: "#/components/responses/BadRequest"
-        "405":
+        "404":
           "$ref": "#/components/responses/NotFound"
         "500":
           $ref: "#/components/responses/ServerError"
@@ -491,7 +585,7 @@ paths:
           schema:
             type: string
           required: true
-          example: "06144fdf-07e0-4ea2-8a91-af7fe47fc3f8"
+          example: "fba554c5-8d7c-4a0a-8780-f0d0d8b2e0d8"
       responses:
         "200":
           description: "Successful response"
@@ -506,7 +600,7 @@ paths:
               }
         "400":
           $ref: "#/components/responses/BadRequest"
-        "405":
+        "404":
           "$ref": "#/components/responses/NotFound"
         "500":
           $ref: "#/components/responses/ServerError"
@@ -523,7 +617,7 @@ paths:
           schema:
             type: string
           required: true
-          example: "06144fdf-07e0-4ea2-8a91-af7fe47fc3f8"
+          example: "fba554c5-8d7c-4a0a-8780-f0d0d8b2e0d8"
       responses:
         "200":
           description: "Successful response"
@@ -539,7 +633,7 @@ paths:
               }
         "400":
           $ref: "#/components/responses/BadRequest"
-        "405":
+        "404":
           "$ref": "#/components/responses/NotFound"
         "500":
           $ref: "#/components/responses/ServerError"
@@ -586,7 +680,7 @@ components:
                 example: "Internal server error"
   schemas:
     Period:
-      type: "string"
+      type: "object"
       properties:
         start:
           type: "string"
