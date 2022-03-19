@@ -23,3 +23,8 @@ export const UserDashboardSchema = Joi.object({
     .uuid({ version: ["uuidv4"] })
     .required(),
 });
+
+export const UserLoginSchema = Joi.object({
+  email: Joi.string().required(),
+  password: Joi.string().required(),
+});
