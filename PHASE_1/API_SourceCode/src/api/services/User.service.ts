@@ -9,11 +9,15 @@ import {
   IUserSpecificSuccessResponse,
   IUserLoginRequestBody,
   IUserLoginSuccessResponse,
+  IUserRemoveBookmarkSuccessResponse,
 } from "IApiResponses";
 import { UserRepository } from "../../repositories/User.respository";
 import { ArticleRepository } from "../../repositories/Article.repository";
 import { DashboardRepository } from "../../repositories/Dashboard.repository";
+import { WidgetRepository } from "../../repositories/Widget.repository";
 import { UserEntity } from "../../entity/User.entity";
+import { WidgetEntity } from "../../entity/Widget.entity";
+import { ArticleEntity } from "../../entity/Article.entity";
 import { HTTPError } from "../../utils/Errors";
 import {
   internalServerError,
@@ -22,16 +26,17 @@ import {
 } from "../../utils/Constants";
 import { convertArticleEntityToInterface } from "../../converters/Article.converter";
 import { convertUserEntityToInterface } from "../../converters/User.converter";
-import { getLog } from "../../utils/Helpers";
 import { convertDashboardEntityToInterface } from "../../converters/Dashboard.converter";
 import { SimpleConsoleLogger } from "typeorm";
+import { getLog } from "../../utils/Helpers";
 
 export class UserService {
   private logger = getLogger();
   constructor(
     readonly userRepository: UserRepository,
     readonly articleRepository: ArticleRepository,
-    readonly dashboardRepository: DashboardRepository
+    readonly dashboardRepository: DashboardRepository,
+    readonly widgetRepository: WidgetRepository
   ) {}
 
   async registerUser(
@@ -52,6 +57,8 @@ export class UserService {
     newUser.name = userDetails.name;
     newUser.email = userDetails.email;
     newUser.password = userDetails.password;
+    newUser.bookmarkedArticles = [];
+    newUser.dashboards = [];
 
     const userEntity: UserEntity = await this.userRepository.saveUser(newUser);
     if (userEntity === undefined) {
@@ -104,25 +111,8 @@ export class UserService {
   async bookmarkArticle(
     bookmarkDetails: IUserBookmarkArticleRequestBody
   ): Promise<IUserBookmarkArticleSuccessResponse | undefined> {
-    let user = await this.userRepository.getUser(bookmarkDetails.userId);
-
-    if (user === undefined) {
-      this.logger.error(
-        `Failed to find user with userId ${bookmarkDetails.userId}`
-      );
-      throw new HTTPError(badRequest);
-    }
-
-    const bookmarkedArticle = await this.articleRepository.getArticle(
-      bookmarkDetails.articleId
-    );
-
-    if (bookmarkedArticle === undefined) {
-      this.logger.error(
-        `Failed to find article with articleId ${bookmarkDetails.articleId}`
-      );
-      throw new HTTPError(badRequest);
-    }
+    let user = await this.getUser(bookmarkDetails.userId);
+    const bookmarkedArticle = await this.getArticle(bookmarkDetails.articleId);
 
     if (
       user.bookmarkedArticles &&
@@ -133,15 +123,51 @@ export class UserService {
       );
       throw new HTTPError(badRequest);
     }
-    user.bookmarkedArticles = user.bookmarkedArticles
-      ? [...user.bookmarkedArticles, bookmarkedArticle.articleId]
-      : [bookmarkedArticle.articleId];
+    user.bookmarkedArticles = [
+      ...user.bookmarkedArticles,
+      bookmarkedArticle.articleId,
+    ];
 
     user = await this.userRepository.saveUser(user);
 
     return {
       user: convertUserEntityToInterface(user),
       article: convertArticleEntityToInterface(bookmarkedArticle),
+      log: getLog(new Date()),
+    };
+  }
+
+  async removeBookmark(
+    bookmarkDetails: IUserBookmarkArticleRequestBody
+  ): Promise<IUserRemoveBookmarkSuccessResponse | undefined> {
+    let user = await this.getUser(bookmarkDetails.userId);
+
+    if (
+      !user.bookmarkedArticles ||
+      user.bookmarkedArticles.length === 0 ||
+      !user.bookmarkedArticles.includes(bookmarkDetails.articleId)
+    ) {
+      this.logger.error(
+        `User with userId ${user.userId} has not bookmarked article with articleId ${bookmarkDetails.articleId}`
+      );
+      throw new HTTPError(badRequest);
+    }
+
+    user.bookmarkedArticles = user.bookmarkedArticles.filter(
+      (e) => e !== bookmarkDetails.articleId
+    );
+
+    user = await this.userRepository.saveUser(user);
+
+    if (user === undefined) {
+      this.logger.error(
+        `Failed to remove bookmarked article ${bookmarkDetails.articleId} from user ${bookmarkDetails.userId}`
+      );
+      throw new HTTPError(internalServerError);
+    }
+
+    return {
+      user: convertUserEntityToInterface(user),
       log: getLog(new Date()),
     };
   }
@@ -177,15 +203,15 @@ export class UserService {
       );
       throw new HTTPError(badRequest);
     }
-    user.dashboards = user.dashboards
-      ? [...user.dashboards, userDashboard.dashboardId]
-      : [userDashboard.dashboardId];
+    user.dashboards = [...user.dashboards, userDashboard.dashboardId];
 
     user = await this.userRepository.saveUser(user);
-
+    const widgets: WidgetEntity[] = await this.widgetRepository.getWidgetById(
+      dashboard.widgets
+    );
     return {
       user: convertUserEntityToInterface(user),
-      dashboard: convertDashboardEntityToInterface(dashboard, []),
+      dashboard: convertDashboardEntityToInterface(dashboard, widgets),
       log: getLog(new Date()),
     };
   }
@@ -202,5 +228,26 @@ export class UserService {
       user: convertUserEntityToInterface(user),
       log: getLog(new Date()),
     };
+
+  async getUser(userId: string): Promise<UserEntity> {
+    const user = await this.userRepository.getUser(userId);
+
+    if (user === undefined) {
+      this.logger.error(`Failed to find user with userId ${userId}`);
+      throw new HTTPError(badRequest);
+    }
+
+    return user;
+  }
+
+  async getArticle(articleId: string): Promise<ArticleEntity> {
+    const article = await this.articleRepository.getArticle(articleId);
+
+    if (article === undefined) {
+      this.logger.error(`Failed to find article with articleId ${articleId}`);
+      throw new HTTPError(badRequest);
+    }
+
+    return article;
   }
 }
