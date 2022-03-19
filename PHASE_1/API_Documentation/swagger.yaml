@@ -459,7 +459,7 @@ paths:
               }
         "400":
           $ref: "#/components/responses/BadRequest"
-        "405":
+        "404":
           "$ref": "#/components/responses/NotFound"
         "500":
           $ref: "#/components/responses/ServerError"

@@ -136,6 +136,14 @@ export const getMockUsers = (): User[] => {
       dashboards: ["dash-123"],
       bookmarkedArticles: ["art-123"],
     },
+    {
+      userId: "user1",
+      name: "Bob",
+      email: "bobthebuilder@gmail.com",
+      password: "abc123",
+      dashboards: [],
+      bookmarkedArticles: [],
+    },
   ];
 };
 

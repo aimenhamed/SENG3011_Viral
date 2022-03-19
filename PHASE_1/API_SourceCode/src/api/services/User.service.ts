@@ -11,21 +11,24 @@ import {
 import { UserRepository } from "../../repositories/User.respository";
 import { ArticleRepository } from "../../repositories/Article.repository";
 import { DashboardRepository } from "../../repositories/Dashboard.repository";
+import { WidgetRepository } from "../../repositories/Widget.repository";
 import { UserEntity } from "../../entity/User.entity";
+import { WidgetEntity } from "../../entity/Widget.entity";
+import { ArticleEntity } from "../../entity/Article.entity";
 import { HTTPError } from "../../utils/Errors";
 import { internalServerError, badRequest } from "../../utils/Constants";
 import { convertArticleEntityToInterface } from "../../converters/Article.converter";
 import { convertUserEntityToInterface } from "../../converters/User.converter";
-import { getLog } from "../../utils/Helpers";
 import { convertDashboardEntityToInterface } from "../../converters/Dashboard.converter";
-import { ArticleEntity } from "../../entity/Article.entity";
+import { getLog } from "../../utils/Helpers";
 
 export class UserService {
   private logger = getLogger();
   constructor(
     readonly userRepository: UserRepository,
     readonly articleRepository: ArticleRepository,
-    readonly dashboardRepository: DashboardRepository
+    readonly dashboardRepository: DashboardRepository,
+    readonly widgetRepository: WidgetRepository
   ) {}
 
   async registerUser(
@@ -81,9 +84,10 @@ export class UserService {
       );
       throw new HTTPError(badRequest);
     }
-    user.bookmarkedArticles = user.bookmarkedArticles
-      ? [...user.bookmarkedArticles, bookmarkedArticle.articleId]
-      : [bookmarkedArticle.articleId];
+    user.bookmarkedArticles = [
+      ...user.bookmarkedArticles,
+      bookmarkedArticle.articleId,
+    ];
 
     user = await this.userRepository.saveUser(user);
 
@@ -115,6 +119,13 @@ export class UserService {
     );
 
     user = await this.userRepository.saveUser(user);
+
+    if (user === undefined) {
+      this.logger.error(
+        `Failed to remove bookmarked article ${bookmarkDetails.articleId} from user ${bookmarkDetails.userId}`
+      );
+      throw new HTTPError(internalServerError);
+    }
 
     return {
       user: convertUserEntityToInterface(user),
@@ -153,15 +164,15 @@ export class UserService {
       );
       throw new HTTPError(badRequest);
     }
-    user.dashboards = user.dashboards
-      ? [...user.dashboards, userDashboard.dashboardId]
-      : [userDashboard.dashboardId];
+    user.dashboards = [...user.dashboards, userDashboard.dashboardId];
 
     user = await this.userRepository.saveUser(user);
-
+    const widgets: WidgetEntity[] = await this.widgetRepository.getWidgetById(
+      dashboard.widgets
+    );
     return {
       user: convertUserEntityToInterface(user),
-      dashboard: convertDashboardEntityToInterface(dashboard, []),
+      dashboard: convertDashboardEntityToInterface(dashboard, widgets),
       log: getLog(new Date()),
     };
   }
