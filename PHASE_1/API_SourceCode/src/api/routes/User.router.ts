@@ -7,11 +7,13 @@ import {
   UserRegisterSchema,
   UserBookmarkArticleSchema,
   UserDashboardSchema,
+  UserLoginSchema,
 } from "../schemas/User.schema";
 import {
   IUserRegisterRequestBody,
   IUserBookmarkArticleRequestBody,
   IUserDashboardRequestBody,
+  IUserLoginRequestBody,
 } from "IApiResponses";
 import { HTTPError } from "../../utils/Errors";
 import { badRequest } from "../../utils/Constants";
@@ -74,6 +76,25 @@ export class UserRouter implements IRouter {
           }
         }
       )
+      .get(
+        "/users/:userId",
+        async (req: Request, res: Response, next: NextFunction) => {
+          this.logger.info(`Received /users/:userId request`);
+          try {
+            const userId: string = req.params.userId;
+            const result = await this.userService.getSpecificUser(userId);
+            this.logger.info(`Responding to client in GET /users/:userId`);
+            return res.status(200).json(result);
+          } catch (err: any) {
+            this.logger.warn(
+              `An error occurred when trying to GET specific user with userId ${
+                req.params.userId
+              }.${formatError(err)}`
+            );
+            return next(err);
+          }
+        }
+      )
       .put(
         "/users/dashboard",
         validationMiddleware(UserDashboardSchema, "body"),
@@ -91,6 +112,29 @@ export class UserRouter implements IRouter {
           } catch (err: any) {
             this.logger.warn(
               `An error occurred when trying to PUT dashboard for user ${formatError(
+                err
+              )}`
+            );
+            return next(err);
+          }
+        }
+      )
+      .post(
+        "/users/login",
+        validationMiddleware(UserLoginSchema, "body"),
+        async (req: Request, res: Response, next: NextFunction) => {
+          this.logger.info(`Received /users/login request`);
+
+          const userDetails = req.body as IUserLoginRequestBody;
+          if (!userDetails) throw new HTTPError(badRequest);
+
+          try {
+            const result = await this.userService.loginUser(userDetails);
+            this.logger.info(`Responding to client in POST /users/login`);
+            return res.status(200).json(result);
+          } catch (err: any) {
+            this.logger.warn(
+              `An error occurred when trying to POST login user ${formatError(
                 err
               )}`
             );

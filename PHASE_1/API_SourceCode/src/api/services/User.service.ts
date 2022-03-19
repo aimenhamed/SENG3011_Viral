@@ -6,13 +6,20 @@ import {
   IUserBookmarkArticleSuccessResponse,
   IUserDashboardRequestBody,
   IUserDashboardSuccessResponse,
+  IUserLoginRequestBody,
+  IUserLoginSuccessResponse,
+  IUserSpecificSuccessResponse,
 } from "IApiResponses";
 import { UserRepository } from "../../repositories/User.respository";
 import { ArticleRepository } from "../../repositories/Article.repository";
 import { DashboardRepository } from "../../repositories/Dashboard.repository";
 import { UserEntity } from "../../entity/User.entity";
 import { HTTPError } from "../../utils/Errors";
-import { internalServerError, badRequest } from "../../utils/Constants";
+import {
+  internalServerError,
+  badRequest,
+  notFoundError,
+} from "../../utils/Constants";
 import { convertArticleEntityToInterface } from "../../converters/Article.converter";
 import { convertUserEntityToInterface } from "../../converters/User.converter";
 import { getLog } from "../../utils/Helpers";
@@ -147,6 +154,46 @@ export class UserService {
     return {
       user: convertUserEntityToInterface(user),
       dashboard: convertDashboardEntityToInterface(dashboard, []),
+      log: getLog(new Date()),
+    };
+  }
+
+  async getSpecificUser(userId: string): Promise<IUserSpecificSuccessResponse> {
+    const user = await this.userRepository.getUser(userId);
+    if (user === undefined) {
+      this.logger.error(`No user with userId ${userId} found in db`);
+      throw new HTTPError(notFoundError);
+    }
+
+    this.logger.info(`User found with userId ${userId}, responding to client`);
+    return {
+      user: convertUserEntityToInterface(user),
+      log: getLog(new Date()),
+    };
+  }
+
+  async loginUser(
+    userDetails: IUserLoginRequestBody
+  ): Promise<IUserLoginSuccessResponse | undefined> {
+    const user = await this.userRepository.getUserByEmail(userDetails.email);
+
+    if (user === undefined) {
+      this.logger.error(
+        `Failed to login user with email ${userDetails.email} as no user exists with this email`
+      );
+      throw new HTTPError(badRequest);
+    }
+
+    if (user.password != userDetails.password) {
+      this.logger.error(
+        `Failed to login user with email ${userDetails.email} as they entered an incorrect password`
+      );
+      throw new HTTPError(badRequest);
+    }
+
+    this.logger.info(`Successfully logged in user ${user.name}`);
+    return {
+      user: convertUserEntityToInterface(user),
       log: getLog(new Date()),
     };
   }

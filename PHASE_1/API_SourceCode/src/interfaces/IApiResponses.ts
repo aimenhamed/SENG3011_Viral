@@ -99,3 +99,18 @@ export interface IUserDashboardRequestBody {
 }
 
 export type IUserDashboardSuccessResponse = ICommonDashboardSuccessResponse;
+
+export interface IUserLoginRequestBody {
+  email: string;
+  password: string;
+}
+
+export interface IUserLoginSuccessResponse {
+  user: User;
+  log: Log;
+}
+
+export interface IUserSpecificSuccessResponse {
+  user: User;
+  log: Log;
+}
