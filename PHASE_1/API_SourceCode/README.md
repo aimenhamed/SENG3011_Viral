@@ -31,6 +31,10 @@ docker run -p 3030:3030 viral-api
 npm start
 ```
 
+## System Tests
+
+In order to run system tests you need to start up docker container and deploy our schema. From there you need to comment out lines 30-35 in Database.ts.
+
 ## Conventions
 
 ### Filenames
