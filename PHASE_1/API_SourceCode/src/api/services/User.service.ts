@@ -10,6 +10,7 @@ import {
 import { UserRepository } from "../../repositories/User.respository";
 import { ArticleRepository } from "../../repositories/Article.repository";
 import { DashboardRepository } from "../../repositories/Dashboard.repository";
+import { WidgetRepository } from "../../repositories/Widget.repository";
 import { UserEntity } from "../../entity/User.entity";
 import { HTTPError } from "../../utils/Errors";
 import { internalServerError, badRequest } from "../../utils/Constants";
@@ -17,13 +18,16 @@ import { convertArticleEntityToInterface } from "../../converters/Article.conver
 import { convertUserEntityToInterface } from "../../converters/User.converter";
 import { getLog } from "../../utils/Helpers";
 import { convertDashboardEntityToInterface } from "../../converters/Dashboard.converter";
+import { WidgetEntity } from "../../entity/Widget.entity";
+
 
 export class UserService {
   private logger = getLogger();
   constructor(
     readonly userRepository: UserRepository,
     readonly articleRepository: ArticleRepository,
-    readonly dashboardRepository: DashboardRepository
+    readonly dashboardRepository: DashboardRepository,
+    readonly widgetRepository: WidgetRepository
   ) {}
 
   async registerUser(
@@ -143,10 +147,10 @@ export class UserService {
       : [userDashboard.dashboardId];
 
     user = await this.userRepository.saveUser(user);
-
+    const widgets:WidgetEntity[] = await this.widgetRepository.getWidgetById(dashboard.widgets);  
     return {
       user: convertUserEntityToInterface(user),
-      dashboard: convertDashboardEntityToInterface(dashboard, []),
+      dashboard: convertDashboardEntityToInterface(dashboard, widgets),
       log: getLog(new Date()),
     };
   }

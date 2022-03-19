@@ -6,30 +6,32 @@ import {
   notFoundError,
 } from "../../utils/Constants";
 import { ArticleRepository } from "../../repositories/Article.repository";
-import { DashboardRepository } from "../../repositories/Dashboard.repository";
 import { UserRepository } from "../../repositories/User.respository";
-import { ArticleService } from "./Article.service";
+import { DashboardRepository } from "../../repositories/Dashboard.repository";
+import { WidgetRepository } from "../../repositories/Widget.repository";
 import { UserService } from "./User.service";
-import { getMockArticles, getMockUsers, getMockDashboards } from "../../utils/testData";
+import { getMockArticles, getMockUsers, getMockDashboards, getMockWidgets } from "../../utils/testData";
 
 
 describe("UserService", () => {
     let userRepository: UserRepository
     let articleRepository: ArticleRepository;
     let dashboardRepository: DashboardRepository;
+    let widgetRepository: WidgetRepository;
     beforeEach(() => {
       jest.clearAllMocks();
       jest.resetAllMocks();
       userRepository = new UserRepository();
       articleRepository = new ArticleRepository();
       dashboardRepository = new DashboardRepository();
+      widgetRepository = new WidgetRepository();
     });
     afterAll(() => {
       jest.clearAllMocks();
       jest.resetAllMocks();
     });
 
-    const userService = () => new UserService(userRepository, articleRepository, dashboardRepository);
+    const userService = () => new UserService(userRepository, articleRepository, dashboardRepository, widgetRepository);
 
     describe("registerNewUser", () => {
         it("should resolve with 200 if the user is successfully registered", () => {
@@ -91,6 +93,38 @@ describe("UserService", () => {
             });
         });
 
+        it("should resolve with 200 if a second article is successfully bookmarked", ()=> {
+          const service = userService();
+          const user = getMockUsers()[0];
+          const article = getMockArticles()[0];
+          const article2 = getMockArticles()[1];
+          let updatedUser = {...user, bookmarkedArticles: [article.articleId]}
+          userRepository.getUser = jest.fn().mockReturnValue(user);
+          articleRepository.getArticle = jest.fn().mockReturnValue(article);
+          userRepository.saveUser = jest.fn().mockReturnValue(updatedUser);
+          
+          service.bookmarkArticle({
+            userId: user.userId,
+            articleId: article.articleId,
+          })
+          updatedUser = {...user, bookmarkedArticles: [article.articleId, article2.articleId]}
+          articleRepository.getArticle = jest.fn().mockReturnValue(article2);
+          userRepository.saveUser = jest.fn().mockReturnValue(updatedUser);
+          
+
+          expect(service.bookmarkArticle({
+              userId: user.userId,
+              articleId: article2.articleId,
+          })).resolves.toEqual({
+              user: updatedUser,
+              article: article2,
+              log: {
+                  ...baseLog,
+                  accessTime: expect.any(String)
+              }
+          });
+      });
+
         it("should throw 400 error if user does not exist", ()=> {
             const service = userService();
             const article = getMockArticles()[0];
@@ -141,66 +175,181 @@ describe("UserService", () => {
 
     })
 
-    describe("removeBookmarkedArticle", () => {
-        it("should resolve with 200 if article is successfully removed", ()=> {
+    // describe("removeBookmarkedArticle", () => {
+    //     it("should resolve with 200 if article is successfully removed", ()=> {
+    //         const service = userService();
+    //         const user = {...getMockUsers()[0], bookmarkedArticles: [article.articleId]}
+    //         const updatedUser = getMockUsers()[0]
+    //         const article = getMockArticles()[0];
+    //         userRepository.getUser = jest.fn().mockReturnValue(user);
+    //         articleRepository.getArticle = jest.fn().mockReturnValue(article);
+    //         userRepository.saveUser = jest.fn().mockReturnValue(updatedUser);
+            
+    //         expect(service.removeBookmarkF({
+    //             userId: user.userId,
+    //             articleId: article.articleId,
+    //         })).resolves.toEqual({
+    //             user: updatedUser,
+    //             article: article,
+    //             log: {
+    //                 ...baseLog,
+    //                 accessTime: expect.any(String)
+    //             }
+    //         });
+            
+    //     });
+
+    //     it("should throw 400 error if user does not exist", ()=> {
+    //         const service = userService();
+    //         const article = getMockArticles()[0];
+    //         userRepository.getUser = jest.fn().mockReturnValue(undefined);
+    //         articleRepository.getArticle = jest.fn().mockReturnValue(article);
+            
+    //         const errorResult = new HTTPError(badRequest)
+    //         expect(service.bookmarkArticle({
+    //             userId: "id does not exist",
+    //             articleId: article.articleId,
+    //         })).rejects.toThrow(errorResult);
+    //     });
+
+    //     it("should throw 400 error if article does not exist", ()=> {
+    //         const service = userService();
+    //         const user = getMockUsers()[0];
+    //         userRepository.getUser = jest.fn().mockReturnValue(user);
+    //         articleRepository.getArticle = jest.fn().mockReturnValue(undefined);
+
+    //         const errorResult = new HTTPError(badRequest)
+    //         expect(service.bookmarkArticle({
+    //             userId: user.userId,
+    //             articleId: "id does not exist",
+    //         })).rejects.toThrow(errorResult);
+    //     });
+
+    //     it("should throw 400 error if article has already been bookmarked", ()=> {
+    //         const service = userService();
+    //         const user = getMockUsers()[0];
+    //         const article = getMockArticles()[0];
+    //         userRepository.getUser = jest.fn().mockReturnValue(user);
+    //         articleRepository.getArticle = jest.fn().mockReturnValue(article);
+
+    //         service.bookmarkArticle({
+    //             userId: user.userId,
+    //             articleId: article.articleId,
+    //         })
+
+    //         const errorResult = new HTTPError(badRequest)
+    //         expect(service.bookmarkArticle({
+    //             userId: user.userId,
+    //             articleId: article.articleId,
+    //         })).rejects.toThrow(errorResult);
+    //     });
+
+    // })
+
+    describe("addDashboardToUser", () => {
+        it("should resolve with 200 if article is successfully bookmarked", ()=> {
             const service = userService();
-            const user = {...getMockUsers()[0], bookmarkedArticles: [article.articleId]}
-            const article = getMockArticles()[0];
+            const user = getMockUsers()[0];
+            const dashboard = getMockDashboards()[0];
+            const widget = getMockWidgets()[0];
+            const updatedUser = {...user, dashboards: [dashboard.dashboardId]}
             userRepository.getUser = jest.fn().mockReturnValue(user);
-            articleRepository.getArticle = jest.fn().mockReturnValue(article);
+            dashboardRepository.getDashboard = jest.fn().mockReturnValue(dashboard);
             userRepository.saveUser = jest.fn().mockReturnValue(updatedUser);
-            service.bookmarkArticle({
+            widgetRepository.getWidgetById = jest.fn().mockReturnValue([widget]);
+
+            expect(service.addDashboardToUser({
                 userId: user.userId,
-                articleId: article.articleId,
-            })
-            
-            
+                dashboardId: dashboard.dashboardId,
+            })).resolves.toEqual({
+                user: updatedUser,
+                dashboard: {...dashboard, widgets: [widget]},
+                log: {
+                    ...baseLog,
+                    accessTime: expect.any(String)
+                }
+            });
         });
 
-        // it("should throw 400 error if user does not exist", ()=> {
-        //     const service = userService();
-        //     const article = getMockArticles()[0];
-        //     userRepository.getUser = jest.fn().mockReturnValue(undefined);
-        //     articleRepository.getArticle = jest.fn().mockReturnValue(article);
-            
-        //     const errorResult = new HTTPError(badRequest)
-        //     expect(service.bookmarkArticle({
-        //         userId: "id does not exist",
-        //         articleId: article.articleId,
-        //     })).rejects.toThrow(errorResult);
-        // });
+        it("should throw 400 error if it user does not exist", ()=> {
+          const service = userService();
+          const user = getMockUsers()[0];
+          const dashboard = getMockDashboards()[0];
+          const widget = getMockWidgets()[0];
+          const updatedUser = {...user, dashboards: [dashboard.dashboardId]}
+          userRepository.getUser = jest.fn().mockReturnValue(undefined);
+          dashboardRepository.getDashboard = jest.fn().mockReturnValue(dashboard);
+          userRepository.saveUser = jest.fn().mockReturnValue(updatedUser);
+          widgetRepository.getWidgetById = jest.fn().mockReturnValue([widget]);
 
-        // it("should throw 400 error if article does not exist", ()=> {
-        //     const service = userService();
-        //     const user = getMockUsers()[0];
-        //     userRepository.getUser = jest.fn().mockReturnValue(user);
-        //     articleRepository.getArticle = jest.fn().mockReturnValue(undefined);
+          const errorResult =  new HTTPError(badRequest);
 
-        //     const errorResult = new HTTPError(badRequest)
-        //     expect(service.bookmarkArticle({
-        //         userId: user.userId,
-        //         articleId: "id does not exist",
-        //     })).rejects.toThrow(errorResult);
-        // });
+          expect(service.addDashboardToUser({
+            userId: "non-existent user",
+            dashboardId: dashboard.dashboardId,
+          })).rejects.toThrow(errorResult);
+        });
 
-        // it("should throw 400 error if article has already been bookmarked", ()=> {
-        //     const service = userService();
-        //     const user = getMockUsers()[0];
-        //     const article = getMockArticles()[0];
-        //     userRepository.getUser = jest.fn().mockReturnValue(user);
-        //     articleRepository.getArticle = jest.fn().mockReturnValue(article);
+        it("should throw 400 error if it dashboard does not exist", ()=> {
+          const service = userService();
+          const user = getMockUsers()[0];
+          const dashboard = getMockDashboards()[0];
+          const widget = getMockWidgets()[0];
+          const updatedUser = {...user, dashboards: [dashboard.dashboardId]}
+          userRepository.getUser = jest.fn().mockReturnValue(user);
+          dashboardRepository.getDashboard = jest.fn().mockReturnValue(undefined);
+          userRepository.saveUser = jest.fn().mockReturnValue(updatedUser);
+          widgetRepository.getWidgetById = jest.fn().mockReturnValue([widget]);
 
-        //     service.bookmarkArticle({
-        //         userId: user.userId,
-        //         articleId: article.articleId,
-        //     })
+          const errorResult =  new HTTPError(badRequest);
 
-        //     const errorResult = new HTTPError(badRequest)
-        //     expect(service.bookmarkArticle({
-        //         userId: user.userId,
-        //         articleId: article.articleId,
-        //     })).rejects.toThrow(errorResult);
-        // });
+          expect(service.addDashboardToUser({
+            userId: user.userId,
+            dashboardId: "non-existent dashboard",
+          })).rejects.toThrow(errorResult);
+        });
 
+        it("should throw 400 error if it dashboard does not exist", ()=> {
+          const service = userService();
+          const user = getMockUsers()[0];
+          const dashboard = getMockDashboards()[0];
+          const widget = getMockWidgets()[0];
+          const updatedUser = {...user, dashboards: [dashboard.dashboardId]}
+          userRepository.getUser = jest.fn().mockReturnValue(user);
+          dashboardRepository.getDashboard = jest.fn().mockReturnValue(undefined);
+          userRepository.saveUser = jest.fn().mockReturnValue(updatedUser);
+          widgetRepository.getWidgetById = jest.fn().mockReturnValue([widget]);
+
+          const errorResult =  new HTTPError(badRequest);
+
+          expect(service.addDashboardToUser({
+            userId: user.userId,
+            dashboardId: "non-existent dashboard",
+          })).rejects.toThrow(errorResult);
+        });
+
+        it("should throw 400 error if it dashboard has already been saved", ()=> {
+          const service = userService();
+          const user = getMockUsers()[0];
+          const dashboard = getMockDashboards()[0];
+          const widget = getMockWidgets()[0];
+          const updatedUser = {...user, dashboards: [dashboard.dashboardId]}
+          userRepository.getUser = jest.fn().mockReturnValue(user);
+          dashboardRepository.getDashboard = jest.fn().mockReturnValue(dashboard);
+          userRepository.saveUser = jest.fn().mockReturnValue(updatedUser);
+          widgetRepository.getWidgetById = jest.fn().mockReturnValue([widget]);
+
+          service.addDashboardToUser({
+            userId: user.userId,
+            dashboardId: dashboard.dashboardId,
+          })
+
+          const errorResult =  new HTTPError(badRequest);
+
+          expect(service.addDashboardToUser({
+            userId: user.userId,
+            dashboardId: dashboard.dashboardId,
+          })).rejects.toThrow(errorResult);
+        });
     })
 });
