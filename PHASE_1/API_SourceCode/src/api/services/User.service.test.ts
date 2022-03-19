@@ -108,6 +108,7 @@ describe("UserService", () => {
             articleId: article.articleId,
           })
           updatedUser = {...user, bookmarkedArticles: [article.articleId, article2.articleId]}
+          userRepository.getUser = jest.fn().mockReturnValue({...user, bookmarkedArticles: [article.articleId]});
           articleRepository.getArticle = jest.fn().mockReturnValue(article2);
           userRepository.saveUser = jest.fn().mockReturnValue(updatedUser);
           
@@ -175,76 +176,80 @@ describe("UserService", () => {
 
     })
 
-    // describe("removeBookmarkedArticle", () => {
-    //     it("should resolve with 200 if article is successfully removed", ()=> {
-    //         const service = userService();
-    //         const user = {...getMockUsers()[0], bookmarkedArticles: [article.articleId]}
-    //         const updatedUser = getMockUsers()[0]
-    //         const article = getMockArticles()[0];
-    //         userRepository.getUser = jest.fn().mockReturnValue(user);
-    //         articleRepository.getArticle = jest.fn().mockReturnValue(article);
-    //         userRepository.saveUser = jest.fn().mockReturnValue(updatedUser);
+    describe("removeBookmarkedArticle", () => {
+        it("should resolve with 200 if article is successfully removed", ()=> {
+            const service = userService();
+            const updatedUser = getMockUsers()[0]
+            const article = getMockArticles()[0];
+            const user = {...getMockUsers()[0], bookmarkedArticles: [article.articleId]}
+            userRepository.getUser = jest.fn().mockReturnValue(user);
+            articleRepository.getArticle = jest.fn().mockReturnValue(article);
+            userRepository.saveUser = jest.fn().mockReturnValue(updatedUser);
             
-    //         expect(service.removeBookmarkF({
-    //             userId: user.userId,
-    //             articleId: article.articleId,
-    //         })).resolves.toEqual({
-    //             user: updatedUser,
-    //             article: article,
-    //             log: {
-    //                 ...baseLog,
-    //                 accessTime: expect.any(String)
-    //             }
-    //         });
+            expect(service.removeBookmark({
+                userId: user.userId,
+                articleId: article.articleId,
+            })).resolves.toEqual({
+                user: updatedUser,
+                log: {
+                    ...baseLog,
+                    accessTime: expect.any(String)
+                }
+            });
             
-    //     });
+        });
 
-    //     it("should throw 400 error if user does not exist", ()=> {
-    //         const service = userService();
-    //         const article = getMockArticles()[0];
-    //         userRepository.getUser = jest.fn().mockReturnValue(undefined);
-    //         articleRepository.getArticle = jest.fn().mockReturnValue(article);
-            
-    //         const errorResult = new HTTPError(badRequest)
-    //         expect(service.bookmarkArticle({
-    //             userId: "id does not exist",
-    //             articleId: article.articleId,
-    //         })).rejects.toThrow(errorResult);
-    //     });
+        it("should throw 400 if user does not exist", ()=> {
+          const service = userService();
+          const updatedUser = getMockUsers()[0]
+          const article = getMockArticles()[0];
+          const user = {...getMockUsers()[0], bookmarkedArticles: [article.articleId]}
+          userRepository.getUser = jest.fn().mockReturnValue(undefined);
+          articleRepository.getArticle = jest.fn().mockReturnValue(article);
+          userRepository.saveUser = jest.fn().mockReturnValue(updatedUser);
+          
+          const errorResult = new HTTPError(badRequest); 
 
-    //     it("should throw 400 error if article does not exist", ()=> {
-    //         const service = userService();
-    //         const user = getMockUsers()[0];
-    //         userRepository.getUser = jest.fn().mockReturnValue(user);
-    //         articleRepository.getArticle = jest.fn().mockReturnValue(undefined);
+          expect(service.removeBookmark({
+              userId: "unknown userId",
+              articleId: article.articleId,
+          })).rejects.toThrow(errorResult);
+        });
 
-    //         const errorResult = new HTTPError(badRequest)
-    //         expect(service.bookmarkArticle({
-    //             userId: user.userId,
-    //             articleId: "id does not exist",
-    //         })).rejects.toThrow(errorResult);
-    //     });
+        it("should throw 400 if bookmark doesn't exist", ()=> {
+          const service = userService();
+          const updatedUser = getMockUsers()[0]
+          const article = getMockArticles()[0];
+          const user = {...getMockUsers()[0], bookmarkedArticles: [article.articleId]}
+          userRepository.getUser = jest.fn().mockReturnValue(user);
+          articleRepository.getArticle = jest.fn().mockReturnValue(article);
+          userRepository.saveUser = jest.fn().mockReturnValue(updatedUser);
+          
+          const errorResult = new HTTPError(badRequest); 
 
-    //     it("should throw 400 error if article has already been bookmarked", ()=> {
-    //         const service = userService();
-    //         const user = getMockUsers()[0];
-    //         const article = getMockArticles()[0];
-    //         userRepository.getUser = jest.fn().mockReturnValue(user);
-    //         articleRepository.getArticle = jest.fn().mockReturnValue(article);
+          expect(service.removeBookmark({
+              userId: user.userId,
+              articleId: "unknown article",
+          })).rejects.toThrow(errorResult);
+        });
 
-    //         service.bookmarkArticle({
-    //             userId: user.userId,
-    //             articleId: article.articleId,
-    //         })
+        it("should throw 500 if remove operation fails", ()=> {
+          const service = userService();
+          const updatedUser = getMockUsers()[0]
+          const article = getMockArticles()[0];
+          const user = {...getMockUsers()[0], bookmarkedArticles: [article.articleId]}
+          userRepository.getUser = jest.fn().mockReturnValue(user);
+          articleRepository.getArticle = jest.fn().mockReturnValue(article);
+          userRepository.saveUser = jest.fn().mockReturnValue(undefined);
+          
+          const errorResult = new HTTPError(internalServerError); 
 
-    //         const errorResult = new HTTPError(badRequest)
-    //         expect(service.bookmarkArticle({
-    //             userId: user.userId,
-    //             articleId: article.articleId,
-    //         })).rejects.toThrow(errorResult);
-    //     });
-
-    // })
+          expect(service.removeBookmark({
+              userId: user.userId,
+              articleId: article.articleId,
+          })).rejects.toThrow(errorResult);
+        });
+    })
 
     describe("addDashboardToUser", () => {
         it("should resolve with 200 if article is successfully bookmarked", ()=> {

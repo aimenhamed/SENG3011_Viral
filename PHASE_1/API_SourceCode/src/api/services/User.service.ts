@@ -84,9 +84,7 @@ export class UserService {
       );
       throw new HTTPError(badRequest);
     }
-    user.bookmarkedArticles = user.bookmarkedArticles
-      ? [...user.bookmarkedArticles, bookmarkedArticle.articleId]
-      : [bookmarkedArticle.articleId];
+    user.bookmarkedArticles = [...user.bookmarkedArticles, bookmarkedArticle.articleId]
 
     user = await this.userRepository.saveUser(user);
 
@@ -118,6 +116,13 @@ export class UserService {
     );
 
     user = await this.userRepository.saveUser(user);
+
+    if (user === undefined) {
+      this.logger.error(
+        `Failed to remove bookmarked article ${bookmarkDetails.articleId} from user ${bookmarkDetails.userId}`
+      );
+      throw new HTTPError(internalServerError);
+    }
 
     return {
       user: convertUserEntityToInterface(user),
@@ -156,9 +161,7 @@ export class UserService {
       );
       throw new HTTPError(badRequest);
     }
-    user.dashboards = user.dashboards
-      ? [...user.dashboards, userDashboard.dashboardId]
-      : [userDashboard.dashboardId];
+    user.dashboards = [...user.dashboards, userDashboard.dashboardId]
 
     user = await this.userRepository.saveUser(user);
     const widgets:WidgetEntity[] = await this.widgetRepository.getWidgetById(dashboard.widgets);  
