@@ -84,7 +84,10 @@ export class UserService {
       );
       throw new HTTPError(badRequest);
     }
-    user.bookmarkedArticles = [...user.bookmarkedArticles, bookmarkedArticle.articleId]
+    user.bookmarkedArticles = [
+      ...user.bookmarkedArticles,
+      bookmarkedArticle.articleId,
+    ];
 
     user = await this.userRepository.saveUser(user);
 
@@ -161,10 +164,12 @@ export class UserService {
       );
       throw new HTTPError(badRequest);
     }
-    user.dashboards = [...user.dashboards, userDashboard.dashboardId]
+    user.dashboards = [...user.dashboards, userDashboard.dashboardId];
 
     user = await this.userRepository.saveUser(user);
-    const widgets:WidgetEntity[] = await this.widgetRepository.getWidgetById(dashboard.widgets);  
+    const widgets: WidgetEntity[] = await this.widgetRepository.getWidgetById(
+      dashboard.widgets
+    );
     return {
       user: convertUserEntityToInterface(user),
       dashboard: convertDashboardEntityToInterface(dashboard, widgets),
