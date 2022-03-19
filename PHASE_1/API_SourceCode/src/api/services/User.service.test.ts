@@ -10,7 +10,7 @@ import { UserRepository } from "../../repositories/User.respository";
 import { DashboardRepository } from "../../repositories/Dashboard.repository";
 import { WidgetRepository } from "../../repositories/Widget.repository";
 import { UserService } from "./User.service";
-import { getMockArticles, getMockUsers, getMockDashboards, getMockWidgets } from "../../utils/testData";
+import { getMockArticles, getMockUsers, getMockDashboards, getMockWidgets, getDashboardEntity } from "../../utils/testData";
 
 
 describe("UserService", () => {
@@ -36,7 +36,7 @@ describe("UserService", () => {
     describe("registerNewUser", () => {
         it("should resolve with 200 if the user is successfully registered", () => {
             const service = userService();
-            const userRecord = getMockUsers()[0];
+            const userRecord = getMockUsers()[2];
             const {userId, bookmarkedArticles, dashboards, ...newUser} = userRecord;
             
             userRepository.getUserByEmail =jest.fn().mockReturnValue(undefined)
@@ -52,7 +52,7 @@ describe("UserService", () => {
 
         it("should throw 400 error if user already exists", ()=> {
             const service = userService();
-            const existingUser = getMockUsers()[0];
+            const existingUser = getMockUsers()[2];
             userRepository.getUserByEmail = jest.fn().mockReturnValue(existingUser);
             
             const errorResult = new HTTPError(badRequest)
@@ -74,7 +74,7 @@ describe("UserService", () => {
     describe("bookmarkArticle", () => {
         it("should resolve with 200 if article is successfully bookmarked", ()=> {
             const service = userService();
-            const user = getMockUsers()[0];
+            const user = getMockUsers()[2];
             const article = getMockArticles()[0];
             const updatedUser = {...user, bookmarkedArticles: [article.articleId]}
             userRepository.getUser = jest.fn().mockReturnValue(user);
@@ -95,7 +95,7 @@ describe("UserService", () => {
 
         it("should resolve with 200 if a second article is successfully bookmarked", ()=> {
           const service = userService();
-          const user = getMockUsers()[0];
+          const user = getMockUsers()[2];
           const article = getMockArticles()[0];
           const article2 = getMockArticles()[1];
           let updatedUser = {...user, bookmarkedArticles: [article.articleId]}
@@ -124,7 +124,7 @@ describe("UserService", () => {
                   accessTime: expect.any(String)
               }
           });
-      });
+        });
 
         it("should throw 400 error if user does not exist", ()=> {
             const service = userService();
@@ -141,7 +141,7 @@ describe("UserService", () => {
 
         it("should throw 400 error if article does not exist", ()=> {
             const service = userService();
-            const user = getMockUsers()[0];
+            const user = getMockUsers()[2];
             userRepository.getUser = jest.fn().mockReturnValue(user);
             articleRepository.getArticle = jest.fn().mockReturnValue(undefined);
 
@@ -154,7 +154,7 @@ describe("UserService", () => {
 
         it("should throw 400 error if article has already been bookmarked", ()=> {
             const service = userService();
-            const user = getMockUsers()[0];
+            const user = getMockUsers()[2];
             const article = getMockArticles()[0];
             const updatedUser = {...user, bookmarkedArticles: [article.articleId]}
             userRepository.getUser = jest.fn().mockReturnValue(user);
@@ -179,9 +179,9 @@ describe("UserService", () => {
     describe("removeBookmarkedArticle", () => {
         it("should resolve with 200 if article is successfully removed", ()=> {
             const service = userService();
-            const updatedUser = getMockUsers()[0]
+            const updatedUser = getMockUsers()[2]
             const article = getMockArticles()[0];
-            const user = {...getMockUsers()[0], bookmarkedArticles: [article.articleId]}
+            const user = {...updatedUser, bookmarkedArticles: [article.articleId]}
             userRepository.getUser = jest.fn().mockReturnValue(user);
             articleRepository.getArticle = jest.fn().mockReturnValue(article);
             userRepository.saveUser = jest.fn().mockReturnValue(updatedUser);
@@ -201,7 +201,7 @@ describe("UserService", () => {
 
         it("should throw 400 if user does not exist", ()=> {
           const service = userService();
-          const updatedUser = getMockUsers()[0]
+          const updatedUser = getMockUsers()[2]
           const article = getMockArticles()[0];
           const user = {...getMockUsers()[0], bookmarkedArticles: [article.articleId]}
           userRepository.getUser = jest.fn().mockReturnValue(undefined);
@@ -218,9 +218,9 @@ describe("UserService", () => {
 
         it("should throw 400 if bookmark doesn't exist", ()=> {
           const service = userService();
-          const updatedUser = getMockUsers()[0]
+          const updatedUser = getMockUsers()[2]
           const article = getMockArticles()[0];
-          const user = {...getMockUsers()[0], bookmarkedArticles: [article.articleId]}
+          const user = {...updatedUser, bookmarkedArticles: [article.articleId]}
           userRepository.getUser = jest.fn().mockReturnValue(user);
           articleRepository.getArticle = jest.fn().mockReturnValue(article);
           userRepository.saveUser = jest.fn().mockReturnValue(updatedUser);
@@ -235,9 +235,9 @@ describe("UserService", () => {
 
         it("should throw 500 if remove operation fails", ()=> {
           const service = userService();
-          const updatedUser = getMockUsers()[0]
+          const updatedUser = getMockUsers()[2]
           const article = getMockArticles()[0];
-          const user = {...getMockUsers()[0], bookmarkedArticles: [article.articleId]}
+          const user = {...updatedUser, bookmarkedArticles: [article.articleId]}
           userRepository.getUser = jest.fn().mockReturnValue(user);
           articleRepository.getArticle = jest.fn().mockReturnValue(article);
           userRepository.saveUser = jest.fn().mockReturnValue(undefined);
@@ -252,23 +252,23 @@ describe("UserService", () => {
     })
 
     describe("addDashboardToUser", () => {
-        it("should resolve with 200 if article is successfully bookmarked", ()=> {
+        it("should resolve with 200 if dashboard was successfully added", ()=> {
             const service = userService();
-            const user = getMockUsers()[0];
-            const dashboard = getMockDashboards()[0];
-            const widget = getMockWidgets()[0];
+            const user = getMockUsers()[2];
+            const dashboard = getDashboardEntity();
+            const widgets = getMockWidgets();
             const updatedUser = {...user, dashboards: [dashboard.dashboardId]}
             userRepository.getUser = jest.fn().mockReturnValue(user);
             dashboardRepository.getDashboard = jest.fn().mockReturnValue(dashboard);
             userRepository.saveUser = jest.fn().mockReturnValue(updatedUser);
-            widgetRepository.getWidgetById = jest.fn().mockReturnValue([widget]);
+            widgetRepository.getWidgetById = jest.fn().mockReturnValue(widgets);
 
             expect(service.addDashboardToUser({
                 userId: user.userId,
                 dashboardId: dashboard.dashboardId,
             })).resolves.toEqual({
                 user: updatedUser,
-                dashboard: {...dashboard, widgets: [widget]},
+                dashboard: {...dashboard, widgets: widgets},
                 log: {
                     ...baseLog,
                     accessTime: expect.any(String)
@@ -278,14 +278,14 @@ describe("UserService", () => {
 
         it("should throw 400 error if it user does not exist", ()=> {
           const service = userService();
-          const user = getMockUsers()[0];
-          const dashboard = getMockDashboards()[0];
-          const widget = getMockWidgets()[0];
+          const user = getMockUsers()[2];
+          const dashboard = getDashboardEntity();
+          const widgets = getMockWidgets();
           const updatedUser = {...user, dashboards: [dashboard.dashboardId]}
           userRepository.getUser = jest.fn().mockReturnValue(undefined);
           dashboardRepository.getDashboard = jest.fn().mockReturnValue(dashboard);
           userRepository.saveUser = jest.fn().mockReturnValue(updatedUser);
-          widgetRepository.getWidgetById = jest.fn().mockReturnValue([widget]);
+          widgetRepository.getWidgetById = jest.fn().mockReturnValue(widgets);
 
           const errorResult =  new HTTPError(badRequest);
 
@@ -297,14 +297,14 @@ describe("UserService", () => {
 
         it("should throw 400 error if it dashboard does not exist", ()=> {
           const service = userService();
-          const user = getMockUsers()[0];
-          const dashboard = getMockDashboards()[0];
-          const widget = getMockWidgets()[0];
+          const user = getMockUsers()[2];
+          const dashboard = getDashboardEntity();
+          const widgets = getMockWidgets();
           const updatedUser = {...user, dashboards: [dashboard.dashboardId]}
           userRepository.getUser = jest.fn().mockReturnValue(user);
           dashboardRepository.getDashboard = jest.fn().mockReturnValue(undefined);
           userRepository.saveUser = jest.fn().mockReturnValue(updatedUser);
-          widgetRepository.getWidgetById = jest.fn().mockReturnValue([widget]);
+          widgetRepository.getWidgetById = jest.fn().mockReturnValue(widgets);
 
           const errorResult =  new HTTPError(badRequest);
 
@@ -316,14 +316,14 @@ describe("UserService", () => {
 
         it("should throw 400 error if it dashboard does not exist", ()=> {
           const service = userService();
-          const user = getMockUsers()[0];
-          const dashboard = getMockDashboards()[0];
-          const widget = getMockWidgets()[0];
+          const user = getMockUsers()[2];
+          const dashboard = getDashboardEntity();
+          const widgets = getMockWidgets();
           const updatedUser = {...user, dashboards: [dashboard.dashboardId]}
           userRepository.getUser = jest.fn().mockReturnValue(user);
           dashboardRepository.getDashboard = jest.fn().mockReturnValue(undefined);
           userRepository.saveUser = jest.fn().mockReturnValue(updatedUser);
-          widgetRepository.getWidgetById = jest.fn().mockReturnValue([widget]);
+          widgetRepository.getWidgetById = jest.fn().mockReturnValue(widgets);
 
           const errorResult =  new HTTPError(badRequest);
 
@@ -335,14 +335,14 @@ describe("UserService", () => {
 
         it("should throw 400 error if it dashboard has already been saved", ()=> {
           const service = userService();
-          const user = getMockUsers()[0];
-          const dashboard = getMockDashboards()[0];
-          const widget = getMockWidgets()[0];
+          const user = getMockUsers()[2];
+          const dashboard = getDashboardEntity();
+          const widgets = getMockWidgets();
           const updatedUser = {...user, dashboards: [dashboard.dashboardId]}
           userRepository.getUser = jest.fn().mockReturnValue(user);
           dashboardRepository.getDashboard = jest.fn().mockReturnValue(dashboard);
           userRepository.saveUser = jest.fn().mockReturnValue(updatedUser);
-          widgetRepository.getWidgetById = jest.fn().mockReturnValue([widget]);
+          widgetRepository.getWidgetById = jest.fn().mockReturnValue(widgets);
 
           service.addDashboardToUser({
             userId: user.userId,

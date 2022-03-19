@@ -1,10 +1,37 @@
 import { Article } from "IArticle";
 import { Report } from "IReport";
-import { User } from "IUser";
-import { Dashboard } from "IDashboard";
-import { Widget, WidgetType } from "../interfaces/IWidget";
+import { ReportEntity } from "../entity/Report.entity";
+import { ArticleEntity } from "../entity/Article.entity";
 import mockArticles from "./data/small.json";
+import { WidgetEntity } from "../entity/Widget.entity";
+import { Widget, WidgetType } from "../interfaces/IWidget";
+import { User } from "../interfaces/IUser";
+import { UserEntity } from "../entity/User.entity";
+import { Dashboard } from "../interfaces/IDashboard";
 import { DashboardEntity } from "../entity/Dashboard.entity";
+
+export const getReportEntity = (): ReportEntity => {
+  const report = getMockReports()[0];
+  const reportEntity = new ReportEntity();
+  reportEntity.reportId = report.reportId;
+  reportEntity.articleId = "art-123";
+  reportEntity.diseases = report.diseases;
+  reportEntity.eventDate = report.eventDate;
+  reportEntity.locations = report.locations;
+  reportEntity.syndromes = report.syndromes;
+  return reportEntity;
+};
+
+export const getArticleEntity = (): ArticleEntity => {
+  return {
+    articleId: "art-123",
+    url: mockArticles[0].URL,
+    dateOfPublication: mockArticles[0]["Date of publication"],
+    headline: mockArticles[0]["Title"],
+    mainText: mockArticles[0].Content,
+    reports: [getReportEntity()],
+  };
+};
 
 export const getMockArticles = (): Article[] => {
   return [
@@ -62,8 +89,53 @@ export const getMockReports = (): Report[] => {
   ];
 };
 
+export const getMockWidgets = (): Widget[] => {
+  return [
+    {
+      widgetId: "wid-123",
+      widgetType: WidgetType.ARTICLE,
+      articleId: "art-123",
+    },
+    {
+      widgetId: "wid-321",
+      widgetType: WidgetType.ARTICLE,
+      articleId: "art-123",
+    },
+    {
+      widgetId: "wid-707",
+      widgetType: WidgetType.ARTICLE,
+      articleId: "art-123",
+    },
+  ];
+};
+
+export const getWidgetEntity = (): WidgetEntity => {
+  const widget = getMockWidgets()[0];
+  const widgetEntity = new WidgetEntity();
+  widgetEntity.articleId = widget.articleId;
+  widgetEntity.widgetId = widget.widgetId;
+  widgetEntity.widgetType = widget.widgetType;
+  return widgetEntity;
+};
+
 export const getMockUsers = (): User[] => {
   return [
+    {
+      userId: "user-123",
+      name: "jeff",
+      email: "jeff1@gmail.com",
+      password: "mysecretpassword",
+      dashboards: ["dash-123"],
+      bookmarkedArticles: ["art-123"],
+    },
+    {
+      userId: "user-321",
+      name: "tom",
+      email: "tom1@gmail.com",
+      password: "mysecretpassword",
+      dashboards: ["dash-123"],
+      bookmarkedArticles: ["art-123"],
+    },
     {
       userId: "user1",
       name: "Bob",
@@ -72,25 +144,40 @@ export const getMockUsers = (): User[] => {
       dashboards: [],
       bookmarkedArticles: []
     }
-  ]
-}
+  ];
+};
 
-export const getMockDashboards = (): DashboardEntity[] => {
+export const getUserEntity = (): UserEntity => {
+  const user = getMockUsers()[0];
+  const userEntity = new UserEntity();
+  userEntity.userId = user.userId;
+  userEntity.name = user.name;
+  userEntity.dashboards = user.dashboards;
+  userEntity.password = user.password;
+  userEntity.bookmarkedArticles = user.bookmarkedArticles;
+  userEntity.email = user.email;
+  return userEntity;
+};
+
+export const getMockDashboards = (): Dashboard[] => {
   return [
     {
-      dashboardId: "dashboard1",
-      userId: "user1",
-      widgets: [ getMockWidgets()[0].widgetId ]
-    }
-  ]
-}
-
-export const getMockWidgets = (): Widget[] => {
-  return [
+      dashboardId: "dash-123",
+      userId: "user-123",
+      widgets: getMockWidgets(),
+    },
     {
-      widgetId: "widget1",
-      widgetType: WidgetType.ARTICLE,
-      articleId: "art-123"
-    }
-  ]
-}
+      dashboardId: "dash-321",
+      userId: "user-321",
+      widgets: getMockWidgets(),
+    },
+  ];
+};
+
+export const getDashboardEntity = (): DashboardEntity => {
+  return {
+    dashboardId: "dash-123",
+    userId: "user-123",
+    widgets: ["wid-123", "wid-321", "wid-707"],
+  };
+};
