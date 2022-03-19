@@ -7,6 +7,8 @@ import {
   IUserDashboardRequestBody,
   IUserDashboardSuccessResponse,
   IUserSpecificSuccessResponse,
+  IUserLoginRequestBody,
+  IUserLoginSuccessResponse,
 } from "IApiResponses";
 import { UserRepository } from "../../repositories/User.respository";
 import { ArticleRepository } from "../../repositories/Article.repository";
@@ -66,6 +68,37 @@ export class UserService {
       user: convertUserEntityToInterface(userEntity),
       log: getLog(new Date()),
     };
+  }
+
+  async loginUser(
+    userDetails: IUserLoginRequestBody
+  ): Promise<IUserLoginSuccessResponse | undefined> {
+    const user = await this.userRepository.getUserByEmail(
+      userDetails.email
+    );
+
+    if (user === undefined) {
+      this.logger.error(
+        `Failed to login user with email ${userDetails.email} as no user exists with this email`
+      );
+      throw new HTTPError(badRequest);
+    }
+
+    if (user.password != userDetails.password ) {
+      this.logger.error(
+        `Failed to login user with email ${userDetails.email} as they entered an incorrect password`
+      );
+      throw new HTTPError(badRequest);
+    }
+
+    this.logger.info(
+      `Successfully logged in user ${user.name}`
+    );
+    return {
+      user: convertUserEntityToInterface(user),
+      log: getLog(new Date()),
+    }
+
   }
 
   async bookmarkArticle(

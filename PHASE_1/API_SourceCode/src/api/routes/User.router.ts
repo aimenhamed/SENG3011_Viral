@@ -5,11 +5,13 @@ import { UserService } from "../services/User.service";
 import validationMiddleware from "../middlewares/validation";
 import {
   UserRegisterSchema,
+  UserLoginSchema,
   UserBookmarkArticleSchema,
   UserDashboardSchema,
 } from "../schemas/User.schema";
 import {
   IUserRegisterRequestBody,
+  IUserLoginRequestBody,
   IUserBookmarkArticleRequestBody,
   IUserDashboardRequestBody,
 } from "IApiResponses";
@@ -43,6 +45,29 @@ export class UserRouter implements IRouter {
           } catch (err: any) {
             this.logger.warn(
               `An error occurred when trying to POST register user ${formatError(
+                err
+              )}`
+            );
+            return next(err);
+          }
+        }
+      )
+      .post(
+        "/users/login",
+        validationMiddleware(UserLoginSchema, "body"),
+        async (req: Request, res: Response, next: NextFunction) => {
+          this.logger.info(`Received /users/login request`);
+
+          const userDetails = req.body as IUserLoginRequestBody;
+          if (!userDetails) throw new HTTPError (badRequest);
+
+          try {
+            const result = await this.userService.loginUser(userDetails);
+            this.logger.info(`Responding to client in POST /users/login`);
+            return res.status(200).json(result);
+          } catch (err: any) {
+            this.logger.warn(
+              `An error occurred when trying to POST login user ${formatError(
                 err
               )}`
             );

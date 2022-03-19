@@ -1,3 +1,4 @@
+import { RandomUUIDOptions } from "crypto";
 import { Article } from "IArticle";
 import { Dashboard } from "IDashboard";
 import { Report } from "IReport";
@@ -55,6 +56,16 @@ export interface IUserRegisterRequestBody {
 }
 
 export interface IUserRegisterSuccessResponse {
+  user: User;
+  log: Log;
+}
+
+export interface IUserLoginRequestBody {
+  email: string;
+  password: string;
+}
+
+export interface IUserLoginSuccessResponse {
   user: User;
   log: Log;
 }

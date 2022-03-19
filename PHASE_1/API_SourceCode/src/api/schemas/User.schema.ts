@@ -6,6 +6,11 @@ export const UserRegisterSchema = Joi.object({
   password: Joi.string().required(),
 });
 
+export const UserLoginSchema = Joi.object({
+  email: Joi.string().required(),
+  password: Joi.string().required(),
+});
+
 export const UserBookmarkArticleSchema = Joi.object({
   userId: Joi.string()
     .uuid({ version: ["uuidv4"] })
