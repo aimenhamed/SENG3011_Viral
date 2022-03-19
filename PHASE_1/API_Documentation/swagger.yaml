@@ -43,7 +43,7 @@ paths:
             items:
               type: "string"
           required: true
-          example: '["nipah virus", "Encephalitis"]'
+          example: '["nipah virus"]'
 
       responses:
         "200":
@@ -67,7 +67,7 @@ paths:
       tags:
         - "Articles"
       summary: "Retrieve all articles"
-      description: "Dumps all articles currently stored in the database."
+      description: "Dumps all articles currently stored in the database. Main text is excluded."
       operationId: "articlesDump"
       responses:
         "200":
@@ -77,7 +77,20 @@ paths:
               schema:
                 type: "array"
                 items:
-                  "$ref": "#/components/schemas/Article"
+                  type: "object"
+                  properties:
+                    articleId:
+                      type: "string"
+                    url:
+                      type: "string"
+                    dateOfPublication:
+                      type: "string"
+                    headline:
+                      type: "string"
+                    reports:
+                      type: "array"
+                      items:
+                        "$ref": "#/components/schemas/Report"
         "400":
           "$ref": "#/components/responses/BadRequest"
         "500":
@@ -98,7 +111,7 @@ paths:
           schema:
             type: string
           required: true
-          example: "02054ba4-e817-43e5-a7f4-e3415dcf56ee"
+          example: "c4ebd485-a22a-4ac3-882b-eec4daabd2b0"
       responses:
         "200":
           description: "Successful response"
@@ -150,7 +163,7 @@ paths:
           schema:
             type: string
           required: true
-          example: "135e98a4-8f40-4eb1-a953-18521a08d37f"
+          example: "8cf91f9d-4484-469e-b668-225ed3bb5006"
       responses:
         "200":
           description: "Successful response"
@@ -260,7 +273,7 @@ paths:
           schema:
             type: string
           required: true
-          example: "06144fdf-07e0-4ea2-8a91-af7fe47fc3f8"
+          example: "7bb72fe5-6b8c-4984-8efc-758322e8c8a2"
       responses:
         "200":
           description: "Successful response"
@@ -296,8 +309,8 @@ paths:
                 dashboardId:
                   type: string
               example:
-                userId:
-                dashboardId:
+                  userId: "7bb72fe5-6b8c-4984-8efc-758322e8c8a2"
+                  dashboardId: "password"
       responses:
         "200":
           description: "Successful response"
@@ -313,6 +326,7 @@ paths:
                         dashboard: { $ref: "#/components/schemas/Dashboard" },
                       },
                   },
+                
               }
         "400":
           $ref: "#/components/responses/BadRequest"
@@ -341,6 +355,11 @@ paths:
                         userId: { type: "string" },
                         articleId: { type: "string" },
                       },
+                    example:
+                      {
+                        userId: "7bb72fe5-6b8c-4984-8efc-758322e8c8a2",
+                        articleId: "c4ebd485-a22a-4ac3-882b-eec4daabd2b0"
+                      }
                   },
               },
           }
@@ -387,6 +406,11 @@ paths:
                         userId: { type: "string" },
                         articleId: { type: "string" },
                       },
+                    example:
+                      {
+                        userId: "7bb72fe5-6b8c-4984-8efc-758322e8c8a2",
+                        articleId: "c4ebd485-a22a-4ac3-882b-eec4daabd2b0"
+                      }
                   },
               },
           }
@@ -438,6 +462,17 @@ paths:
                               },
                           },
                       },
+                    example:
+                      {
+                        "userId": "7bb72fe5-6b8c-4984-8efc-758322e8c8a2",
+                        "widgets": [{
+                            "widgetType": "ARTICLE",
+                            "articleId": "c4ebd485-a22a-4ac3-882b-eec4daabd2b0"
+                        },{
+                            "widgetType": "ARTICLE",
+                            "articleId": "0cc1c698-efe4-45a1-a476-cfd6ef27f11c"
+                        }]
+                      }
                   },
               },
           }
@@ -459,7 +494,7 @@ paths:
               }
         "400":
           $ref: "#/components/responses/BadRequest"
-        "404":
+        "405":
           "$ref": "#/components/responses/NotFound"
         "500":
           $ref: "#/components/responses/ServerError"
@@ -478,7 +513,7 @@ paths:
           schema:
             type: string
           required: true
-          example: "885eca4d-9ac0-41b2-873f-1b5de8336117"
+          example: "fba554c5-8d7c-4a0a-8780-f0d0d8b2e0d8"
       requestBody:
         "content":
           {
@@ -550,7 +585,7 @@ paths:
           schema:
             type: string
           required: true
-          example: "885eca4d-9ac0-41b2-873f-1b5de8336117"
+          example: "fba554c5-8d7c-4a0a-8780-f0d0d8b2e0d8"
       responses:
         "200":
           description: "Successful response"
@@ -582,7 +617,7 @@ paths:
           schema:
             type: string
           required: true
-          example: "885eca4d-9ac0-41b2-873f-1b5de8336117"
+          example: "fba554c5-8d7c-4a0a-8780-f0d0d8b2e0d8"
       responses:
         "200":
           description: "Successful response"
