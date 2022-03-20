@@ -6,13 +6,13 @@
 
 ### [Project Management](https://github.com/aimenhamed/SENG3011_Viral/blob/master/Reports/Project%20Management%20-%20FINAL.pdf)
 
-### Deliverable 2
+## Deliverable 2
 
 ### [Swagger for API](https://teamviral-api.herokuapp.com)
 
-### [Design Report]
+### [Design Report](https://github.com/aimenhamed/SENG3011_Viral/blob/master/Reports/D2%20Design%20Details.pdf)
 
-### [Testing Report]
+### [Testing Report](https://github.com/aimenhamed/SENG3011_Viral/blob/master/Reports/D2%20Testing%20Report.pdf)
 
 ### [API Source Code](https://github.com/aimenhamed/SENG3011_Viral/tree/master/PHASE_1/API_SourceCode)
 
