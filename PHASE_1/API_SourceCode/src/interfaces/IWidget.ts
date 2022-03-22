@@ -10,7 +10,7 @@ export enum WidgetType {
 
 export enum GraphType {
   BAR = "BAR",
-  PIPE = "PIPE",
+  PIE = "PIE",
   LINE = "LINE",
   STACKED_BAR = "STACKED_BAR",
 }

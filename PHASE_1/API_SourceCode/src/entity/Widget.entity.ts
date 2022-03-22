@@ -33,6 +33,6 @@ export class WidgetEntity {
   })
   keyTerms: string[];
 
-  @Column("text", {name: "text", nullable: true})
-  text: string;
+  @Column("text", {name: "content", nullable: true})
+  content: string;
 }
