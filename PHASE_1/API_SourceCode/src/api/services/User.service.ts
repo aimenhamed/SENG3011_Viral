@@ -23,6 +23,8 @@ import {
   internalServerError,
   badRequest,
   notFoundError,
+  secret,
+  jwt,
 } from "../../utils/Constants";
 import { convertArticleEntityToInterface } from "../../converters/Article.converter";
 import { convertUserEntityToInterface } from "../../converters/User.converter";
@@ -219,7 +221,8 @@ export class UserService {
 
     this.logger.info(`Successfully logged in user ${user.name}`);
     return {
-      user: convertUserEntityToInterface(user),
+      token: jwt.sign(user.userId, secret),
+      user: user,
       log: getLog(new Date()),
     };
   }

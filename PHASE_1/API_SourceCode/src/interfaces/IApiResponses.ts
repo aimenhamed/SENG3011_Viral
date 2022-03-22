@@ -111,6 +111,7 @@ export interface IUserLoginRequestBody {
 }
 
 export interface IUserLoginSuccessResponse {
+  token: string;
   user: User;
   log: Log;
 }
