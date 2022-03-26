@@ -15,7 +15,7 @@ const Home = () => {
 
 	const regionStyle: ISVGElementStyleAttributes = {
 		initial: {
-			fill: 'green',
+			fill: '#2a9763',
 		},
 	}
 
@@ -37,20 +37,23 @@ const Home = () => {
 		}
 
 		return (
-			<div style={{width: '100vw', height: '100vh', paddingRight: '50px', paddingLeft: '50px', boxSizing: 'border-box'}}>
+			<div style={{display: 'flex'}}>
 				<MenuBar />
-				<div style={{display: 'flex', flexDirection: 'row', alignItems: 'baseline', justifyContent: 'space-between'}}>
-					<div>
-						<h1>
-							Select a destination
-						</h1>
-					</div>
-					<div>
-						<FontAwesomeIcon icon={faMagnifyingGlass} style={{position: 'relative', right: '-25px'}} />
-						<input type='text' style={{borderRadius: '5px', backgroundColor: '#e8e8e8', border: '0px', height: '25px', paddingLeft: '35px'}} placeholder='Search'></input></div>
+				<div style={{width: '100vw', height: '100vh', paddingRight: '50px', paddingLeft: '50px', boxSizing: 'border-box'}}>
+					<div style={{display: 'flex', flexDirection: 'row', alignItems: 'baseline', justifyContent: 'space-between'}}>
+						<div>
+							<h1>
+								Select a destination
+							</h1>
+						</div>
+						<div>
+							<FontAwesomeIcon icon={faMagnifyingGlass} style={{position: 'relative', right: '-25px'}} />
+							<input type='text' style={{borderRadius: '5px', backgroundColor: '#e8e8e8', border: '0px', height: '25px', paddingLeft: '35px'}} placeholder='Search'></input>
+						</div>
 					</div>
 					<div style={{height: '80vh', paddingTop: '20px'}}>
 						<VectorMap map={worldMill} onRegionClick={(e, c) => regionClick(e, c)} backgroundColor='white' regionStyle={regionStyle} />
+					</div>
 				</div>
 			</div>
 		);
