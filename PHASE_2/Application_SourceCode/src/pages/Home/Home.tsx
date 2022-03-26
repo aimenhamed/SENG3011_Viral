@@ -48,7 +48,7 @@ const Home = () => {
 						</div>
 						<div>
 							<FontAwesomeIcon icon={faMagnifyingGlass} style={{position: 'relative', right: '-25px'}} />
-							<input type='text' style={{borderRadius: '5px', backgroundColor: '#e8e8e8', border: '0px', height: '25px', paddingLeft: '35px'}} placeholder='Search'></input>
+							<input type='text' style={{borderRadius: '5px', backgroundColor: '#e8e8e8', border: '0px', height: '25px', paddingLeft: '35px'}} placeholder='Search a country' onChange={(e) => console.log(e.target.value)}></input>
 						</div>
 					</div>
 					<div style={{height: '80vh', paddingTop: '20px'}}>
