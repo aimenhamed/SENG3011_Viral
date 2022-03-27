@@ -44,4 +44,12 @@ CREATE TABLE public.advice (
     CONSTRAINT pk_advice_id PRIMARY KEY (advice_id)
 );
 
+CREATE TABLE public.user_articles (
+    user_id uuid,
+    article_id uuid,
+    CONSTRAINT pk_user_id_article_id PRIMARY KEY (user_id,article_id),
+    CONSTRAINT fk_user_id FOREIGN KEY (user_id) references public.user(user_id),
+    CONSTRAINT fk_article_id FOREIGN KEY (article_id) references public.article(article_id)
+)
+
 COMMIT;
