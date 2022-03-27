@@ -50,6 +50,6 @@ CREATE TABLE public.user_articles (
     CONSTRAINT pk_user_id_article_id PRIMARY KEY (user_id,article_id),
     CONSTRAINT fk_user_id FOREIGN KEY (user_id) references public.user(user_id),
     CONSTRAINT fk_article_id FOREIGN KEY (article_id) references public.article(article_id)
-)
+);
 
 COMMIT;
