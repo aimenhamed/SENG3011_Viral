@@ -4,24 +4,30 @@ import { useAppSelector } from "src/logic/redux/hooks";
 import { getSubscriptionDispatch, LoadingStatusTypes, selectAPP } from "src/logic/redux/reducers/subscriptionSlice/subscriptionSlice";
 import { worldMill } from '@react-jvectormap/world'
 import { ISVGElementStyleAttributes } from "@react-jvectormap/core/dist/types";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import MenuBar from "src/components/MenuBar/MenuBar";
+import SearchBar from "src/components/SearchBar/SearchBar";
 import LoadingPage from "../../components/LoadingPage/LoadingPage";
 
 const Home = () => {
 	const dispatch = useDispatch();
 	const {loadingStatus, app, error} = useAppSelector(selectAPP);
 
+	// ===== changing country/region colours ===== \\
+	
 	const regionStyle: ISVGElementStyleAttributes = {
 		initial: {
 			fill: '#2a9763',
 		},
 	}
 
+	// =====================================
+
+	// ===== event handlers ===== \\
+	
 	const regionClick =  (e: Event, c: String) => {
 		console.log(c)
 	}
+	// =====================================
 
 	if (error) {
 		return <div>Error</div>;
@@ -46,14 +52,12 @@ const Home = () => {
 								Select a destination
 							</h1>
 						</div>
-						<div>
-							<FontAwesomeIcon icon={faMagnifyingGlass} style={{position: 'relative', right: '-25px'}} />
-							<input type='text' style={{borderRadius: '5px', backgroundColor: '#e8e8e8', border: '0px', height: '25px', paddingLeft: '35px'}} placeholder='Search a country' onChange={(e) => console.log(e.target.value)}></input>
-						</div>
+						<SearchBar />
 					</div>
 					<div style={{height: '80vh', paddingTop: '20px'}}>
 						<VectorMap map={worldMill} onRegionClick={(e, c) => regionClick(e, c)} backgroundColor='white' regionStyle={regionStyle} />
 					</div>
+					
 				</div>
 			</div>
 		);
