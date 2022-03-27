@@ -1,12 +1,8 @@
 import { faAngleRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useState } from "react";
+import Collapsible from "react-collapsible";
 
 const Legend = () => {
-    const [lvl1Expand, setLvl1Expand] = useState(false);
-    const [lvl2Expand, setLvl2Expand] = useState(false);
-    const [lvl3Expand, setLvl3Expand] = useState(false);
-    const [lvl4Expand, setLvl4Expand] = useState(false); 
 
     const adviceLvls = [
         { lvlName: 'Level 1', color: '#5dbc60', subtitle: 'Exercise normal safety precautions', explanation: 'Use common sense and look out for suspicious behaviour, as you would in Australia.', id: 'lvl1'},
@@ -16,72 +12,32 @@ const Legend = () => {
     ];
 
     const adviceLvlDivStyle ={
-        paddingLeft: '12px',
+        padding: '12px 10px 10px 12px',
         cursor: 'pointer',
+        display: 'flex',
+        justifyContent: 'space-between',
     }
 
     const adviceLvlParaStyle = {
         margin: '0px',
-        paddingBottom: '7px',
-        paddingTop: '7px',
+        padding: '7px',
         cursor: 'pointer',
+        fontSize: 'smaller',
     }
-
-    const setExpandCollapse = (id: string, currState: boolean, updateFunc: React.Dispatch<React.SetStateAction<boolean>>) => {
-        if (currState) {
-            const moreInfoDiv = document.getElementById(`${id}InfoDiv`);
-            console.log(moreInfoDiv);
-        } 
-
-        updateFunc(!currState)
-    }
-
-    const expandCollapse = (id: string) => {
-        let currState: boolean;
-        let updateFunc: React.Dispatch<React.SetStateAction<boolean>>;
-
-        if (id === 'lvl1') {
-            currState = lvl1Expand;
-            updateFunc = setLvl1Expand;
-        } else if (id === 'lvl2') {
-            currState = lvl2Expand;
-            updateFunc = setLvl2Expand;
-        } else if (id === 'lvl3') {
-            currState = lvl3Expand;
-            updateFunc = setLvl3Expand;
-        } else {
-            currState = lvl4Expand;
-            updateFunc = setLvl4Expand;
-        }
-
-        setExpandCollapse(id, currState, updateFunc);
-
-    }
-
-    /* Function(`${adviceLvl.id}Expand`) == true ? (
-                                <div id={`${adviceLvl.id}InfoDiv`}>hello
-                                </div>
-                            ) : 
-                            (
-                                <div style={{display: 'none'}}>
-                                </div>
-                            ) */
 
     return (
-        <div style={{position: 'absolute', bottom: '5vh', borderStyle: 'solid', borderWidth: '4px', borderColor: '#bdbdbd', borderRadius: '10px'}}>
+        <div style={{position: 'absolute', bottom: '5vh', borderStyle: 'solid', borderWidth: '4px', borderColor: '#bdbdbd', borderRadius: '10px', width: '200px'}}>
             <div style={{backgroundColor: '#bdbdbd', paddingLeft: '10px', paddingRight: '10px', fontSize: 'larger'}}>
                 <p style={{margin: '0px', paddingTop: '7px', paddingBottom: '7px'}}>Travel Advice Levels</p>
             </div>
             {
                 adviceLvls.map((adviceLvl) => 
-                    <div id={adviceLvl.id} style={Object.assign({ backgroundColor: adviceLvl.color }, adviceLvlDivStyle)} onClick={() => expandCollapse(adviceLvl.id)}> {/* eslint-disable-line */}
-                        <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
-                            <FontAwesomeIcon icon={faAngleRight} />
-                            <div style={{width: '10px'}}></div>
-                            <p style={adviceLvlParaStyle}>{adviceLvl.lvlName}</p>
+                    <Collapsible trigger={<div style={Object.assign({ backgroundColor: adviceLvl.color }, adviceLvlDivStyle)}>{`${adviceLvl.lvlName}`}<FontAwesomeIcon icon={faAngleRight} /></div>} > {/* eslint-disable-line */}
+                        <div style={{backgroundColor: 'white'}}>
+                         <p style={Object.assign({ fontWeight: '700' }, adviceLvlParaStyle)}>{adviceLvl.subtitle}</p> {/* eslint-disable-line */}
+                                <p style={adviceLvlParaStyle}>{adviceLvl.explanation}</p> 
                         </div>
-                        
-                    </div>
+                    </Collapsible>
                 )
             }
         </div>
