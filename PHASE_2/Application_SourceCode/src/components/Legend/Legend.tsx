@@ -1,4 +1,4 @@
-import { faAngleRight } from "@fortawesome/free-solid-svg-icons";
+import { faAngleDown } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Collapsible from "react-collapsible";
 
@@ -32,7 +32,7 @@ const Legend = () => {
             </div>
             {
                 adviceLvls.map((adviceLvl) => 
-                    <Collapsible trigger={<div style={Object.assign({ backgroundColor: adviceLvl.color }, adviceLvlDivStyle)}>{`${adviceLvl.lvlName}`}<FontAwesomeIcon icon={faAngleRight} /></div>} > {/* eslint-disable-line */}
+                    <Collapsible trigger={<div style={Object.assign({ backgroundColor: adviceLvl.color }, adviceLvlDivStyle)}>{`${adviceLvl.lvlName}`}<FontAwesomeIcon icon={faAngleDown} /></div>}> {/* eslint-disable-line */}
                         <div style={{backgroundColor: 'white'}}>
                          <p style={Object.assign({ fontWeight: '700' }, adviceLvlParaStyle)}>{adviceLvl.subtitle}</p> {/* eslint-disable-line */}
                                 <p style={adviceLvlParaStyle}>{adviceLvl.explanation}</p> 

@@ -46,23 +46,42 @@ const SearchBar = () => {
         setSearchResults(topFiveResults);
 	}
 
+    const highlightOnHover = (event: React.MouseEvent<HTMLDivElement, MouseEvent>, element: string) => {
+        const searchResult = document.getElementById(element);
+
+        if (searchResult != null) {
+            searchResult.style.filter = 'brightness(1.2)';
+        }
+      
+    }
+
+    const unHighlight = (e: React.MouseEvent<HTMLDivElement, MouseEvent>, element: string) => {
+        const searchResult = document.getElementById(element);
+
+        if (searchResult != null) {
+            searchResult.style.filter = 'brightness(1.0)';
+        }
+    }
+
     return (
         <div>
-			<FontAwesomeIcon icon={faMagnifyingGlass} style={{position: 'relative', right: '-25px'}} />
-			<input type='text' style={{borderRadius: '5px', backgroundColor: '#e8e8e8', border: '0px', height: '25px', paddingLeft: '35px'}} placeholder='Search a country' onChange={(e) => searchRegion(e.target.value)}></input>
-            
+			<div id="search">
+                <FontAwesomeIcon icon={faMagnifyingGlass} style={{position: 'relative', right: '-25px'}} />
+                <input type='text' style={{borderRadius: '5px', backgroundColor: '#e8e8e8', border: '0px', height: '25px', paddingLeft: '35px'}} placeholder='Search a country' onChange={(e) => searchRegion(e.target.value)}></input>
+            </div>
+
             {
                 search ? (
                     <div style={{position: 'absolute', zIndex: '1'}}>
                         {searchResults.map((result) => 
                             <Link to='/' style={searchResultTxtStyle}>
-                                <div style={searchResultDivStyle}>
+                                <div id={result.target} style={searchResultDivStyle} onMouseOver={(e) => highlightOnHover(e, result.target)} onMouseLeave={(e) => unHighlight(e, result.target)}> { /* eslint-disable-line */}
                                     <p>{result.target}</p>
                                 </div>
                             </Link>
                         )}
                         <Link to='/' style={searchResultTxtStyle}>
-                            <div style={searchResultDivStyle}>
+                            <div id='seeMoreOption' style={Object.assign({backgroundColor: 'rgb(232, 232, 232)'}, searchResultDivStyle)} onMouseOver={(e) => highlightOnHover(e, 'seeMoreOption')} onMouseLeave={(e) => unHighlight(e, 'seeMoreOption')}> { /* eslint-disable-line */}
                                 <p>See more</p>
                                 <FontAwesomeIcon icon={faArrowRight} size="sm" />
                             </div>
