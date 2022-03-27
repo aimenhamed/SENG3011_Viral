@@ -42,7 +42,7 @@ const MenuBar = () => {
 						<div style={{width: '15px'}}> </div>
 						<Link to='/' style={{textDecoration: 'none'}}><p style={{fontSize: 'small', color: 'black'}}>{menuItem.itemName}</p></Link>
 					</div>
-				)
+					)
 				}
 			</div>
 			<div style={{height: '100px'}}></div>

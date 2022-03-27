@@ -6,6 +6,7 @@ import { worldMill } from '@react-jvectormap/world'
 import { ISVGElementStyleAttributes } from "@react-jvectormap/core/dist/types";
 import MenuBar from "src/components/MenuBar/MenuBar";
 import SearchBar from "src/components/SearchBar/SearchBar";
+import Legend from "src/components/Legend/Legend";
 import LoadingPage from "../../components/LoadingPage/LoadingPage";
 
 const Home = () => {
@@ -57,7 +58,7 @@ const Home = () => {
 					<div style={{height: '80vh', paddingTop: '20px'}}>
 						<VectorMap map={worldMill} onRegionClick={(e, c) => regionClick(e, c)} backgroundColor='white' regionStyle={regionStyle} />
 					</div>
-					
+					<Legend />
 				</div>
 			</div>
 		);
