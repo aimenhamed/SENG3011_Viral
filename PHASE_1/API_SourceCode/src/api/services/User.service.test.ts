@@ -8,10 +8,7 @@ import {
 import { ArticleRepository } from "../../repositories/Article.repository";
 import { UserRepository } from "../../repositories/User.respository";
 import { UserService } from "./User.service";
-import {
-  getMockArticles,
-  getMockUsers,
-} from "../../utils/testData";
+import { getMockArticles, getMockUsers } from "../../utils/testData";
 
 describe("UserService", () => {
   let userRepository: UserRepository;

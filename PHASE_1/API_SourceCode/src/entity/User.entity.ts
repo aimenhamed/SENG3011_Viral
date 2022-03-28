@@ -1,4 +1,10 @@
-import { Column, Entity, PrimaryGeneratedColumn, ManyToMany, JoinTable } from "typeorm";
+import {
+  Column,
+  Entity,
+  PrimaryGeneratedColumn,
+  ManyToMany,
+  JoinTable,
+} from "typeorm";
 import { ArticleEntity } from "./Article.entity";
 
 @Entity({ name: "user", schema: "public" })
@@ -15,7 +21,7 @@ export class UserEntity {
   @Column("text", { name: "password", nullable: false })
   password: string;
 
-  @ManyToMany(()=>ArticleEntity, {
+  @ManyToMany(() => ArticleEntity, {
     eager: true,
   })
   @JoinTable()

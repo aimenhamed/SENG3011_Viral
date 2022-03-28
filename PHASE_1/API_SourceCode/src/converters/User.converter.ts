@@ -8,8 +8,9 @@ export const convertUserEntityToInterface = (entity: UserEntity): User => {
     name: entity.name,
     email: entity.email,
     password: entity.password,
-    bookmarkedArticles: entity.bookmarkedArticles.map(article=>
-      convertArticleEntityToInterface(article)),
-    bookmarkedCountries:  entity.bookmarkedCountries,
+    bookmarkedArticles: entity.bookmarkedArticles.map((article) =>
+      convertArticleEntityToInterface(article)
+    ),
+    bookmarkedCountries: entity.bookmarkedCountries,
   };
 };

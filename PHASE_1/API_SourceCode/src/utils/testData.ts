@@ -123,12 +123,12 @@ export const getUserEntity = (): UserEntity => {
   userEntity.name = user.name;
   userEntity.password = user.password;
   userEntity.bookmarkedCountries = user.bookmarkedCountries;
-  userEntity.bookmarkedArticles = [getArticleEntity()]
+  userEntity.bookmarkedArticles = [getArticleEntity()];
   userEntity.email = user.email;
   return userEntity;
 };
 
-export  const getMockAdvices = ():Advice[] => {
+export const getMockAdvices = (): Advice[] => {
   return [
     {
       adviceId: "advice1",
@@ -138,10 +138,10 @@ export  const getMockAdvices = ():Advice[] => {
       adviceLevel: "Do not travel",
       latestAdvice: "abababa",
       lastUpdate: new Date("2022-01-01"),
-    }
-  ]
-}
+    },
+  ];
+};
 
-export const getMockAdvice = ():Advice => {
+export const getMockAdvice = (): Advice => {
   return getMockAdvices()[0];
-}
+};

@@ -90,6 +90,6 @@ export interface IUserSpecificSuccessResponse {
 }
 
 export interface IAdviceSpecificSuccessResponse {
-  advice: Advice,
-  log: Log,
+  advice: Advice;
+  log: Log;
 }
