@@ -2,6 +2,7 @@ import { Article } from "IArticle";
 import { Report } from "IReport";
 import { ReportEntity } from "../entity/Report.entity";
 import { ArticleEntity } from "../entity/Article.entity";
+import { AdviceEntity } from "../entity/Advice.entity";
 import mockArticles from "./data/small.json";
 // import { User } from "../interfaces/IUser";
 // import { UserEntity } from "../entity/User.entity";
@@ -125,3 +126,15 @@ export const getMockReports = (): Report[] => {
 //   userEntity.email = user.email;
 //   return userEntity;
 // };
+
+export const getMockAdvice = (): AdviceEntity => {
+  return {
+    adviceId: "advice1",
+    url: "https://www.idkwherethisgoes.com",
+    country: "United States of America",
+    continent: "North America",
+    adviceLevel: "Do not Travel",
+    lastUpdate: new Date(),
+    latestAdvice: "abababababa",
+  };
+};
