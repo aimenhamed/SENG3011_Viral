@@ -13,6 +13,9 @@ import { ReportService } from "./api/services/Report.service";
 import { UserRepository } from "./repositories/User.respository";
 import { UserService } from "./api/services/User.service";
 import { UserRouter } from "./api/routes/User.router";
+import { AdviceRepository } from "./repositories/Advice.repository";
+import { AdviceService } from "./api/services/Advice.service";
+import { AdviceRouter } from "./api/routes/Advice.router";
 
 export default class App {
   readonly logger = getLogger();
@@ -22,6 +25,7 @@ export default class App {
   private readonly articleRepository = new ArticleRepository();
   private readonly reportRepository = new ReportRepository();
   private readonly userRepository = new UserRepository();
+  private readonly adviceRepository = new AdviceRepository();
   // add services here
   private readonly articleService = new ArticleService(this.articleRepository);
   private readonly searchService = new SearchService(
@@ -33,6 +37,7 @@ export default class App {
     this.userRepository,
     this.articleRepository
   );
+  private readonly adviceService = new AdviceService(this.adviceRepository);
 
   constructor() {
     // add routers here .. e.g.
@@ -40,13 +45,15 @@ export default class App {
     const searchRouter = new SearchRouter(this.searchService);
     const reportRouter = new ReportRouter(this.reportService);
     const userRouter = new UserRouter(this.userService);
+    const adviceRouter = new AdviceRouter(this.adviceService);
 
     this.ex.addRouters(
       // ... add routers here
       articleRouter,
       searchRouter,
       reportRouter,
-      userRouter
+      userRouter,
+      adviceRouter
     );
   }
 

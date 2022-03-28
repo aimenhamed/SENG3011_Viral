@@ -1,3 +1,4 @@
+import { Advice } from "IAdvice";
 import { Article } from "IArticle";
 import { Report } from "IReport";
 import { User } from "IUser";
@@ -85,5 +86,10 @@ export interface IUserLoginSuccessResponse {
 
 export interface IUserSpecificSuccessResponse {
   user: User;
+  log: Log;
+}
+
+export interface IAdviceSpecificSuccessResponse {
+  advice: Advice;
   log: Log;
 }
