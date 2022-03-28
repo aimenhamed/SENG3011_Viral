@@ -5,6 +5,7 @@ import config from "config";
 import { ArticleEntity } from "../entity/Article.entity";
 import { ReportEntity } from "../entity/Report.entity";
 import { UserEntity } from "../entity/User.entity";
+import { AdviceEntity } from "../entity/Advice.entity";
 
 export default class Database {
   private logger = getLogger();
@@ -19,11 +20,11 @@ export default class Database {
       ...databaseConfig,
       name: this.connectionName,
       type: "postgres",
-      host: process.env.POSTGRESQL_HOST,
+      host: "ec2-18-210-191-5.compute-1.amazonaws.com",
       port: 5432,
-      username: process.env.POSTGRESQL_USER,
-      password: process.env.POSTGRESQL_PASSWORD,
-      database: process.env.POSTGRESQL_DATABASE,
+      username: "fsggrwwrbsxbkk",
+      password: "0bbabdc7704f4a9cc4b6fbf80a2acc5c8f5f0c70e6a9bcc5238a0e31b5191f56",
+      database: "dd4u9qmc5pk0gv",
       // schema: "public",
       ssl: true,
       extra: {
@@ -35,6 +36,7 @@ export default class Database {
         ArticleEntity,
         ReportEntity,
         UserEntity,
+        AdviceEntity,
       ],
     });
     this.logger.info(

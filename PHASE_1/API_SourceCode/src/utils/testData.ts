@@ -3,12 +3,10 @@ import { Report } from "IReport";
 import { ReportEntity } from "../entity/Report.entity";
 import { ArticleEntity } from "../entity/Article.entity";
 import mockArticles from "./data/small.json";
-import { WidgetEntity } from "../entity/Widget.entity";
-import { Widget, WidgetType } from "../interfaces/IWidget";
 import { User } from "../interfaces/IUser";
 import { UserEntity } from "../entity/User.entity";
-import { Dashboard } from "../interfaces/IDashboard";
-import { DashboardEntity } from "../entity/Dashboard.entity";
+import { Advice } from "IAdvice";
+import { convertArticleEntityToInterface } from "../converters/Article.converter";
 
 export const getReportEntity = (): ReportEntity => {
   const report = getMockReports()[0];
@@ -89,35 +87,6 @@ export const getMockReports = (): Report[] => {
   ];
 };
 
-export const getMockWidgets = (): Widget[] => {
-  return [
-    {
-      widgetId: "wid-123",
-      widgetType: WidgetType.ARTICLE,
-      articleId: "art-123",
-    },
-    {
-      widgetId: "wid-321",
-      widgetType: WidgetType.ARTICLE,
-      articleId: "art-123",
-    },
-    {
-      widgetId: "wid-707",
-      widgetType: WidgetType.ARTICLE,
-      articleId: "art-123",
-    },
-  ];
-};
-
-export const getWidgetEntity = (): WidgetEntity => {
-  const widget = getMockWidgets()[0];
-  const widgetEntity = new WidgetEntity();
-  widgetEntity.articleId = widget.articleId;
-  widgetEntity.widgetId = widget.widgetId;
-  widgetEntity.widgetType = widget.widgetType;
-  return widgetEntity;
-};
-
 export const getMockUsers = (): User[] => {
   return [
     {
@@ -125,23 +94,23 @@ export const getMockUsers = (): User[] => {
       name: "jeff",
       email: "jeff1@gmail.com",
       password: "mysecretpassword",
-      dashboards: ["dash-123"],
-      bookmarkedArticles: ["art-123"],
+      bookmarkedCountries: [],
+      bookmarkedArticles: [getMockArticles()[0]],
     },
     {
       userId: "user-321",
       name: "tom",
       email: "tom1@gmail.com",
       password: "mysecretpassword",
-      dashboards: ["dash-123"],
-      bookmarkedArticles: ["art-123"],
+      bookmarkedCountries: [],
+      bookmarkedArticles: [getMockArticles()[0]],
     },
     {
       userId: "user1",
       name: "Bob",
       email: "bobthebuilder@gmail.com",
       password: "abc123",
-      dashboards: [],
+      bookmarkedCountries: [],
       bookmarkedArticles: [],
     },
   ];
@@ -152,32 +121,27 @@ export const getUserEntity = (): UserEntity => {
   const userEntity = new UserEntity();
   userEntity.userId = user.userId;
   userEntity.name = user.name;
-  userEntity.dashboards = user.dashboards;
   userEntity.password = user.password;
-  userEntity.bookmarkedArticles = user.bookmarkedArticles;
+  userEntity.bookmarkedCountries = user.bookmarkedCountries;
+  userEntity.bookmarkedArticles = [getArticleEntity()]
   userEntity.email = user.email;
   return userEntity;
 };
 
-export const getMockDashboards = (): Dashboard[] => {
+export  const getMockAdvices = ():Advice[] => {
   return [
     {
-      dashboardId: "dash-123",
-      userId: "user-123",
-      widgets: getMockWidgets(),
-    },
-    {
-      dashboardId: "dash-321",
-      userId: "user-321",
-      widgets: getMockWidgets(),
-    },
-  ];
-};
+      adviceId: "advice1",
+      url: "https://www.idkwherethisgoes.com",
+      country: "USA",
+      continent: "North America",
+      adviceLevel: "Do not travel",
+      latestAdvice: "abababa",
+      lastUpdate: new Date("2022-01-01"),
+    }
+  ]
+}
 
-export const getDashboardEntity = (): DashboardEntity => {
-  return {
-    dashboardId: "dash-123",
-    userId: "user-123",
-    widgets: ["wid-123", "wid-321", "wid-707"],
-  };
-};
+export const getMockAdvice = ():Advice => {
+  return getMockAdvices()[0];
+}
