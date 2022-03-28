@@ -73,6 +73,7 @@ export class UserService {
       `Successfully registered new user, with userId: ${newUser.userId}`
     );
     return {
+      token: jwt.sign(userEntity.userId, secret),
       user: convertUserEntityToInterface(userEntity),
       log: getLog(new Date()),
     };
@@ -222,7 +223,7 @@ export class UserService {
     this.logger.info(`Successfully logged in user ${user.name}`);
     return {
       token: jwt.sign(user.userId, secret),
-      user: user,
+      user: convertUserEntityToInterface(user),
       log: getLog(new Date()),
     };
   }

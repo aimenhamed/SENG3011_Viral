@@ -4,6 +4,8 @@ import {
   badRequest,
   internalServerError,
   notFoundError,
+  jwt,
+  secret,
 } from "../../utils/Constants";
 import { ArticleRepository } from "../../repositories/Article.repository";
 import { UserRepository } from "../../repositories/User.respository";
@@ -53,6 +55,7 @@ describe("UserService", () => {
       userRepository.getUserByEmail = jest.fn().mockReturnValue(undefined);
       userRepository.saveUser = jest.fn().mockReturnValue(userRecord);
       expect(service.registerUser(newUser)).resolves.toEqual({
+        token: jwt.sign(userId, secret),
         user: userRecord,
         log: {
           ...baseLog,
