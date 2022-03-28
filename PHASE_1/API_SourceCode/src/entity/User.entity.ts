@@ -1,4 +1,11 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import {
+  Column,
+  Entity,
+  PrimaryGeneratedColumn,
+  ManyToMany,
+  JoinTable,
+} from "typeorm";
+import { ArticleEntity } from "./Article.entity";
 
 @Entity({ name: "user", schema: "public" })
 export class UserEntity {
@@ -14,19 +21,17 @@ export class UserEntity {
   @Column("text", { name: "password", nullable: false })
   password: string;
 
-  @Column("uuid", {
-    array: true,
-    name: "dashboards",
-    nullable: false,
-    default: () => "array[]::uuid[]",
+  @ManyToMany(() => ArticleEntity, {
+    eager: true,
   })
-  dashboards: string[];
+  @JoinTable()
+  bookmarkedArticles: ArticleEntity[];
 
-  @Column("uuid", {
+  @Column("text", {
     array: true,
-    name: "bookmarked_articles",
+    name: "widgets",
     nullable: false,
-    default: () => "array[]::uuid[]",
+    default: () => "array[]::text[]",
   })
-  bookmarkedArticles: string[];
+  bookmarkedCountries: string[];
 }

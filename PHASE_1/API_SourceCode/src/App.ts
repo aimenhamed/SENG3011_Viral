@@ -13,10 +13,6 @@ import { ReportService } from "./api/services/Report.service";
 import { UserRepository } from "./repositories/User.respository";
 import { UserService } from "./api/services/User.service";
 import { UserRouter } from "./api/routes/User.router";
-import { DashboardRepository } from "./repositories/Dashboard.repository";
-import { DashboardService } from "./api/services/Dashboard.service";
-import { WidgetRepository } from "./repositories/Widget.repository";
-import { DashboardRouter } from "./api/routes/Dashboard.router";
 
 export default class App {
   readonly logger = getLogger();
@@ -26,8 +22,6 @@ export default class App {
   private readonly articleRepository = new ArticleRepository();
   private readonly reportRepository = new ReportRepository();
   private readonly userRepository = new UserRepository();
-  private readonly dashboardRepository = new DashboardRepository();
-  private readonly widgetRepository = new WidgetRepository();
   // add services here
   private readonly articleService = new ArticleService(this.articleRepository);
   private readonly searchService = new SearchService(
@@ -37,14 +31,7 @@ export default class App {
   private readonly reportService = new ReportService(this.reportRepository);
   private readonly userService = new UserService(
     this.userRepository,
-    this.articleRepository,
-    this.dashboardRepository,
-    this.widgetRepository
-  );
-  private readonly dashboardService = new DashboardService(
-    this.widgetRepository,
-    this.userRepository,
-    this.dashboardRepository
+    this.articleRepository
   );
 
   constructor() {
@@ -53,15 +40,13 @@ export default class App {
     const searchRouter = new SearchRouter(this.searchService);
     const reportRouter = new ReportRouter(this.reportService);
     const userRouter = new UserRouter(this.userService);
-    const dashboardRouter = new DashboardRouter(this.dashboardService);
 
     this.ex.addRouters(
       // ... add routers here
       articleRouter,
       searchRouter,
       reportRouter,
-      userRouter,
-      dashboardRouter
+      userRouter
     );
   }
 
