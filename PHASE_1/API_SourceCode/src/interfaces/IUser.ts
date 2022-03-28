@@ -1,4 +1,4 @@
-import { Article } from './IArticle';
+import { Article } from "./IArticle";
 
 export interface User {
   userId: string;

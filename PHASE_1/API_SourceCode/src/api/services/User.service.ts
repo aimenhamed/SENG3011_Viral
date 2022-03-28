@@ -27,7 +27,7 @@ export class UserService {
   private logger = getLogger();
   constructor(
     readonly userRepository: UserRepository,
-    readonly articleRepository: ArticleRepository,
+    readonly articleRepository: ArticleRepository
   ) {}
 
   async registerUser(
@@ -83,10 +83,7 @@ export class UserService {
       );
       throw new HTTPError(badRequest);
     }
-    user.bookmarkedArticles = [
-      ...user.bookmarkedArticles,
-      bookmarkedArticle,
-    ];
+    user.bookmarkedArticles = [...user.bookmarkedArticles, bookmarkedArticle];
 
     user = await this.userRepository.saveUser(user);
 

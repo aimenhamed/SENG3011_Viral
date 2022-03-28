@@ -46,7 +46,7 @@ export default class App {
       articleRouter,
       searchRouter,
       reportRouter,
-      userRouter,
+      userRouter
     );
   }
 

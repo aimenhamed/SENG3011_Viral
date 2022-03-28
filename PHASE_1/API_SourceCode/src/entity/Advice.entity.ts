@@ -20,6 +20,6 @@ export class AdviceEntity {
   @Column("text", { name: "latest_advice", nullable: true })
   latestAdvice: string;
 
-  @Column("date",{ name: "last_update", nullable: false })
+  @Column("date", { name: "last_update", nullable: false })
   lastUpdate: Date;
 }
