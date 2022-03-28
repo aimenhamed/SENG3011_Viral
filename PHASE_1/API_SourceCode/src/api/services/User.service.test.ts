@@ -18,7 +18,7 @@ import { UserService } from "./User.service";
 //   getDashboardEntity,
 // } from "../../utils/testData";
 
-describe("UserService",()=>{
+describe("UserService", () => {
   let userRepository: UserRepository;
   let articleRepository: ArticleRepository;
   beforeEach(() => {
@@ -31,12 +31,12 @@ describe("UserService",()=>{
     jest.clearAllMocks();
     jest.resetAllMocks();
   });
-  describe("dummy", ()=>{
-    it("placeholder until users is fixed", ()=>{
-      expect(1===1);
+  describe("dummy", () => {
+    it("placeholder until users is fixed", () => {
+      expect(1 === 1);
     });
-  })
-})
+  });
+});
 
 // describe("UserService", () => {
 //   let userRepository: UserRepository;

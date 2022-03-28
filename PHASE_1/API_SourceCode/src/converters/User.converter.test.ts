@@ -2,8 +2,8 @@
 // import { convertUserEntityToInterface } from "./User.converter";
 
 describe("convertUserEntityToInterface", () => {
-  it("placeholder", ()=> {
-    expect(1===1);
+  it("placeholder", () => {
+    expect(1 === 1);
   });
 });
 
