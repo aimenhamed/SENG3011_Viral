@@ -24,12 +24,22 @@ export class UserEntity {
   @ManyToMany(() => ArticleEntity, {
     eager: true,
   })
-  @JoinTable()
+  @JoinTable({
+    name: "user_articles",
+    joinColumn: {
+      name: "user_id",
+      referencedColumnName: "userId",
+    },
+    inverseJoinColumn: {
+      name: "article_id",
+      referencedColumnName: "articleId",
+    },
+  })
   bookmarkedArticles: ArticleEntity[];
 
   @Column("text", {
     array: true,
-    name: "widgets",
+    name: "bookmarked_countries",
     nullable: false,
     default: () => "array[]::text[]",
   })

@@ -4,8 +4,9 @@ import { ReportEntity } from "../entity/Report.entity";
 import { ArticleEntity } from "../entity/Article.entity";
 import { AdviceEntity } from "../entity/Advice.entity";
 import mockArticles from "./data/small.json";
-// import { User } from "../interfaces/IUser";
-// import { UserEntity } from "../entity/User.entity";
+import { User } from "../interfaces/IUser";
+import { UserEntity } from "../entity/User.entity";
+import { convertArticleEntityToInterface } from "../converters/Article.converter";
 
 export const getReportEntity = (): ReportEntity => {
   const report = getMockReports()[0];
@@ -86,46 +87,45 @@ export const getMockReports = (): Report[] => {
   ];
 };
 
-// export const getMockUsers = (): User[] => {
-//   return [
-//     {
-//       userId: "user-123",
-//       name: "jeff",
-//       email: "jeff1@gmail.com",
-//       password: "mysecretpassword",
-//       dashboards: ["dash-123"],
-//       bookmarkedArticles: ["art-123"],
-//     },
-//     {
-//       userId: "user-321",
-//       name: "tom",
-//       email: "tom1@gmail.com",
-//       password: "mysecretpassword",
-//       dashboards: ["dash-123"],
-//       bookmarkedArticles: ["art-123"],
-//     },
-//     {
-//       userId: "user1",
-//       name: "Bob",
-//       email: "bobthebuilder@gmail.com",
-//       password: "abc123",
-//       dashboards: [],
-//       bookmarkedArticles: [],
-//     },
-//   ];
-// };
+export const getMockUsers = (): User[] => {
+  return [
+    {
+      userId: "user-123",
+      name: "jeff",
+      email: "jeff1@gmail.com",
+      password: "mysecretpassword",
+      bookmarkedArticles: [getArticleEntity()],
+      bookmarkedCountries: [],
+    },
+    {
+      userId: "user-321",
+      name: "tom",
+      email: "tom1@gmail.com",
+      password: "mysecretpassword",
+      bookmarkedArticles: [getArticleEntity()],
+      bookmarkedCountries: [],
+    },
+    {
+      userId: "user1",
+      name: "Bob",
+      email: "bobthebuilder@gmail.com",
+      password: "abc123",
+      bookmarkedArticles: [],
+      bookmarkedCountries: [],
+    },
+  ];
+};
 
-// export const getUserEntity = (): UserEntity => {
-//   const user = getMockUsers()[0];
-//   const userEntity = new UserEntity();
-//   userEntity.userId = user.userId;
-//   userEntity.name = user.name;
-//   userEntity.dashboards = user.dashboards;
-//   userEntity.password = user.password;
-//   userEntity.bookmarkedArticles = user.bookmarkedArticles;
-//   userEntity.email = user.email;
-//   return userEntity;
-// };
+export const getUserEntity = (): UserEntity => {
+  const user = getMockUsers()[0];
+  const userEntity = new UserEntity();
+  userEntity.userId = user.userId;
+  userEntity.name = user.name;
+  userEntity.password = user.password;
+  userEntity.bookmarkedArticles = [getArticleEntity()];
+  userEntity.email = user.email;
+  return userEntity;
+};
 
 export const getMockAdvice = (): AdviceEntity => {
   return {
