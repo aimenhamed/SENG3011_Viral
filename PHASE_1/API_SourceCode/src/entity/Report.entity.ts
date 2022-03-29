@@ -12,7 +12,7 @@ export class ReportEntity {
   @PrimaryGeneratedColumn("uuid", { name: "report_id" })
   reportId: string;
 
-  @ManyToOne((type) => ArticleEntity, (article) => article.articleId)
+  @ManyToOne(() => ArticleEntity, (article) => article.articleId)
   @JoinColumn({ name: "article_id" })
   article: ArticleEntity;
 

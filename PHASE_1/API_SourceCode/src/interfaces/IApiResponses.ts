@@ -1,8 +1,7 @@
+import { Advice } from "IAdvice";
 import { Article } from "IArticle";
-import { Dashboard } from "IDashboard";
 import { Report } from "IReport";
 import { User } from "IUser";
-import { WidgetType } from "IWidget";
 
 export interface IHttpError {
   errorCode: number;
@@ -76,36 +75,6 @@ export interface IUserRemoveBookmarkSuccessResponse {
   log: Log;
 }
 
-export interface WidgetRequest {
-  widgetType: WidgetType;
-  articleId: string;
-}
-
-export interface ICommonDashboardRequestBody {
-  userId: string;
-  widgets: WidgetRequest[];
-}
-
-export interface ICommonDashboardSuccessResponse {
-  dashboard: Dashboard;
-  user: User;
-  log: Log;
-}
-
-export type IDeleteDashboardSuccessResponse = IUserRegisterSuccessResponse;
-
-export interface IGetDashboardSuccessResponse {
-  dashboard: Dashboard;
-  log: Log;
-}
-
-export interface IUserDashboardRequestBody {
-  userId: string;
-  dashboardId: string;
-}
-
-export type IUserDashboardSuccessResponse = ICommonDashboardSuccessResponse;
-
 export interface IUserLoginRequestBody {
   email: string;
   password: string;
@@ -119,5 +88,10 @@ export interface IUserLoginSuccessResponse {
 
 export interface IUserSpecificSuccessResponse {
   user: User;
+  log: Log;
+}
+
+export interface IAdviceSpecificSuccessResponse {
+  advice: Advice;
   log: Log;
 }
