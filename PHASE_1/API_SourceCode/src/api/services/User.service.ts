@@ -102,7 +102,9 @@ export class UserService {
     if (
       !user.bookmarkedArticles ||
       user.bookmarkedArticles.length === 0 ||
-      !user.bookmarkedArticles.includes(bookmarkedArticle)
+      !user.bookmarkedArticles.some(
+        (article) => article.articleId === bookmarkedArticle.articleId
+      )
     ) {
       this.logger.error(
         `User with userId ${user.userId} has not bookmarked article with articleId ${bookmarkDetails.articleId}`
@@ -111,7 +113,7 @@ export class UserService {
     }
 
     user.bookmarkedArticles = user.bookmarkedArticles.filter(
-      (e) => e !== bookmarkedArticle
+      (article) => article.articleId !== bookmarkedArticle.articleId
     );
 
     user = await this.userRepository.saveUser(user);
