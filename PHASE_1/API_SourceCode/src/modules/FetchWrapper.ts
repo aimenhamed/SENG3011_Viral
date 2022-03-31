@@ -1,6 +1,9 @@
 import got from "got";
 import { formatError, getLogger } from "../utils/Logger";
-import { AmadeusFlightResponse, AmadeusResponse } from "../interfaces/IFetchResponses";
+import {
+  AmadeusFlightResponse,
+  AmadeusResponse,
+} from "../interfaces/IFetchResponses";
 
 export enum RequestPaths {
   AMADEUS,
@@ -15,13 +18,13 @@ export const getRequestPath = (
   dlc?: string,
   depDate?: string,
   adults?: string,
-  max?: string,
+  max?: string
 ): string => {
   switch (prefix) {
     case RequestPaths.AMADEUS:
       return `https://test.api.amadeus.com/v1/duty-of-care/diseases/covid19-area-report?countryCode=${pathId}`;
     case RequestPaths.AMADEUS_FLIGHTS:
-      return `https://test.api.amadeus.com/v2/shopping/flight-offers?originLocationCode=${olc}&destinationLocationCode=${dlc}&departureDate=${depDate}&adults=${adults}&max=${max}`
+      return `https://test.api.amadeus.com/v2/shopping/flight-offers?originLocationCode=${olc}&destinationLocationCode=${dlc}&departureDate=${depDate}&adults=${adults}&max=${max}`;
     case RequestPaths.AMADEUS_TOKEN:
       return `https://test.api.amadeus.com/v1/security/oauth2/token`;
     default:
@@ -92,10 +95,23 @@ export class FetchWrapper {
     }
   }
 
-  async getFlightOffers(originLocationCode: string, destinationLocationCode: string, departureDate: string, adults: string, max: string): Promise<any> {
+  async getFlightOffers(
+    originLocationCode: string,
+    destinationLocationCode: string,
+    departureDate: string,
+    adults: string,
+    max: string
+  ): Promise<any> {
     try {
       await this.getToken();
-      const path = getRequestPath(RequestPaths.AMADEUS_FLIGHTS,originLocationCode, destinationLocationCode, departureDate, adults, max);
+      const path = getRequestPath(
+        RequestPaths.AMADEUS_FLIGHTS,
+        originLocationCode,
+        destinationLocationCode,
+        departureDate,
+        adults,
+        max
+      );
       const request = {
         options: {
           headers: {
@@ -116,7 +132,9 @@ export class FetchWrapper {
       return flightsResponse;
     } catch (err: any) {
       this.logger.error(
-        `An error occurred when getting flights with origin: ${originLocationCode}, destination: ${destinationLocationCode}, departure date: ${departureDate}, adults: ${adults}, max: ${max}: ${formatError(err)}`
+        `An error occurred when getting flights with origin: ${originLocationCode}, destination: ${destinationLocationCode}, departure date: ${departureDate}, adults: ${adults}, max: ${max}: ${formatError(
+          err
+        )}`
       );
     }
   }

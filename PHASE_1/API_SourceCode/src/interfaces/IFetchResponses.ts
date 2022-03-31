@@ -63,84 +63,84 @@ export interface AmadeusFlightResponse {
 }
 
 export interface AmadeusFlightData {
-      type: string,
-      id: string,
-      source: string,
-      instantTicketingRequired: boolean,
-      nonHomogenous: boolean,
-      oneWay: boolean,
-      lastTicketingDate: Date,
-      numberOfBookableSeats: number,
-      itineraries: [
+  type: string;
+  id: string;
+  source: string;
+  instantTicketingRequired: boolean;
+  nonHomogenous: boolean;
+  oneWay: boolean;
+  lastTicketingDate: Date;
+  numberOfBookableSeats: number;
+  itineraries: [
+    {
+      duration: string;
+      segments: [
         {
-          duration: string,
-          segments: [
-            {
-              departure: {
-                iataCode: string,
-                termial: string,
-                at: string
-              },
-              arrival: {
-                iataCode: string,
-                terminal: string,
-                at: string
-              },
-              carrierCode: string,
-              number: string,
-              aircraft: {
-                code: string,
-              },
-              operating: {
-                carrierCode: string,
-              },
-              duration: string,
-              id: string,
-              numberOfStops: number,
-              blacklistedInEU: boolean
-            }
-          ]
+          departure: {
+            iataCode: string;
+            termial: string;
+            at: string;
+          };
+          arrival: {
+            iataCode: string;
+            terminal: string;
+            at: string;
+          };
+          carrierCode: string;
+          number: string;
+          aircraft: {
+            code: string;
+          };
+          operating: {
+            carrierCode: string;
+          };
+          duration: string;
+          id: string;
+          numberOfStops: number;
+          blacklistedInEU: boolean;
         }
-      ],
+      ];
+    }
+  ];
+  price: {
+    currency: string;
+    total: string;
+    base: string;
+    fees: [
+      {
+        amount: string;
+        type: string;
+      }
+    ];
+    grandTotal: string;
+  };
+  pricingOptions: {
+    fareType: [string];
+    includedCheckedBagsOnly: boolean;
+  };
+  validatingAirlineCodes: [string];
+  travelerPricings: [
+    {
+      travelerId: string;
+      fareOption: string;
+      travelerType: string;
       price: {
-        currency: string,
-        total: string,
-        base: string,
-        fees: [
-          {
-            amount: string,
-            type: string
-          },
-        ]
-        grandTotal: string,
-      },
-      pricingOptions: {
-        fareType: [string],
-        includedCheckedBagsOnly: boolean
-      },
-      validatingAirlineCodes: [string ],
-      travelerPricings: [
+        currency: string;
+        total: string;
+        base: string;
+      };
+      fareDetailsBySegment: [
         {
-          travelerId: string,
-          fareOption: string,
-          travelerType: string,
-          price: {
-            currency: string,
-            total: string,
-            base: string
-          },
-          fareDetailsBySegment: [
-            {
-              segmentId: string,
-              cabin: string,
-              fareBasis: string,
-              class: string,
-              includedCheckedBags: {
-                weight: number,
-                weightUnit: string
-              }
-            }
-          ]
+          segmentId: string;
+          cabin: string;
+          fareBasis: string;
+          class: string;
+          includedCheckedBags: {
+            weight: number;
+            weightUnit: string;
+          };
         }
-      ]
+      ];
+    }
+  ];
 }
