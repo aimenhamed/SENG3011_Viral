@@ -33,7 +33,13 @@ export default class Database {
           rejectUnauthorized: false,
         },
       },
-      entities: [ArticleEntity, ReportEntity, UserEntity, AdviceEntity, CountryEntity],
+      entities: [
+        ArticleEntity,
+        ReportEntity,
+        UserEntity,
+        AdviceEntity,
+        CountryEntity,
+      ],
     });
     this.logger.info(
       `Started connection with connection name ${this.connectionName}`

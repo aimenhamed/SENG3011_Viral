@@ -21,4 +21,4 @@ export class CountryEntity {
     default: () => "array[]::integer[]",
   })
   coords: number[];
-} 
+}
