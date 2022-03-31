@@ -93,3 +93,13 @@ export interface IAdviceSpecificSuccessResponse {
   advice: Advice;
   log: Log;
 }
+
+export interface IAdviceOnlyResponse {
+  country: string;
+  adviceLevel: string;
+}
+
+export interface IAdviceAllSuccessResponse {
+  countries: IAdviceOnlyResponse[];
+  log: Log;
+}

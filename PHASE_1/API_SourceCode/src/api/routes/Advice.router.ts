@@ -29,6 +29,21 @@ export class AdviceRouter implements IRouter {
           return next(err);
         }
       }
+    ).get(
+      "/advice/all",
+      async (req: Request, res: Response, next: NextFunction) => {
+        this.logger.info(`Received /advice/all request`);
+        try {
+          const result = await this.adviceService.getAllAdvice();
+          this.logger.info(`Responding to client in GET /advice/all`);
+          return res.status(200).json(result);
+        } catch (err: any) {
+          this.logger.warn(
+            `An error occurred when trying to GET advice ${formatError(err)}`
+          );
+          return next(err);
+        }
+      }
     );
   }
   getPrefix(): string {
