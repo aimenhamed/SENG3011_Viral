@@ -52,4 +52,14 @@ CREATE TABLE public.user_articles (
     CONSTRAINT fk_article_id FOREIGN KEY (article_id) references public.article(article_id)
 );
 
+CREATE TABLE public.comments (
+    comment_id uuid,
+    created_by uuid,
+    country text,
+    message text,
+    created_date date,
+    CONSTRAINT pk_comment_id PRIMARY KEY (comment_id),
+    CONSTRAINT fk_user_id FOREIGN KEY (created_by) references public.user(user_id)
+)
+
 COMMIT;
