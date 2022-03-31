@@ -13,38 +13,40 @@ export class AdviceRouter implements IRouter {
   }
 
   setupRoutes(): Router {
-    return Router().get(
-      "/advice",
-      async (req: Request, res: Response, next: NextFunction) => {
-        this.logger.info(`Received /advice request`);
-        try {
-          const country: string = req.query.country as string;
-          const result = await this.adviceService.getAdvice(country);
-          this.logger.info(`Responding to client in GET /advice`);
-          return res.status(200).json(result);
-        } catch (err: any) {
-          this.logger.warn(
-            `An error occurred when trying to GET advice ${formatError(err)}`
-          );
-          return next(err);
+    return Router()
+      .get(
+        "/advice",
+        async (req: Request, res: Response, next: NextFunction) => {
+          this.logger.info(`Received /advice request`);
+          try {
+            const country: string = req.query.country as string;
+            const result = await this.adviceService.getAdvice(country);
+            this.logger.info(`Responding to client in GET /advice`);
+            return res.status(200).json(result);
+          } catch (err: any) {
+            this.logger.warn(
+              `An error occurred when trying to GET advice ${formatError(err)}`
+            );
+            return next(err);
+          }
         }
-      }
-    ).get(
-      "/advice/all",
-      async (req: Request, res: Response, next: NextFunction) => {
-        this.logger.info(`Received /advice/all request`);
-        try {
-          const result = await this.adviceService.getAllAdvice();
-          this.logger.info(`Responding to client in GET /advice/all`);
-          return res.status(200).json(result);
-        } catch (err: any) {
-          this.logger.warn(
-            `An error occurred when trying to GET advice ${formatError(err)}`
-          );
-          return next(err);
+      )
+      .get(
+        "/advice/all",
+        async (req: Request, res: Response, next: NextFunction) => {
+          this.logger.info(`Received /advice/all request`);
+          try {
+            const result = await this.adviceService.getAllAdvice();
+            this.logger.info(`Responding to client in GET /advice/all`);
+            return res.status(200).json(result);
+          } catch (err: any) {
+            this.logger.warn(
+              `An error occurred when trying to GET advice ${formatError(err)}`
+            );
+            return next(err);
+          }
         }
-      }
-    );
+      );
   }
   getPrefix(): string {
     return this.prefix;

@@ -1,5 +1,8 @@
 import { getLogger } from "../../utils/Logger";
-import { IAdviceSpecificSuccessResponse, IAdviceAllSuccessResponse } from "IApiResponses";
+import {
+  IAdviceSpecificSuccessResponse,
+  IAdviceAllSuccessResponse,
+} from "IApiResponses";
 import { AdviceRepository } from "../../repositories/Advice.repository";
 import { HTTPError } from "../../utils/Errors";
 import { internalServerError, notFoundError } from "../../utils/Constants";
@@ -7,7 +10,6 @@ import { convertAdviceEntityToInterface } from "../../converters/Advice.converte
 import { getLog } from "../../utils/Helpers";
 
 export class AdviceService {
-  
   private logger = getLogger();
   constructor(readonly adviceRepository: AdviceRepository) {}
 
@@ -29,7 +31,7 @@ export class AdviceService {
   }
 
   async getAllAdvice(): Promise<IAdviceAllSuccessResponse> {
-    const advices = await this.adviceRepository.getAllAdvice();
+    const advices = await this.adviceRepository.getAllAdviceLevels();
 
     if (advices === undefined) {
       this.logger.error(`Received no advice from the db`);
@@ -42,6 +44,6 @@ export class AdviceService {
     return {
       countries: advices,
       log: getLog(new Date()),
-    }
+    };
   }
 }
