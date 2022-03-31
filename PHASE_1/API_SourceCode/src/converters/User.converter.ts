@@ -7,7 +7,7 @@ export const convertUserEntityToInterface = (entity: UserEntity): User => {
     userId: entity.userId,
     name: entity.name,
     email: entity.email,
-    password: entity.password,
+    //password: entity.password,
     bookmarkedArticles: entity.bookmarkedArticles.map((article) =>
       convertArticleEntityToInterface(article)
     ),

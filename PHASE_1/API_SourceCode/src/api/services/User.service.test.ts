@@ -11,6 +11,7 @@ import { ArticleRepository } from "../../repositories/Article.repository";
 import { UserRepository } from "../../repositories/User.respository";
 import { UserService } from "./User.service";
 import { getMockArticles, getMockUsers } from "../../utils/testData";
+import { IUserRegisterRequestBody } from "../../interfaces/IApiResponses";
 
 // describe("UserService", () => {
 //   let userRepository: UserRepository;
@@ -52,12 +53,17 @@ describe("UserService", () => {
     it("should resolve with 200 if the user is successfully registered", () => {
       const service = userService();
       const userRecord = getMockUsers()[2];
-      const { userId, bookmarkedArticles, ...newUser } = userRecord;
+      //const { userId, bookmarkedArticles, ...newUser } = userRecord;
+      const newUser: IUserRegisterRequestBody = {
+        name: userRecord.name,
+        email: userRecord.email,
+        password: "",
+      };
 
       userRepository.getUserByEmail = jest.fn().mockReturnValue(undefined);
       userRepository.saveUser = jest.fn().mockReturnValue(userRecord);
       expect(service.registerUser(newUser)).resolves.toEqual({
-        token: jwt.sign(userId, secret),
+        token: jwt.sign(userRecord.userId, secret),
         user: userRecord,
         log: {
           ...baseLog,
@@ -70,14 +76,24 @@ describe("UserService", () => {
       const service = userService();
       const existingUser = getMockUsers()[2];
       userRepository.getUserByEmail = jest.fn().mockReturnValue(existingUser);
+      const reqBody: IUserRegisterRequestBody = {
+        name: existingUser.name,
+        email: existingUser.email,
+        password: "",
+      };
 
       const errorResult = new HTTPError(badRequest);
-      expect(service.registerUser(existingUser)).rejects.toThrow(errorResult);
+      expect(service.registerUser(reqBody)).rejects.toThrow(errorResult);
     });
 
     it("should respond with 500 error if the user could not be added", () => {
       const service = userService();
-      const { userId, bookmarkedArticles, ...newUser } = getMockUsers()[0];
+      const userRecord = getMockUsers()[0];
+      const newUser: IUserRegisterRequestBody = {
+        name: userRecord.name,
+        email: userRecord.email,
+        password: "",
+      };
 
       userRepository.getUserByEmail = jest.fn().mockReturnValue(undefined);
       userRepository.saveUser = jest.fn().mockReturnValue(undefined);

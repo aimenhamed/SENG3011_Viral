@@ -93,7 +93,6 @@ export const getMockUsers = (): User[] => {
       userId: "user-123",
       name: "jeff",
       email: "jeff1@gmail.com",
-      password: "mysecretpassword",
       bookmarkedArticles: [getArticleEntity()],
       bookmarkedCountries: [],
     },
@@ -101,7 +100,6 @@ export const getMockUsers = (): User[] => {
       userId: "user-321",
       name: "tom",
       email: "tom1@gmail.com",
-      password: "mysecretpassword",
       bookmarkedArticles: [getArticleEntity()],
       bookmarkedCountries: [],
     },
@@ -109,7 +107,6 @@ export const getMockUsers = (): User[] => {
       userId: "user1",
       name: "Bob",
       email: "bobthebuilder@gmail.com",
-      password: "abc123",
       bookmarkedArticles: [],
       bookmarkedCountries: [],
     },
@@ -121,7 +118,7 @@ export const getUserEntity = (): UserEntity => {
   const userEntity = new UserEntity();
   userEntity.userId = user.userId;
   userEntity.name = user.name;
-  userEntity.password = user.password;
+  //userEntity.password = user.password;
   userEntity.bookmarkedArticles = [getArticleEntity()];
   userEntity.email = user.email;
   return userEntity;
