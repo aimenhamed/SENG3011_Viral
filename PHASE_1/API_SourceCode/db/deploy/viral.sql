@@ -52,4 +52,11 @@ CREATE TABLE public.user_articles (
     CONSTRAINT fk_article_id FOREIGN KEY (article_id) references public.article(article_id)
 );
 
+CREATE TABLE public.country (
+    country_id uuid,
+    name text NOT NULL,
+    code text NOT NULL,
+    coords int[],
+    CONSTRAINT pk_country_id PRIMARY KEY (country_id)
+)
 COMMIT;
