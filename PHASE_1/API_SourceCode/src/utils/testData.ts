@@ -128,13 +128,37 @@ export const getUserEntity = (): UserEntity => {
 };
 
 export const getMockAdvice = (): AdviceEntity => {
-  return {
-    adviceId: "advice1",
-    url: "https://www.idkwherethisgoes.com",
-    country: "United States of America",
-    continent: "North America",
-    adviceLevel: "Do not Travel",
-    lastUpdate: new Date(),
-    latestAdvice: "abababababa",
-  };
+  return getMockAdvices()[0];
+};
+
+export const getMockAdvices = (): AdviceEntity[] => {
+  return [
+    {
+      adviceId: "advice1",
+      url: "https://www.idkwherethisgoes.com",
+      country: "United States of America",
+      continent: "North America",
+      adviceLevel: "Do not Travel",
+      lastUpdate: new Date(),
+      latestAdvice: "abababababa",
+    },
+    {
+      adviceId: "advice2",
+      url: "https://www.idkwherethisgoes2.com",
+      country: "Atlantis",
+      continent: "Pacific",
+      adviceLevel: "Reconsider your need to travel",
+      lastUpdate: new Date(),
+      latestAdvice: "I don't think this is a valid place to travel to...",
+    },
+    {
+      adviceId: "advice3",
+      url: "https://www.idkwherethisgoes3.com",
+      country: "Narnia",
+      continent: "Fictional",
+      adviceLevel: "Exercise a high degree of caution",
+      lastUpdate: new Date(),
+      latestAdvice: "There's a talking lion there idk",
+    },
+  ];
 };
