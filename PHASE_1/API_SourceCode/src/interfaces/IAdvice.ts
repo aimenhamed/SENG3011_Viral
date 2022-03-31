@@ -7,3 +7,8 @@ export interface Advice {
   latestAdvice: string;
   lastUpdate: Date;
 }
+
+export interface IAdviceOnly {
+  country: string;
+  adviceLevel: string;
+}
