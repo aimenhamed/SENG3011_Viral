@@ -36,12 +36,13 @@ CREATE TABLE public.user (
 CREATE TABLE public.advice (
     advice_id uuid NOT NULL DEFAULT gen_random_uuid(),
     url text NOT NULL,
-    country text NOT NULL,
+    country_id uuid,
     continent text,
     advice_level text,
     latest_advice text NOT NULL,
     last_update date NOT NULL,
-    CONSTRAINT pk_advice_id PRIMARY KEY (advice_id)
+    CONSTRAINT pk_advice_id PRIMARY KEY (advice_id),
+    CONSTRAINT fk_country_id FOREIGN KEY (country_id) references country(country_id)
 );
 
 CREATE TABLE public.user_articles (
