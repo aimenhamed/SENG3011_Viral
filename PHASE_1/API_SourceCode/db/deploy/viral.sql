@@ -36,18 +36,18 @@ CREATE TABLE public.user (
 CREATE TABLE public.advice (
     advice_id uuid NOT NULL DEFAULT gen_random_uuid(),
     url text NOT NULL,
-    country_id uuid,
+    country uuid,
     continent text,
     advice_level text,
     latest_advice text NOT NULL,
     last_update date NOT NULL,
     CONSTRAINT pk_advice_id PRIMARY KEY (advice_id),
-    CONSTRAINT fk_country_id FOREIGN KEY (country_id) references country(country_id)
+    CONSTRAINT fk_country FOREIGN KEY (country) references country(country_id)
 );
 
 CREATE TABLE public.user_articles (
-    user_id uuid,
-    article_id uuid,
+    user_id NOT NULL uuid,
+    article_id NOT NULL uuid,
     CONSTRAINT pk_user_id_article_id PRIMARY KEY (user_id,article_id),
     CONSTRAINT fk_user_id FOREIGN KEY (user_id) references public.user(user_id),
     CONSTRAINT fk_article_id FOREIGN KEY (article_id) references public.article(article_id)
@@ -56,20 +56,21 @@ CREATE TABLE public.user_articles (
 
 
 CREATE TABLE public.country (
-    country_id uuid,
+    country_id uuid NOT NULL DEFAULT gen_random_uuid(),
     name text NOT NULL,
     code text NOT NULL,
     coords int[],
     CONSTRAINT pk_country_id PRIMARY KEY (country_id)
 )
 
-CREATE TABLE public.comments (
-    comment_id uuid,
+CREATE TABLE public.comment (
+    comment_id uuid NOT NULL DEFAULT gen_random_uuid(),
     created_by uuid,
-    country text,
+    country uuid,
     message text,
     created_date date,
     CONSTRAINT pk_comment_id PRIMARY KEY (comment_id),
-    CONSTRAINT fk_user_id FOREIGN KEY (created_by) references public.user(user_id)
+    CONSTRAINT fk_user_id FOREIGN KEY (created_by) references public.user(user_id),
+    CONSTRAINT fk_country FOREIGN KEY (country) references public.country(country_id)
 )
 COMMIT;

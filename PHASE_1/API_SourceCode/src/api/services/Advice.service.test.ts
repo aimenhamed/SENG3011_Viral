@@ -27,7 +27,7 @@ describe("AdviceService", () => {
       const advice = getMockAdvice();
       repository.getAdviceByCountry = jest.fn().mockReturnValue(advice);
 
-      expect(service.getAdvice(advice.country)).resolves.toEqual({
+      expect(service.getAdvice(advice.country.name)).resolves.toEqual({
         advice,
         log: {
           ...baseLog,

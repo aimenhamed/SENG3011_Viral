@@ -7,6 +7,7 @@ import { ReportEntity } from "../entity/Report.entity";
 import { UserEntity } from "../entity/User.entity";
 import { AdviceEntity } from "../entity/Advice.entity";
 import { CountryEntity } from "../entity/Country.entity";
+import { CommentEntity } from "../entity/Comment.entity";
 
 export default class Database {
   private logger = getLogger();
@@ -39,6 +40,7 @@ export default class Database {
         UserEntity,
         AdviceEntity,
         CountryEntity,
+        CommentEntity,
       ],
     });
     this.logger.info(

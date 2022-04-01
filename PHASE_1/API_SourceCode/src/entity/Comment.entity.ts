@@ -1,32 +1,28 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from "typeorm";
 import { UserEntity } from "./User.entity";
-
+import { CountryEntity } from "./Country.entity";
 @Entity({ name: "comment", schema: "public" })
 export class CommentEntity {
   @PrimaryGeneratedColumn("uuid", { name: "comment_id" })
   commentId: string;
+
+  @ManyToOne(() => UserEntity, (user) => user.userId)
+  @JoinColumn({ name: "created_by" })
+  createdBy: UserEntity;
+
+  @ManyToOne(() => CountryEntity, (country) => country.countryId)
+  @JoinColumn({ name: "country" })
+  country: CountryEntity;
+
+  @Column("text", { name: "message" })
+  message: string;
+
+  @Column("date", { name: "created_date" })
+  date: Date;
 }
-
-// @Entity({ name: "article", schema: "public" })
-// export class ArticleEntity {
-//   @PrimaryGeneratedColumn("uuid", { name: "article_id" })
-//   articleId: string;
-
-//   @Column("text", { name: "url", nullable: false })
-//   url: string;
-
-//   @Column("text", { name: "date_of_publication", nullable: false })
-//   dateOfPublication: string;
-
-//   @Column("text", { name: "headline", nullable: false })
-//   headline: string;
-
-//   @Column("text", { name: "main_text", nullable: false })
-//   mainText: string;
-
-//   @OneToMany(() => ReportEntity, (report) => report.article, {
-//     eager: true,
-//     cascade: true,
-//   })
-//   public reports: ReportEntity[];
-// }

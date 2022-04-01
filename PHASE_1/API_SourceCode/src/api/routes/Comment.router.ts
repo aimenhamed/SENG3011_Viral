@@ -15,30 +15,27 @@ export class CommentRouter implements IRouter {
   }
 
   setupRoutes(): Router {
-    return Router()
-      .post(
-        "/comments",
-        validationMiddleware(CommentPostSchema, "body"),
-        async (req: Request, res: Response, next: NextFunction) => {
-          this.logger.info(`Received POST /comments request`);
-          try {
-            const newComment = req.body;
+    return Router().post(
+      "/comments",
+      validationMiddleware(CommentPostSchema, "body"),
+      async (req: Request, res: Response, next: NextFunction) => {
+        this.logger.info(`Received POST /comments request`);
+        try {
+          const newComment = req.body;
 
-            const result = await this.commentService.createComment();
-            this.logger.info(`Responding to client in POST /comments`);
-            return res.status(200).json(result);
-          } catch (err: any) {
-            this.logger.warn(
-              `An error occurred when trying to GET all articles ${formatError(
-                err
-              )}`
-            );
-            return next(err);
-          }
+          const result = await this.commentService.createComment(newComment);
+          this.logger.info(`Responding to client in POST /comments`);
+          return res.status(200).json(result);
+        } catch (err: any) {
+          this.logger.warn(
+            `An error occurred when trying to POST comment ${formatError(err)}`
+          );
+          return next(err);
         }
-      )
-    }
-        
+      }
+    );
+  }
+
   getPrefix(): string {
     return this.prefix;
   }
