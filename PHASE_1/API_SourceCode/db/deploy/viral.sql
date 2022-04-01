@@ -53,7 +53,16 @@ CREATE TABLE public.user_articles (
     CONSTRAINT fk_article_id FOREIGN KEY (article_id) references public.article(article_id)
 );
 
-<<<<<<< HEAD
+
+
+CREATE TABLE public.country (
+    country_id uuid,
+    name text NOT NULL,
+    code text NOT NULL,
+    coords int[],
+    CONSTRAINT pk_country_id PRIMARY KEY (country_id)
+)
+
 CREATE TABLE public.comments (
     comment_id uuid,
     created_by uuid,
@@ -63,14 +72,4 @@ CREATE TABLE public.comments (
     CONSTRAINT pk_comment_id PRIMARY KEY (comment_id),
     CONSTRAINT fk_user_id FOREIGN KEY (created_by) references public.user(user_id)
 )
-
-=======
-CREATE TABLE public.country (
-    country_id uuid,
-    name text NOT NULL,
-    code text NOT NULL,
-    coords int[],
-    CONSTRAINT pk_country_id PRIMARY KEY (country_id)
-)
->>>>>>> develop
 COMMIT;
