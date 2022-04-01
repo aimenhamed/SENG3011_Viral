@@ -11,6 +11,10 @@ tags:
     description: "Everything related to articles"
   - name: "Reports"
     description: "Everything you need to know about reports"
+  - name: "Users"
+    description: "Interact with our application through an account"
+  - name: "Countries"
+    description: "Receive information specific to the countries"
 paths:
   /search:
     get:
@@ -212,7 +216,12 @@ paths:
               schema:
                 {
                   type: "object",
-                  properties: { "user": { $ref: "#/components/schemas/User" } },
+                  properties: { 
+                    "token":
+                      type:"string",
+                    "user": { $ref: "#/components/schemas/User" } 
+                    
+                  },
                 }
         "400":
           $ref: "#/components/responses/BadRequest"
@@ -284,50 +293,6 @@ paths:
                   type: "object",
                   properties: { "user": { $ref: "#/components/schemas/User" } },
                 }
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "404":
-          "$ref": "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/ServerError"
-
-  /users/dashboard:
-    put:
-      tags:
-        - "Users"
-      summary: "Adds a dashboard under user profile"
-      description: "Adds a dashboard under user profile."
-      operationId: "addDashboardToUser"
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: "object"
-              properties:
-                userId:
-                  type: string
-                dashboardId:
-                  type: string
-              example:
-                  userId: "7bb72fe5-6b8c-4984-8efc-758322e8c8a2"
-                  dashboardId: "fba554c5-8d7c-4a0a-8780-f0d0d8b2e0d8"
-      responses:
-        "200":
-          description: "Successful response"
-          content:
-            application/json:
-              {
-                schema:
-                  {
-                    type: "object",
-                    properties:
-                      {
-                        user: { $ref: "#/components/schemas/User" },
-                        dashboard: { $ref: "#/components/schemas/Dashboard" },
-                      },
-                  },
-                
-              }
         "400":
           $ref: "#/components/responses/BadRequest"
         "404":
@@ -435,208 +400,179 @@ paths:
           "$ref": "#/components/responses/NotFound"
         "500":
           "$ref": "#/components/responses/ServerError"      
+
+  /advice/all:
+    get:
+      tags:
+        - "Countries"
+      summary: "Retrieve the advice level of all countries at risk"
+      description: "Countries that are potentially at risk will have their advice level shown here. Countries that are deemed save to travel to will not be included here."
+      operationId: "adviceAll"
+      responses:
+        "200":
+          description: "Successful response"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  type: "object"
+                  properties: 
+                    {
+                      country: {type: "string"},
+                      adviceLevel: {type: "string"}
+                    }
+                  example: 
+                    {
+                      country: "Ukraine",
+                      adviceLevel: "Do not travel"
+                    }
+        "500":
+          "$ref": "#/components/responses/ServerError"
   
-  /dashboard:
+  /advice:
+    get:
+      tags:
+        - "Countries"
+      summary: "Retrieve specific information on a country at risk"
+      description: "Retrieves all relevant information on the country."
+      operationId: "adviceSpecific"
+      parameters:
+      - name: country
+        in: "query"
+        description: "the name of the country being queried (case sensitive)"
+        schema:
+          type: string
+        required: true
+        example: "Ukraine"
+      responses:
+        "200":
+          description: "Successful response"
+          content:
+            application/json:
+              schema:
+                type: "object"
+                properties: 
+                  {
+                    advice: 
+                      {
+                        $ref: "#/components/schemas/Advice"
+                      },
+                    log:
+                      {
+                        "$ref": "#/components/schemas/Log"
+                      }
+                  }
+                
+              example:
+                {
+                  "advice": {
+                      "adviceId": "84ee17ac-c345-48d8-9c99-1c6c7616c775",
+                      "url": "https://www.smartraveller.gov.au/destinations/europe/ukraine",
+                      "country": {
+                          "countryId": "b1b08336-d818-4e09-adbb-08b55895f34b",
+                          "name": "Ukraine",
+                          "code": "UA",
+                          "coords": [
+                              49,
+                              32
+                          ]
+                      },
+                      "continent": "Europe",
+                      "adviceLevel": "Do not travel",
+                      "latestAdvice": "The Russian invasion of Ukraine is ongoing. The security situation continues to be volatile and is deteriorating rapidly. Infrastructure and military facilities have been struck by rocket attacks in Lviv. Heavy fighting, including bombardments, explosions and missile launches, is ongoing throughout Ukraine. There have been many civilian casualties. Foreigners have been killed and may be targeted, including in areas not directly affected by fighting. Do not travel to Ukraine, there is a real risk to life.  If you’re in Ukraine, shelter in place until you judge it’s safe to depart. Seek shelter in a hardened structure away from windows. Review your personal security plans. Be alert and aware of your surroundings. Continue to monitor advice on Smartraveller and reputable local and international media. Where it is safe to do so, you should leave Ukraine. You're responsible for your own safety and that of your family.",
+                      "lastUpdate": "2022-03-30"
+                  },
+                  "log": {
+                      "teamName": "Team Viral",
+                      "dataSource": "https://www.who.int/csr/don/en/",
+                      "accessTime": "23:14:03 GMT+1100 (Australian Eastern Daylight Time)"
+                  }
+              }
+        "404":
+          "$ref": "#/components/responses/NotFound"
+        "500":
+          "$ref": "#/components/responses/ServerError" 
+  /comment:
     post:
       tags:
-        - "Dashboards"
-      summary: "Creates a new dashboard"
-      description: "Adds a new dashboard into the database"
-      operationId: "createDashboard"
+        - "Countries"
+      summary: "Create a comment in a country page"
+      description: "Create a public message in a country page."
+      operationId: "commentPost"
       requestBody:
-        "content":
-          {
-            "application/json":
+        content: {
+          "application/json":
               {
                 schema:
                   {
                     type: "object",
                     properties:
                       {
-                        widgets:
-                          {
-                            type: "array",
-                            items:
-                              {
-                                "$ref": "#/components/schemas/WidgetRequestBody",
-                              },
-                          },
+                        userId: { type: "string" },
+                        countryId: { type: "string" },
+                        message: { type: "string" }
                       },
                     example:
                       {
-                        "userId": "7bb72fe5-6b8c-4984-8efc-758322e8c8a2",
-                        "widgets": [{
-                            "widgetType": "ARTICLE",
-                            "articleId": "c4ebd485-a22a-4ac3-882b-eec4daabd2b0"
-                        },{
-                            "widgetType": "ARTICLE",
-                            "articleId": "0cc1c698-efe4-45a1-a476-cfd6ef27f11c"
-                        }]
+                        "userId": "11db4e8a-b16a-4667-a5e7-09a6598fbbab",
+                        "countryId": "612532d9-8661-4a3f-85b4-77e5322294cb",
+                        "message": "aabababababa"
                       }
                   },
               },
-          }
+        }
       responses:
-        "200":
+        200:
           description: "Successful response"
           content:
             application/json:
-              {
-                schema:
+              schema:
+                type: "object"
+                properties: 
                   {
-                    type: "object",
-                    properties:
+                    comment: 
                       {
-                        dashboard: { $ref: "#/components/schemas/Dashboard" },
-                        user: { $ref: "#/components/schemas/User" },
+                        "$ref": "#/components/schemas/Comment"
                       },
-                  },
-              }
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "405":
-          "$ref": "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/ServerError"
-
-  /dashboard/{dashboardId}:
-    put:
-      tags:
-        - "Dashboards"
-      summary: "Updates an existing dashboard"
-      description: "Updates an existing dashboard and saves it into the database"
-      operationId: "updateDashboard"
-      parameters:
-        - name: dashboardId
-          in: "path"
-          description: "a UUID representing the dashboard being queried"
-          schema:
-            type: string
-          required: true
-          example: "fba554c5-8d7c-4a0a-8780-f0d0d8b2e0d8"
-      requestBody:
-        "content":
-          {
-            "application/json":
-              {
-                schema:
+                    log:
+                      {
+                        "$ref": "#/components/schemas/Log"
+                      }
+                  }
+                example:
                   {
-                    type: "object",
-                    properties:
-                      {
-                        user_id: 
-                          {
-                            type: string
-                          },
-                        widgets:
-                          {
-                            type: "array",
-                            items:
-                              {
-                                "$ref": "#/components/schemas/WidgetRequestBody",
-                              },
-                          },
-                      },
-                    example:
-                    {
-                      "userId": "2f683119-ca8d-4e14-8ef0-9ed1bae37e00",
-                      "widgets": [
-                        {
-                          "widgetType": "ARTICLE",
-                          "articleId": "014bb811-b1f1-4a92-8306-4f079e8eee85"
-                        }
-                      ]
+                    
+                    "comment": {
+                        "commentId": "48d79785-ea92-45a7-80b6-a2c737697716",
+                        "createdBy": {
+                            "userId": "11db4e8a-b16a-4667-a5e7-09a6598fbbab",
+                            "name": "Aimen",
+                            "email": "HiAimen@gmail.com",
+                            "bookmarkedArticles": [],
+                            "bookmarkedCountries": []
+                        },
+                        "country": {
+                            "countryId": "612532d9-8661-4a3f-85b4-77e5322294cb",
+                            "name": "Afghanistan",
+                            "code": "AF",
+                            "coords": [
+                                33,
+                                65
+                            ]
+                        },
+                        "message": "aabababababa",
+                        "date": "2022-04-01T12:07:56.885Z"
                     },
-                },
-              },
-          }
-      responses:
-        "200":
-          description: "Successful response"
-          content:
-            application/json:
-              {
-                schema:
-                  {
-                    type: "object",
-                    properties:
-                      {
-                        dashboard: { $ref: "#/components/schemas/Dashboard" },
-                        user: { $ref: "#/components/schemas/User" },
-                      },
-                  },
-              }
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "404":
-          "$ref": "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/ServerError"
-    delete:
-      tags:
-        - "Dashboards"
-      summary: "Deletes a dashboard"
-      description: "Deletes a dashboard and removes it from the database"
-      operationId: "deleteDashboard"
-      parameters:
-        - name: dashboardId
-          in: "path"
-          description: "a UUID representing the dashboard being deleted"
-          schema:
-            type: string
-          required: true
-          example: "fba554c5-8d7c-4a0a-8780-f0d0d8b2e0d8"
-      responses:
-        "200":
-          description: "Successful response"
-          content:
-            application/json:
-              {
-                schema:
-                  {
-                    type: "object",
-                    properties: { user: { $ref: "#/components/schemas/User" } },
-                  },
-              }
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "404":
-          "$ref": "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/ServerError"
-    get:
-      tags:
-        - "Dashboards"
-      summary: "Retrieves a dashboard"
-      description: "Retrieves a dashboard from the database"
-      operationId: "etDashboard"
-      parameters:
-        - name: dashboardId
-          in: "path"
-          description: "a UUID representing the dashboard being deleted"
-          schema:
-            type: string
-          required: true
-          example: "fba554c5-8d7c-4a0a-8780-f0d0d8b2e0d8"
-      responses:
-        "200":
-          description: "Successful response"
-          content:
-            application/json:
-              {
-                schema:
-                  {
-                    type: "object",
-                    properties:
-                      { dashboard: { $ref: "#/components/schemas/Dashboard" } },
-                  },
-              }
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "404":
-          "$ref": "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/ServerError"
+                    "log": {
+                        "teamName": "Team Viral",
+                        "dataSource": "https://www.who.int/csr/don/en/",
+                        "accessTime": "23:07:57 GMT+1100 (Australian Eastern Daylight Time)"
+                    }
+                  
+                  }
+        
+      
 components:
   responses:
     BadRequest:
@@ -735,40 +671,65 @@ components:
           type: "string"
         email:
           type: "string"
-        password:
-          type: "string"
-        dashboards:
-          type: "array"
-          items:
-            type: "string"
         bookmarkedArticles:
           type: "array"
           items:
-            type: "string"
-    Dashboard:
-      type: "object"
-      properties:
-        dashboardId:
-          type: "string"
-        userId:
-          type: "string"
-        widgets:
+            "$ref": "#/components/schemas/Article"
+        bookmarkedCountries:
           type: "array"
           items:
-            "$ref": "#/components/schemas/Widget"
-    Widget:
+            "$ref": "#/components/schemas/Country"
+    Country:
       type: "object"
       properties:
-        widgetId:
+        countryId:
           type: "string"
-        widgetType:
+        name:
           type: "string"
-        articleId:
+        code:
           type: "string"
-    WidgetRequestBody:
+        coords:
+          type: "array"
+          minItems: 2
+          maxItems: 2
+          items:
+            type: "number"
+    Advice:
       type: "object"
       properties:
-        widgetType:
+        adviceId: 
           type: "string"
-        articleId:
+        url:
+          type: "string"
+        country: 
+          "$ref": "#/components/schemas/Country"
+        continent:
+          type: "string"
+        adviceLevel:
+          type: "string"
+        latestAdvice:
+          type: "string"
+        lastUpdate:
+          type: "string"
+    Comment:
+      type: "object"
+      properties:
+        commentId: 
+          type: "string"
+        createdBy:
+          "$ref": "#/components/schemas/User"
+        country: 
+          "$ref": "#/components/schemas/Country"
+        message:
+          type: "string"
+        date:
+          type: "string"
+    Log:
+      type: "object"
+      properties:
+        teamName: 
+          type: "string"
+        dataSource:
+          type: "string"
+        accessTime:
           type: "string"
