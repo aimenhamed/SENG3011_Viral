@@ -2,6 +2,7 @@ import { Advice } from "IAdvice";
 import { Article } from "IArticle";
 import { Report } from "IReport";
 import { User } from "IUser";
+import { IAdviceOnly } from "IAdvice";
 
 export interface IHttpError {
   errorCode: number;
@@ -91,5 +92,10 @@ export interface IUserSpecificSuccessResponse {
 
 export interface IAdviceSpecificSuccessResponse {
   advice: Advice;
+  log: Log;
+}
+
+export interface IAdviceAllSuccessResponse {
+  countries: IAdviceOnly[];
   log: Log;
 }

@@ -16,6 +16,7 @@ import { UserRouter } from "./api/routes/User.router";
 import { AdviceRepository } from "./repositories/Advice.repository";
 import { AdviceService } from "./api/services/Advice.service";
 import { AdviceRouter } from "./api/routes/Advice.router";
+import { CountryRepository } from "./repositories/Country.repository";
 
 export default class App {
   readonly logger = getLogger();
@@ -26,6 +27,7 @@ export default class App {
   private readonly reportRepository = new ReportRepository();
   private readonly userRepository = new UserRepository();
   private readonly adviceRepository = new AdviceRepository();
+  private readonly countryRepository = new CountryRepository();
   // add services here
   private readonly articleService = new ArticleService(this.articleRepository);
   private readonly searchService = new SearchService(

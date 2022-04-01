@@ -1,8 +1,12 @@
 import { HTTPError } from "../../utils/Errors";
-import { baseLog, notFoundError } from "../../utils/Constants";
+import {
+  baseLog,
+  notFoundError,
+  internalServerError,
+} from "../../utils/Constants";
 import { AdviceRepository } from "../../repositories/Advice.repository";
 import { AdviceService } from "./Advice.service";
-import { getMockAdvice } from "../../utils/testData";
+import { getMockAdvice, getMockAdvices } from "../../utils/testData";
 
 describe("AdviceService", () => {
   let repository: AdviceRepository;
@@ -39,6 +43,43 @@ describe("AdviceService", () => {
       const errorResult = new HTTPError(notFoundError);
       const country = "non-existent-country";
       expect(service.getAdvice(country)).rejects.toThrow(errorResult);
+    });
+  });
+
+  describe("getAllAdvice", () => {
+    it("should resolve and return expected advice levels", () => {
+      const service = adviceService();
+      const advices = getMockAdvices();
+      const adviceOnly = advices.map((advice) => {
+        return {
+          country: advice.country,
+          adviceLevel: advice.adviceLevel,
+        };
+      });
+      repository.getAllAdviceLevels = jest.fn().mockReturnValue(adviceOnly);
+
+      expect(service.getAllAdvice()).resolves.toEqual({
+        countries: adviceOnly,
+        log: {
+          ...baseLog,
+          accessTime: expect.any(String),
+        },
+      });
+    });
+
+    it("should throw an error if it could not connect to db", () => {
+      const service = adviceService();
+      const advices = getMockAdvices();
+      const adviceOnly = advices.map((advice) => {
+        return {
+          country: advice.country,
+          adviceLevel: advice.adviceLevel,
+        };
+      });
+      repository.getAllAdviceLevels = jest.fn().mockReturnValue(undefined);
+
+      const errorResult = new HTTPError(internalServerError);
+      expect(service.getAllAdvice()).rejects.toThrow(errorResult);
     });
   });
 });
