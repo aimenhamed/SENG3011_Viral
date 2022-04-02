@@ -35,7 +35,7 @@ export class UserService {
   constructor(
     readonly userRepository: UserRepository,
     readonly articleRepository: ArticleRepository,
-    readonly countryRepository: CountryRepository,
+    readonly countryRepository: CountryRepository
   ) {}
 
   async registerUser(
@@ -140,23 +140,29 @@ export class UserService {
     };
   }
 
-  async bookmarkCountry(bookmarkDetails:IUserBookmarkCountryRequestBody): Promise<IUserBookmarkCountrySuccessResponse | undefined> {
+  async bookmarkCountry(
+    bookmarkDetails: IUserBookmarkCountryRequestBody
+  ): Promise<IUserBookmarkCountrySuccessResponse | undefined> {
     let user = await this.getUser(bookmarkDetails.userId);
     const country = await this.getCountry(bookmarkDetails.countryId);
     const status = bookmarkDetails.status;
 
-    user.bookmarkedCountries = user.bookmarkedCountries.filter(c=>{return c.countryId !== country.countryId});
+    user.bookmarkedCountries = user.bookmarkedCountries.filter(
+      (c) => c.countryId !== country.countryId
+    );
     if (status) {
-      user.bookmarkedCountries = [...user.bookmarkedCountries, country ]
+      user.bookmarkedCountries = [...user.bookmarkedCountries, country];
     }
 
-    user = await this.userRepository.saveUser(user)
-
+    user = await this.userRepository.saveUser(user);
+    this.logger.info(
+      `Successfully changed bookmarked status for country ${country.code} for user ${user.userId}`
+    );
     return {
       user: convertUserEntityToInterface(user),
       country: convertCountryEntityToInterface(country),
       log: getLog(new Date()),
-    }
+    };
   }
 
   async getSpecificUser(userId: string): Promise<IUserSpecificSuccessResponse> {
@@ -221,7 +227,7 @@ export class UserService {
     return article;
   }
 
-  async getCountry(countryId: string):Promise<CountryEntity> {
+  async getCountry(countryId: string): Promise<CountryEntity> {
     const country = await this.countryRepository.getCountry(countryId);
 
     if (country === undefined) {

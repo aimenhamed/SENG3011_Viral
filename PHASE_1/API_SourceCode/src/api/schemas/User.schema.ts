@@ -27,5 +27,5 @@ export const UserBookmarkCountrySchema = Joi.object({
   countryId: Joi.string()
     .uuid({ version: ["uuidv4"] })
     .required(),
-  status: Joi.boolean().required()
-})
+  status: Joi.boolean().required(),
+});

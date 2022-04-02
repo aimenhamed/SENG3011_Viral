@@ -38,7 +38,7 @@ export class UserEntity {
   })
   bookmarkedArticles: ArticleEntity[];
 
-  @ManyToMany(()=>CountryEntity, {eager: true,})
+  @ManyToMany(() => CountryEntity, { eager: true })
   @JoinTable({
     name: "user_countries",
     joinColumn: {
