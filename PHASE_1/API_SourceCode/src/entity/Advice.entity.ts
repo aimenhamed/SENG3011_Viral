@@ -1,4 +1,11 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from "typeorm";
+import { CountryEntity } from "./Country.entity";
 
 @Entity({ name: "advice", schema: "public" })
 export class AdviceEntity {
@@ -8,8 +15,9 @@ export class AdviceEntity {
   @Column("text", { name: "url", nullable: false })
   url: string;
 
-  @Column("text", { name: "country", nullable: false })
-  country: string;
+  @OneToOne(() => CountryEntity)
+  @JoinColumn({ name: "country" })
+  country: CountryEntity;
 
   @Column("text", { name: "continent", nullable: true })
   continent: string;

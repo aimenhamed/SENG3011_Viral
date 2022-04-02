@@ -7,6 +7,7 @@ import mockArticles from "./data/small.json";
 import { User } from "../interfaces/IUser";
 import { UserEntity } from "../entity/User.entity";
 import { convertArticleEntityToInterface } from "../converters/Article.converter";
+import { CountryEntity } from "../entity/Country.entity";
 
 export const getReportEntity = (): ReportEntity => {
   const report = getMockReports()[0];
@@ -133,7 +134,7 @@ export const getMockAdvices = (): AdviceEntity[] => {
     {
       adviceId: "advice1",
       url: "https://www.idkwherethisgoes.com",
-      country: "United States of America",
+      country: getMockCountries()[0],
       continent: "North America",
       adviceLevel: "Do not Travel",
       lastUpdate: new Date(),
@@ -142,7 +143,7 @@ export const getMockAdvices = (): AdviceEntity[] => {
     {
       adviceId: "advice2",
       url: "https://www.idkwherethisgoes2.com",
-      country: "Atlantis",
+      country: getMockCountries()[1],
       continent: "Pacific",
       adviceLevel: "Reconsider your need to travel",
       lastUpdate: new Date(),
@@ -151,11 +152,34 @@ export const getMockAdvices = (): AdviceEntity[] => {
     {
       adviceId: "advice3",
       url: "https://www.idkwherethisgoes3.com",
-      country: "Narnia",
+      country: getMockCountries()[2],
       continent: "Fictional",
       adviceLevel: "Exercise a high degree of caution",
       lastUpdate: new Date(),
       latestAdvice: "There's a talking lion there idk",
+    },
+  ];
+};
+
+export const getMockCountries = (): CountryEntity[] => {
+  return [
+    {
+      countryId: "country1",
+      name: "United States of America",
+      code: "US",
+      coords: [30, 30],
+    },
+    {
+      countryId: "country2",
+      name: "Atlantis",
+      code: "AT",
+      coords: [31, 31],
+    },
+    {
+      countryId: "country3",
+      name: "Narnia",
+      code: "NN",
+      coords: [32, 32],
     },
   ];
 };

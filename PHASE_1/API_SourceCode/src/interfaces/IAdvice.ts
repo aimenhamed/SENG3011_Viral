@@ -1,7 +1,9 @@
+import { Country } from "ICountry";
+
 export interface Advice {
   adviceId: string;
   url: string;
-  country: string;
+  country: Country;
   continent: string;
   adviceLevel: string;
   latestAdvice: string;

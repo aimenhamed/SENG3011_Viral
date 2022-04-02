@@ -2,6 +2,7 @@ import { Advice } from "IAdvice";
 import { Article } from "IArticle";
 import { Report } from "IReport";
 import { User } from "IUser";
+import { Comment } from "IComment";
 import { IAdviceOnly } from "IAdvice";
 
 export interface IHttpError {
@@ -99,5 +100,16 @@ export interface IAdviceSpecificSuccessResponse {
 
 export interface IAdviceAllSuccessResponse {
   countries: IAdviceOnly[];
+  log: Log;
+}
+
+export interface ICommentPostRequestBody {
+  countryId: string;
+  message: string;
+  userId: string;
+}
+
+export interface ICommentPostSuccessResponse {
+  comment: Comment;
   log: Log;
 }
