@@ -6,20 +6,23 @@ import {
 } from "../../utils/Constants";
 import { AdviceRepository } from "../../repositories/Advice.repository";
 import { AdviceService } from "./Advice.service";
+import { FetchWrapper } from "../../modules/FetchWrapper";
 import { getMockAdvice, getMockAdvices } from "../../utils/testData";
 
 describe("AdviceService", () => {
   let repository: AdviceRepository;
+  let fetchWrapper: FetchWrapper;
   beforeEach(() => {
     jest.clearAllMocks();
     jest.resetAllMocks();
     repository = new AdviceRepository();
+    fetchWrapper = new FetchWrapper();
   });
   afterAll(() => {
     jest.clearAllMocks();
     jest.resetAllMocks();
   });
-  const adviceService = () => new AdviceService(repository);
+  const adviceService = () => new AdviceService(repository, fetchWrapper);
 
   describe("getAdvice", () => {
     it("should resolve and return expected advice", () => {

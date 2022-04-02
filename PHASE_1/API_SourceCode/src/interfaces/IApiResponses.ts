@@ -4,6 +4,7 @@ import { Report } from "IReport";
 import { User } from "IUser";
 import { Comment } from "IComment";
 import { IAdviceOnly } from "IAdvice";
+import { AmadeusData } from "IFetchResponses";
 import { Country } from "ICountry";
 
 export interface IHttpError {
@@ -96,6 +97,7 @@ export interface IUserSpecificSuccessResponse {
 
 export interface IAdviceSpecificSuccessResponse {
   advice: Advice;
+  data: AmadeusData;
   log: Log;
 }
 
