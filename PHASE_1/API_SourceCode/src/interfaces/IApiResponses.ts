@@ -55,6 +55,7 @@ export interface IUserRegisterRequestBody {
 }
 
 export interface IUserRegisterSuccessResponse {
+  token: string;
   user: User;
   log: Log;
 }
@@ -81,6 +82,7 @@ export interface IUserLoginRequestBody {
 }
 
 export interface IUserLoginSuccessResponse {
+  token: string;
   user: User;
   log: Log;
 }
