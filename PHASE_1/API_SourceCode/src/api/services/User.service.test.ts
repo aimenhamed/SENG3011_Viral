@@ -8,6 +8,7 @@ import {
 } from "../../utils/Constants";
 import { ArticleRepository } from "../../repositories/Article.repository";
 import { UserRepository } from "../../repositories/User.respository";
+import { CountryRepository } from "../../repositories/Country.repository";
 import { UserService } from "./User.service";
 import { getMockArticles, getMockUsers } from "../../utils/testData";
 import { IUserRegisterRequestBody } from "../../interfaces/IApiResponses";
@@ -15,18 +16,21 @@ import { IUserRegisterRequestBody } from "../../interfaces/IApiResponses";
 describe("UserService", () => {
   let userRepository: UserRepository;
   let articleRepository: ArticleRepository;
+  let countryRepository: CountryRepository;
   beforeEach(() => {
     jest.clearAllMocks();
     jest.resetAllMocks();
     userRepository = new UserRepository();
     articleRepository = new ArticleRepository();
+    countryRepository = new CountryRepository();
   });
   afterAll(() => {
     jest.clearAllMocks();
     jest.resetAllMocks();
   });
 
-  const userService = () => new UserService(userRepository, articleRepository);
+  const userService = () =>
+    new UserService(userRepository, articleRepository, countryRepository);
 
   describe("registerNewUser", () => {
     it("should resolve with 200 if the user is successfully registered", () => {

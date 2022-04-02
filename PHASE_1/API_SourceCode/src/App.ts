@@ -43,7 +43,8 @@ export default class App {
   private readonly reportService = new ReportService(this.reportRepository);
   private readonly userService = new UserService(
     this.userRepository,
-    this.articleRepository
+    this.articleRepository,
+    this.countryRepository
   );
   private readonly adviceService = new AdviceService(
     this.adviceRepository,

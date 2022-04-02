@@ -19,3 +19,13 @@ export const UserLoginSchema = Joi.object({
   email: Joi.string().required(),
   password: Joi.string().required(),
 });
+
+export const UserBookmarkCountrySchema = Joi.object({
+  userId: Joi.string()
+    .uuid({ version: ["uuidv4"] })
+    .required(),
+  countryId: Joi.string()
+    .uuid({ version: ["uuidv4"] })
+    .required(),
+  status: Joi.boolean().required(),
+});

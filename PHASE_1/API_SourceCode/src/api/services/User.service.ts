@@ -8,11 +8,15 @@ import {
   IUserLoginSuccessResponse,
   IUserSpecificSuccessResponse,
   IUserRemoveBookmarkSuccessResponse,
+  IUserBookmarkCountryRequestBody,
+  IUserBookmarkCountrySuccessResponse,
 } from "IApiResponses";
 import { UserRepository } from "../../repositories/User.respository";
 import { ArticleRepository } from "../../repositories/Article.repository";
+import { CountryRepository } from "../../repositories/Country.repository";
 import { UserEntity } from "../../entity/User.entity";
 import { ArticleEntity } from "../../entity/Article.entity";
+import { CountryEntity } from "../../entity/Country.entity";
 import { HTTPError } from "../../utils/Errors";
 import {
   internalServerError,
@@ -23,13 +27,15 @@ import {
 } from "../../utils/Constants";
 import { convertArticleEntityToInterface } from "../../converters/Article.converter";
 import { convertUserEntityToInterface } from "../../converters/User.converter";
+import { convertCountryEntityToInterface } from "../../converters/Country.converter";
 import { getLog } from "../../utils/Helpers";
 
 export class UserService {
   private logger = getLogger();
   constructor(
     readonly userRepository: UserRepository,
-    readonly articleRepository: ArticleRepository
+    readonly articleRepository: ArticleRepository,
+    readonly countryRepository: CountryRepository
   ) {}
 
   async registerUser(
@@ -134,6 +140,31 @@ export class UserService {
     };
   }
 
+  async bookmarkCountry(
+    bookmarkDetails: IUserBookmarkCountryRequestBody
+  ): Promise<IUserBookmarkCountrySuccessResponse | undefined> {
+    let user = await this.getUser(bookmarkDetails.userId);
+    const country = await this.getCountry(bookmarkDetails.countryId);
+    const status = bookmarkDetails.status;
+
+    user.bookmarkedCountries = user.bookmarkedCountries.filter(
+      (c) => c.countryId !== country.countryId
+    );
+    if (status) {
+      user.bookmarkedCountries = [...user.bookmarkedCountries, country];
+    }
+
+    user = await this.userRepository.saveUser(user);
+    this.logger.info(
+      `Successfully changed bookmarked status for country ${country.code} for user ${user.userId}`
+    );
+    return {
+      user: convertUserEntityToInterface(user),
+      country: convertCountryEntityToInterface(country),
+      log: getLog(new Date()),
+    };
+  }
+
   async getSpecificUser(userId: string): Promise<IUserSpecificSuccessResponse> {
     const user = await this.userRepository.getUser(userId);
     if (user === undefined) {
@@ -194,5 +225,16 @@ export class UserService {
     }
 
     return article;
+  }
+
+  async getCountry(countryId: string): Promise<CountryEntity> {
+    const country = await this.countryRepository.getCountry(countryId);
+
+    if (country === undefined) {
+      this.logger.error(`Failed to find country with countryId ${country}`);
+      throw new HTTPError(badRequest);
+    }
+
+    return country;
   }
 }
