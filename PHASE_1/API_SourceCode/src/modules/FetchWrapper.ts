@@ -73,7 +73,7 @@ export class FetchWrapper {
         },
       });
 
-      const diseaseResponse = JSON.parse(res.body) as AmadeusResponse;
+      const diseaseResponse: AmadeusResponse = JSON.parse(res.body);
       return diseaseResponse;
     } catch (err: any) {
       this.logger.error(

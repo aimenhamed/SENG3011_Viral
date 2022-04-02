@@ -20,10 +20,13 @@ import { CountryRepository } from "./repositories/Country.repository";
 import { CommentRepository } from "./repositories/Comment.repository";
 import { CommentRouter } from "./api/routes/Comment.router";
 import { CommentService } from "./api/services/Comment.service";
+import { FetchWrapper } from "./modules/FetchWrapper";
 export default class App {
   readonly logger = getLogger();
   private ex = new ExpressWrapper();
   private db = new Database("default");
+
+  private readonly fetchWrapper = new FetchWrapper();
 
   private readonly articleRepository = new ArticleRepository();
   private readonly reportRepository = new ReportRepository();
@@ -42,7 +45,10 @@ export default class App {
     this.userRepository,
     this.articleRepository
   );
-  private readonly adviceService = new AdviceService(this.adviceRepository);
+  private readonly adviceService = new AdviceService(
+    this.adviceRepository,
+    this.fetchWrapper
+  );
   private readonly commentService = new CommentService(
     this.commentRepository,
     this.countryRepository,
