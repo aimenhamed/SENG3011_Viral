@@ -15,15 +15,6 @@ export const UserBookmarkArticleSchema = Joi.object({
     .required(),
 });
 
-export const UserDashboardSchema = Joi.object({
-  userId: Joi.string()
-    .uuid({ version: ["uuidv4"] })
-    .required(),
-  dashboardId: Joi.string()
-    .uuid({ version: ["uuidv4"] })
-    .required(),
-});
-
 export const UserLoginSchema = Joi.object({
   email: Joi.string().required(),
   password: Joi.string().required(),

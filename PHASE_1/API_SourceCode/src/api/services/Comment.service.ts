@@ -10,14 +10,8 @@ import { CommentEntity } from "../../entity/Comment.entity";
 import { CountryEntity } from "../../entity/Country.entity";
 import { UserEntity } from "../../entity/User.entity";
 import { HTTPError } from "../../utils/Errors";
-import {
-  badRequest,
-  internalServerError,
-  notFoundError,
-} from "../../utils/Constants";
-import { convertUserEntityToInterface } from "../../converters/User.converter";
+import { badRequest, internalServerError } from "../../utils/Constants";
 import { convertCommentEntityToInterface } from "../../converters/Comment.converter";
-
 import { getLog } from "../../utils/Helpers";
 
 export class CommentService {

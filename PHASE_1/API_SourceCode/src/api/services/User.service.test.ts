@@ -3,7 +3,6 @@ import {
   baseLog,
   badRequest,
   internalServerError,
-  notFoundError,
   jwt,
   secret,
 } from "../../utils/Constants";
@@ -12,26 +11,6 @@ import { UserRepository } from "../../repositories/User.respository";
 import { UserService } from "./User.service";
 import { getMockArticles, getMockUsers } from "../../utils/testData";
 import { IUserRegisterRequestBody } from "../../interfaces/IApiResponses";
-
-// describe("UserService", () => {
-//   let userRepository: UserRepository;
-//   let articleRepository: ArticleRepository;
-//   beforeEach(() => {
-//     jest.clearAllMocks();
-//     jest.resetAllMocks();
-//     userRepository = new UserRepository();
-//     articleRepository = new ArticleRepository();
-//   });
-//   afterAll(() => {
-//     jest.clearAllMocks();
-//     jest.resetAllMocks();
-//   });
-//   describe("dummy", () => {
-//     it("placeholder until users is fixed", () => {
-//       expect(1 === 1);
-//     });
-//   });
-// });
 
 describe("UserService", () => {
   let userRepository: UserRepository;
@@ -53,7 +32,6 @@ describe("UserService", () => {
     it("should resolve with 200 if the user is successfully registered", () => {
       const service = userService();
       const userRecord = getMockUsers()[2];
-      //const { userId, bookmarkedArticles, ...newUser } = userRecord;
       const newUser: IUserRegisterRequestBody = {
         name: userRecord.name,
         email: userRecord.email,

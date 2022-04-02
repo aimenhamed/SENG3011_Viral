@@ -6,7 +6,6 @@ import validationMiddleware from "../middlewares/validation";
 import {
   UserRegisterSchema,
   UserBookmarkArticleSchema,
-  UserDashboardSchema,
   UserLoginSchema,
 } from "../schemas/User.schema";
 import {

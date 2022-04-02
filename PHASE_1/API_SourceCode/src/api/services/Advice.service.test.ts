@@ -69,13 +69,6 @@ describe("AdviceService", () => {
 
     it("should throw an error if it could not connect to db", () => {
       const service = adviceService();
-      const advices = getMockAdvices();
-      const adviceOnly = advices.map((advice) => {
-        return {
-          country: advice.country,
-          adviceLevel: advice.adviceLevel,
-        };
-      });
       repository.getAllAdviceLevels = jest.fn().mockReturnValue(undefined);
 
       const errorResult = new HTTPError(internalServerError);
