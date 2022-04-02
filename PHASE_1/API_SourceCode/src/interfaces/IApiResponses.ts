@@ -4,6 +4,7 @@ import { Report } from "IReport";
 import { User } from "IUser";
 import { Comment } from "IComment";
 import { IAdviceOnly } from "IAdvice";
+import { Country } from "ICountry";
 
 export interface IHttpError {
   errorCode: number;
@@ -111,5 +112,17 @@ export interface ICommentPostRequestBody {
 
 export interface ICommentPostSuccessResponse {
   comment: Comment;
+  log: Log;
+}
+
+export interface IUserBookmarkCountryRequestBody {
+  userId: string;
+  countryId: string;
+  status: boolean;
+}
+
+export interface IUserBookmarkCountrySuccessResponse {
+  user: User;
+  country: Country;
   log: Log;
 }

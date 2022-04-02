@@ -46,14 +46,12 @@ CREATE TABLE public.advice (
 );
 
 CREATE TABLE public.user_articles (
-    user_id NOT NULL uuid,
-    article_id NOT NULL uuid,
+    user_id uuid NOT NULL ,
+    article_id uuid NOT NULL,
     CONSTRAINT pk_user_id_article_id PRIMARY KEY (user_id,article_id),
     CONSTRAINT fk_user_id FOREIGN KEY (user_id) references public.user(user_id),
     CONSTRAINT fk_article_id FOREIGN KEY (article_id) references public.article(article_id)
 );
-
-
 
 CREATE TABLE public.country (
     country_id uuid NOT NULL DEFAULT gen_random_uuid(),
@@ -61,6 +59,14 @@ CREATE TABLE public.country (
     code text NOT NULL,
     coords int[],
     CONSTRAINT pk_country_id PRIMARY KEY (country_id)
+)
+
+CREATE TABLE public.user_countries (
+    user_id uuid NOT NULL,
+    country_id uuid NOT NULL,
+    CONSTRAINT pk_user_id_country_id PRIMARY KEY (user_id,country_id),
+    CONSTRAINT fk_user_id FOREIGN KEY (user_id) references public.user(user_id),
+    CONSTRAINT fk_country_id FOREIGN KEY (country_id) references public.country(country_id)
 )
 
 CREATE TABLE public.comment (

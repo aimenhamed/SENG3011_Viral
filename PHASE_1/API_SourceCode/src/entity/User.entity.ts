@@ -6,6 +6,7 @@ import {
   JoinTable,
 } from "typeorm";
 import { ArticleEntity } from "./Article.entity";
+import { CountryEntity } from "./Country.entity";
 
 @Entity({ name: "user", schema: "public" })
 export class UserEntity {
@@ -37,11 +38,17 @@ export class UserEntity {
   })
   bookmarkedArticles: ArticleEntity[];
 
-  @Column("text", {
-    array: true,
-    name: "bookmarked_countries",
-    nullable: false,
-    default: () => "array[]::text[]",
+  @ManyToMany(()=>CountryEntity, {eager: true,})
+  @JoinTable({
+    name: "user_countries",
+    joinColumn: {
+      name: "user_id",
+      referencedColumnName: "userId",
+    },
+    inverseJoinColumn: {
+      name: "country_id",
+      referencedColumnName: "countryId",
+    },
   })
-  bookmarkedCountries: string[];
+  bookmarkedCountries: CountryEntity[];
 }
