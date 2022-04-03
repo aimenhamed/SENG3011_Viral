@@ -95,30 +95,6 @@ export class UserRouter implements IRouter {
           }
         }
       )
-      .put(
-        "/users/remove-bookmark",
-        validationMiddleware(UserBookmarkArticleSchema, "body"),
-        async (req: Request, res: Response, next: NextFunction) => {
-          this.logger.info(`Received /users/remove-bookmark request`);
-
-          const bookmarkDetails = req.body as IUserBookmarkArticleRequestBody;
-          if (!bookmarkDetails) throw new HTTPError(badRequest);
-
-          try {
-            const result = await this.userService.removeBookmark(
-              bookmarkDetails
-            );
-            return res.status(200).json(result);
-          } catch (err: any) {
-            this.logger.warn(
-              `An error occured when trying to PUT remove bookmark for user ${formatError(
-                err
-              )}`
-            );
-            return next(err);
-          }
-        }
-      )
       .post(
         "/users/login",
         validationMiddleware(UserLoginSchema, "body"),

@@ -82,60 +82,24 @@ export class UserService {
   ): Promise<IUserBookmarkArticleSuccessResponse | undefined> {
     let user = await this.getUser(bookmarkDetails.userId);
     const bookmarkedArticle = await this.getArticle(bookmarkDetails.articleId);
-
-    if (
-      user.bookmarkedArticles &&
-      user.bookmarkedArticles.includes(bookmarkedArticle)
-    ) {
-      this.logger.error(
-        `User with userId ${user.userId} has already bookmarked article with articleId ${bookmarkedArticle.articleId}`
-      );
-      throw new HTTPError(badRequest);
-    }
-    user.bookmarkedArticles = [...user.bookmarkedArticles, bookmarkedArticle];
-
-    user = await this.userRepository.saveUser(user);
-
-    return {
-      user: convertUserEntityToInterface(user),
-      article: convertArticleEntityToInterface(bookmarkedArticle),
-      log: getLog(new Date()),
-    };
-  }
-
-  async removeBookmark(
-    bookmarkDetails: IUserBookmarkArticleRequestBody
-  ): Promise<IUserRemoveBookmarkSuccessResponse | undefined> {
-    let user = await this.getUser(bookmarkDetails.userId);
-    const bookmarkedArticle = await this.getArticle(bookmarkDetails.articleId);
-    if (
-      !user.bookmarkedArticles ||
-      user.bookmarkedArticles.length === 0 ||
-      !user.bookmarkedArticles.some(
-        (article) => article.articleId === bookmarkedArticle.articleId
-      )
-    ) {
-      this.logger.error(
-        `User with userId ${user.userId} has not bookmarked article with articleId ${bookmarkDetails.articleId}`
-      );
-      throw new HTTPError(badRequest);
-    }
+    const status = bookmarkDetails.status;
 
     user.bookmarkedArticles = user.bookmarkedArticles.filter(
-      (article) => article.articleId !== bookmarkedArticle.articleId
+      (a) => a.articleId !== bookmarkedArticle.articleId
     );
-
+    if (status) {
+      user.bookmarkedArticles = [...user.bookmarkedArticles, bookmarkedArticle];
+    }
     user = await this.userRepository.saveUser(user);
-
     if (user === undefined) {
-      this.logger.error(
-        `Failed to remove bookmarked article ${bookmarkDetails.articleId} from user ${bookmarkDetails.userId}`
+      this.logger.info(
+        `Failed to change status for article ${bookmarkDetails.articleId} in user ${bookmarkDetails.userId} to ${bookmarkDetails.status}`
       );
       throw new HTTPError(internalServerError);
     }
-
     return {
       user: convertUserEntityToInterface(user),
+      article: convertArticleEntityToInterface(bookmarkedArticle),
       log: getLog(new Date()),
     };
   }
