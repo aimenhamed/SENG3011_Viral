@@ -1,4 +1,4 @@
-import { ApiError } from "src/interfaces/ReponseInterface";
+import { ApiError } from "src/interfaces/ResponseInterface";
 import { Subscription } from "src/interfaces/SubscriptionInterface";
 import AppConfig from "../config";
 import { get } from "../createRequest";

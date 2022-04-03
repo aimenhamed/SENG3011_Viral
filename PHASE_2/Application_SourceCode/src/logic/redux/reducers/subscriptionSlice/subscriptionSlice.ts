@@ -5,7 +5,9 @@ import { getSubscription } from "src/logic/functions/getSubscription.function";
 import { RootState } from "../../store";
 
 export const getSubscriptionDispatch = createAsyncThunk<
-Subscription, void, {state: RootState}
+  Subscription,
+  void,
+  { state: RootState }
 >("subscription/getSubscriptionDispatch", async (_, { rejectWithValue }) => {
   try {
     const res = (await getSubscription()) as Subscription;
@@ -28,13 +30,13 @@ export enum LoadingStatusTypes {
   GET_SUBSCRIPTION_LOADING = "GET_SUBSCRIPTION_LOADING",
   GET_SUBSCRIPTION_FAILED = "GET_SUBSCRIPTION_FAILED",
   GET_SUBSCRIPTION_COMPLETED = "GET_SUBSCRIPTION_COMPLETED",
-};
+}
 
 export interface SubscriptionState {
   app: Subscription;
   loadingStatus: LoadingStatusTypes;
   error: any;
-};
+}
 
 export const initialState: SubscriptionState = {
   app: {} as Subscription,
@@ -67,7 +69,7 @@ export const subscriptionSlice = createSlice({
   },
 });
 
-export const {updateSubscription} = subscriptionSlice.actions;
+export const { updateSubscription } = subscriptionSlice.actions;
 
 export const selectAPP = (state: RootState) => state.app;
 export const selectAPPLoadingStatus = (state: RootState) =>

@@ -1,11 +1,15 @@
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "src/logic/redux/hooks";
-import { getSubscriptionDispatch, LoadingStatusTypes, selectAPP } from "src/logic/redux/reducers/subscriptionSlice/subscriptionSlice";
+import {
+  getSubscriptionDispatch,
+  LoadingStatusTypes,
+  selectAPP,
+} from "src/logic/redux/reducers/subscriptionSlice/subscriptionSlice";
 import LoadingPage from "../../components/LoadingPage/LoadingPage";
 
 const Home = () => {
   const dispatch = useDispatch();
-  const {loadingStatus, app, error} = useAppSelector(selectAPP);
+  const { loadingStatus, app, error } = useAppSelector(selectAPP);
   if (error) {
     return <div>Error</div>;
   }
@@ -19,9 +23,7 @@ const Home = () => {
       return <div>Not onboarded</div>;
     }
 
-    return (
-      <div>Hi</div>
-    );
+    return <div>Hi</div>;
   }
 
   return <LoadingPage />;

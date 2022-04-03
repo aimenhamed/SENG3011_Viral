@@ -1,4 +1,4 @@
-import { Country } from "src/interfaces/CountryInterface";
+import { Advice } from "src/interfaces/ViralInterface";
 import {
   Container,
   Content,
@@ -6,19 +6,20 @@ import {
   SubSection,
   TileLockup,
   Tile,
+  SubText,
 } from "./style";
 import Text from "../common/text/Text";
 import Map from "../Map/Map";
 import { FlexLayout } from "../common/layouts/screenLayout";
 
 type CountryReportProps = {
-  country: Country;
+  advice: Advice;
 };
 
 const vaxReq: string[] = ["Johnson & Johnson", "Astrazenica"];
 const travAdvice: string[] = ["Exercise a high degree of caution", "Very bad"];
 
-const CountryReport = ({ country }: CountryReportProps) => {
+const CountryReport = ({ advice }: CountryReportProps) => {
   const renderText = (text: string[]) =>
     text.map((req) => <Text key={req}>{req}</Text>);
 
@@ -26,14 +27,14 @@ const CountryReport = ({ country }: CountryReportProps) => {
     <FlexLayout>
       <Container>
         <Text bold fontSize="2rem" align="center">
-          {country.name}
+          {advice.country.name}
         </Text>
         <Content>
           <Section id="left" style={{ marginRight: "2.5rem" }}>
             <SubSection>
               <TileLockup style={{ width: "50%" }}>
                 <Text bold fontSize="1.125rem" align="center">
-                  {country.name} Map
+                  {advice.country.name} Map - Continent {advice.continent}
                 </Text>
                 <Map />
               </TileLockup>
@@ -60,11 +61,15 @@ const CountryReport = ({ country }: CountryReportProps) => {
             </SubSection>
           </Section>
           <Section id="right">
-            <TileLockup>
+            <TileLockup style={{ width: "50%" }}>
               <Text bold fontSize="1.125rem" align="center">
                 Travel Advice
+                <SubText>
+                  {` - Last updated: ${advice.lastUpdate.toDateString()}`}
+                </SubText>
               </Text>
-              <Tile>{renderText(travAdvice)}</Tile>
+              <Tile style={{ marginBottom: "1rem" }}>{advice.adviceLevel}</Tile>
+              <Tile style={{ textAlign: "left" }}>{advice.latestAdvice}</Tile>
             </TileLockup>
             <TileLockup>
               <Text bold fontSize="1.125rem" align="center">

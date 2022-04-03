@@ -41,3 +41,7 @@ export const Tile = styled.div`
   border-radius: 1.5rem;
   background: #eeee;
 `;
+
+export const SubText = styled.span`
+  font-weight: normal;
+`;
