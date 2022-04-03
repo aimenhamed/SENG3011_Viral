@@ -1,24 +1,24 @@
 import { useState } from "react";
-import Text from "src/components/common/text/Text";
-import { LandingPageBackdrop } from "src/components/common/image/imageIndex";
 import LoginDialog from "./LoginDialog/LoginDialog";
 import RegisterDialog from "./RegisterDialog/RegisterDialog";
+import { FullScreen, Title, WelcomeMessage, MenuButtons, Button } from './style';
 
 const LandingPage = () => {
   const [isLoginOpen, setIsLoginOpen] = useState<boolean>(false);
   const [isRegisterOpen, setIsRegisterOpen] = useState<boolean>(false);
   return (
-    <div style={{ backgroundImage: LandingPageBackdrop }}>
-      <Text className="landing-page-title">Welcome to Viral Travel</Text>
-      <p className="landing-page-welcome">Stay safe while travelling abroad</p>
-      <div>
-        <button type="button" onClick={() => setIsLoginOpen(true)}>
+
+    <FullScreen>
+      <Title>Welcome to Viral Travel</Title>
+      <WelcomeMessage>Stay safe while travelling abroad</WelcomeMessage>
+      <MenuButtons>
+        <Button onClick={() => setIsLoginOpen(true)}>
           Login
-        </button>
-        <button type="button" onClick={() => setIsRegisterOpen(true)}>
+        </Button>
+        <Button onClick={() => setIsRegisterOpen(true)}>
           Register
-        </button>
-      </div>
+        </Button>
+      </MenuButtons>
       <LoginDialog
         isOpen={isLoginOpen}
         toggleOpen={() => setIsLoginOpen(false)}
@@ -27,7 +27,7 @@ const LandingPage = () => {
         isOpen={isRegisterOpen}
         toggleOpen={() => setIsRegisterOpen(false)}
       />
-    </div>
+    </FullScreen>
   );
 };
 

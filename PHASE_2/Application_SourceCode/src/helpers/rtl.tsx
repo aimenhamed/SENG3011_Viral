@@ -18,7 +18,7 @@ import { render as rtlRender } from "@testing-library/react";
 import {
   initialState as userState,
   userSlice,
-} from "src/logic/redux/reducers/userSlice.ts/userSlice";
+} from "src/logic/redux/reducers/userSlice/userSlice";
 
 const preloadedInitialState = {
   articles: articleState,

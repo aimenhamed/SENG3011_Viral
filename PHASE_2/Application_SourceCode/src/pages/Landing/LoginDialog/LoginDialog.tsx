@@ -1,15 +1,16 @@
 import { useEffect, useState } from "react";
 import Dialog from "src/components/Dialog/Dialog";
-import Text from "src/components/common/text/Text";
 import { useDispatch } from "react-redux";
 import {
   postLoginDispatch,
   selectUserLoadingStatus,
   UserLoadingStatusTypes,
-} from "src/logic/redux/reducers/userSlice.ts/userSlice";
+} from "src/logic/redux/reducers/userSlice/userSlice";
 import { IUserLoginRequestBody } from "src/interfaces/ResponseInterface";
 import { useAppSelector } from "src/logic/redux/hooks";
 import { useHistory } from "react-router-dom";
+import { sha256 } from 'js-sha256';
+import { ModalTitle, LoginModal, GenericLabel, GenericInput, ModalButton, FakeButton, BadText } from '../style';
 
 type LoginDialogProps = {
   isOpen: boolean;
@@ -32,6 +33,7 @@ const LoginDialog = ({ isOpen, toggleOpen }: LoginDialogProps) => {
   }, [loadingStatus]);
 
   const login = () => {
+    console.log(`password is ${password}`);
     const req: IUserLoginRequestBody = {
       email,
       password,
@@ -41,18 +43,28 @@ const LoginDialog = ({ isOpen, toggleOpen }: LoginDialogProps) => {
   return (
     <>
       {isOpen ? (
-        <Dialog close={toggleOpen} title="Login">
-          <Text>Enter Login Details</Text>
-          <input type="text" onChange={(e) => setEmail(e.target.value)} />
-          <input
-            type="password"
-            onChange={(e) => setPassword(e.target.value)}
-          />
-          <button type="button" onClick={login}>
-            Login!
-          </button>
-          <button type="button">Create an Account</button>
-          <button type="button">Forgot your password</button>
+        <Dialog close={toggleOpen} modalSize="30">
+          <LoginModal>
+            <ModalTitle>Login</ModalTitle>
+            {loadingStatus===UserLoadingStatusTypes.POST_LOGIN_FAILED && (
+              <BadText>The email or password was incorrect.</BadText>
+            )}
+            <GenericLabel>Email</GenericLabel>
+            <GenericInput placeholder="Email" type="text" onBlur={(e) => setEmail(e.target.value)} />
+            <GenericLabel>Password</GenericLabel>
+            <GenericInput
+              placeholder="Password"
+              type="password"
+              onBlur={(e) => setPassword(sha256(e.target.value))}
+            />
+            <ModalButton type="button" onClick={login}>
+              Login!
+            </ModalButton>
+            <FakeButton type="button">Create an Account</FakeButton>
+            <FakeButton type="button">Forgot your password</FakeButton>
+          </LoginModal>
+          <ModalTitle />
+
         </Dialog>
       ) : null}
       ;
