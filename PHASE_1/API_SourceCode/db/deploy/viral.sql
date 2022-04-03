@@ -29,7 +29,6 @@ CREATE TABLE public.user (
     name text NOT NULL,
     email text NOT NULL,
     password text NOT NULL,
-    bookmarked_countries text[] NOT NULL,
     CONSTRAINT pk_user_id PRIMARY KEY (user_id)
 );
 
