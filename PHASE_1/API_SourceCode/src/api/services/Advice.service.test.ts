@@ -5,24 +5,27 @@ import {
   internalServerError,
 } from "../../utils/Constants";
 import { AdviceRepository } from "../../repositories/Advice.repository";
+import { CommentRepository } from "../../repositories/Comment.repository";
 import { AdviceService } from "./Advice.service";
 import { FetchWrapper } from "../../modules/FetchWrapper";
 import { getMockAdvice, getMockAdvices } from "../../utils/testData";
 
 describe("AdviceService", () => {
   let repository: AdviceRepository;
+  let commentRepository: CommentRepository;
   let fetchWrapper: FetchWrapper;
   beforeEach(() => {
     jest.clearAllMocks();
     jest.resetAllMocks();
     repository = new AdviceRepository();
+    commentRepository = new CommentRepository();
     fetchWrapper = new FetchWrapper();
   });
   afterAll(() => {
     jest.clearAllMocks();
     jest.resetAllMocks();
   });
-  const adviceService = () => new AdviceService(repository, fetchWrapper);
+  const adviceService = () => new AdviceService(repository, commentRepository, fetchWrapper);
 
   describe("getAdvice", () => {
     it("should resolve and return expected advice", () => {
