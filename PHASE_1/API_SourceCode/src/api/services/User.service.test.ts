@@ -286,4 +286,52 @@ describe("UserService", () => {
       ).rejects.toThrow(errorResult);
     });
   });
+
+  describe("updateUser", () => {
+    it("should resolve with 200 if user is successfully updated", () => {
+      const service = userService();
+      const user = getMockUsers()[2];
+      const newName = "newName";
+      const newPassword = "newPassword";
+      const updatedUser = {
+        userId: user.userId,
+        name: newName,
+        email: user.email,
+        bookmarkedArticles: user.bookmarkedArticles,
+        bookmarkedCountries: user.bookmarkedCountries,
+      };
+
+      userRepository.getUser = jest.fn().mockReturnValue(user);
+      userRepository.saveUser = jest.fn().mockReturnValue(updatedUser);
+
+      expect(
+        service.updateUser(user.userId, {
+          name: newName,
+          password: newPassword,
+        })
+      ).resolves.toEqual({
+        user: updatedUser,
+        log: {
+          ...baseLog,
+          accessTime: expect.any(String),
+        },
+      });
+    });
+
+    it("should throw 400 error if user does not exist", () => {
+      const service = userService();
+      const newName = "newName";
+      const newPassword = "newPassword";
+      const userId = "nonexistent";
+      userRepository.getUser = jest.fn().mockReturnValue(undefined);
+
+      const errorResult = new HTTPError(badRequest);
+      expect(
+        service.updateUser(userId, {
+          name: newName,
+          password: newPassword,
+        })
+      ).rejects.toThrow(errorResult);
+    });
+  });
 });
