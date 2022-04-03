@@ -97,7 +97,7 @@ export interface IUserSpecificSuccessResponse {
 
 export interface IAdviceSpecificSuccessResponse {
   advice: Advice;
-  data: AmadeusData;
+  data: AmadeusResponse;
   comments: Comment[];
   log: Log;
 }
