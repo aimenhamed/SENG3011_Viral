@@ -1,15 +1,16 @@
 import { useEffect, useState } from "react";
 import Dialog from "src/components/Dialog/Dialog";
-import Text from "src/components/common/text/Text";
 import { useDispatch } from "react-redux";
 import {
   postRegisterDispatch,
   selectUserLoadingStatus,
   UserLoadingStatusTypes,
-} from "src/logic/redux/reducers/userSlice.ts/userSlice";
+} from "src/logic/redux/reducers/userSlice/userSlice";
 import { IUserRegisterRequestBody } from "src/interfaces/ResponseInterface";
 import { useAppSelector } from "src/logic/redux/hooks";
 import { useHistory } from "react-router-dom";
+import { sha256 } from 'js-sha256';
+import { ModalTitle, LoginModal, GenericLabel, GenericInput, ModalButton, BadText } from '../style';
 
 type RegisterDialogProps = {
   isOpen: boolean;
@@ -51,34 +52,44 @@ const RegisterDialog = ({ isOpen, toggleOpen }: RegisterDialogProps) => {
   return (
     <>
       {isOpen ? (
-        <Dialog close={toggleOpen} title="Login">
-          <Text>Enter Register Details</Text>
-          {isError && (
-            <Text>Please ensure both password fields are the same.</Text>
-          )}
-          <input
-            placeholder="Username"
-            type="text"
-            onChange={(e) => setName(e.target.value)}
-          />
-          <input
-            placeholder="Email"
-            type="text"
-            onChange={(e) => setEmail(e.target.value)}
-          />
-          <input
-            type="password"
-            placeholder="Password"
-            onChange={(e) => setPassword(e.target.value)}
-          />
-          <input
-            type="password"
-            placeholder="Confirm password"
-            onChange={(e) => setConfirmPassword(e.target.value)}
-          />
-          <button type="button" onClick={register}>
-            Sign up
-          </button>
+        <Dialog close={toggleOpen} modalSize="30">
+          <LoginModal>
+            <ModalTitle>Enter Register Details</ModalTitle>
+            {isError && (
+              <BadText>Please ensure both password fields are the same.</BadText>
+            )}
+            {loadingStatus===UserLoadingStatusTypes.POST_REGISTER_FAILED && (
+              <BadText>An account using this email already exists.</BadText>
+            )}
+
+            <GenericLabel>Name</GenericLabel>
+            <GenericInput
+              placeholder="Name"
+              type="text"
+              onChange={(e) => setName(e.target.value)}
+            />
+            <GenericLabel>Email</GenericLabel>
+            <GenericInput
+              placeholder="Email"
+              type="text"
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            <GenericLabel>Password</GenericLabel>
+            <GenericInput
+              type="password"
+              placeholder="Password"
+              onChange={(e) => setPassword(sha256(e.target.value))}
+            />
+            <GenericLabel>Confirm Password</GenericLabel>
+            <GenericInput
+              type="password"
+              placeholder="Confirm password"
+              onChange={(e) => setConfirmPassword(sha256(e.target.value))}
+            />
+            <ModalButton type="button" onClick={register}>
+              Sign up
+            </ModalButton>
+          </LoginModal>
         </Dialog>
       ) : null}
       ;

@@ -29,6 +29,7 @@
     "@types/react-dom": "^16.9.10",
     "@types/react-redux": "^7.1.18",
     "@types/react-simple-maps": "^1.0.8",
+    "js-sha256": "^0.9.0",
     "ky": "^0.28.7",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",

@@ -26,6 +26,7 @@ export const ModalContent = styled.div`
   align-items: start;
   border-radius: 0.5rem;
   position: fixed;
+  min-width: 400px;
 `;
 
 export const CloseLockup = styled.div`
