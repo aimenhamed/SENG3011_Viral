@@ -2,7 +2,7 @@ import { Advice } from "IAdvice";
 import { Article } from "IArticle";
 import { Report } from "IReport";
 import { User } from "IUser";
-import { Comment } from "IComment";
+import { Comment, CommentNoCountry } from "IComment";
 import { IAdviceOnly } from "IAdvice";
 import { AmadeusData } from "IFetchResponses";
 import { Country } from "ICountry";
@@ -98,6 +98,7 @@ export interface IUserSpecificSuccessResponse {
 export interface IAdviceSpecificSuccessResponse {
   advice: Advice;
   data: AmadeusData;
+  comments: CommentNoCountry[];
   log: Log;
 }
 

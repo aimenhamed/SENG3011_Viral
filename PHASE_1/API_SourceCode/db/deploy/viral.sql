@@ -71,10 +71,10 @@ CREATE TABLE public.user_countries (
 
 CREATE TABLE public.comment (
     comment_id uuid NOT NULL DEFAULT gen_random_uuid(),
-    created_by uuid,
-    country uuid,
-    message text,
-    created_date date,
+    created_by uuid NOT NULL,
+    country uuid NOT NULL,
+    message text NOT NULL,
+    created_date timestamp NOT NULL,
     CONSTRAINT pk_comment_id PRIMARY KEY (comment_id),
     CONSTRAINT fk_user_id FOREIGN KEY (created_by) references public.user(user_id),
     CONSTRAINT fk_country FOREIGN KEY (country) references public.country(country_id)

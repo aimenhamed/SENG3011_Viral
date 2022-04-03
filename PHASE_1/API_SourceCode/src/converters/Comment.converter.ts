@@ -1,6 +1,6 @@
-import { Comment } from "IComment";
+import { Comment, CommentNoCountry } from "IComment";
 import { CommentEntity } from "../entity/Comment.entity";
-import { convertUserEntityToInterface } from "./User.converter";
+import { convertUserEntityToSimpleInterface } from "./User.converter";
 import { convertCountryEntityToInterface } from "./Country.converter";
 
 export const convertCommentEntityToInterface = (
@@ -8,8 +8,19 @@ export const convertCommentEntityToInterface = (
 ): Comment => {
   return {
     commentId: entity.commentId,
-    createdBy: convertUserEntityToInterface(entity.createdBy),
+    createdBy: convertUserEntityToSimpleInterface(entity.createdBy),
     country: convertCountryEntityToInterface(entity.country),
+    message: entity.message,
+    date: entity.date,
+  };
+};
+
+export const convertCommentEntityToSimpleInterface = (
+  entity: CommentEntity
+): CommentNoCountry => {
+  return {
+    commentId: entity.commentId,
+    createdBy: convertUserEntityToSimpleInterface(entity.createdBy),
     message: entity.message,
     date: entity.date,
   };
