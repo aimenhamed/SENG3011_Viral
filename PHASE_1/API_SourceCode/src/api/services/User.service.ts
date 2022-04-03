@@ -10,6 +10,8 @@ import {
   IUserRemoveBookmarkSuccessResponse,
   IUserBookmarkCountryRequestBody,
   IUserBookmarkCountrySuccessResponse,
+  IUserUpdateRequestBody,
+  IUserUpdateSuccessResponse,
 } from "IApiResponses";
 import { UserRepository } from "../../repositories/User.respository";
 import { ArticleRepository } from "../../repositories/Article.repository";
@@ -200,5 +202,26 @@ export class UserService {
     }
 
     return country;
+  }
+
+  async updateUser(
+    userId: string,
+    userDetails: IUserUpdateRequestBody
+  ): Promise<IUserUpdateSuccessResponse | undefined> {
+    let user = await this.userRepository.getUser(userId);
+    if (user === undefined) {
+      this.logger.error(`Failed to find user with userId ${userId}`);
+      throw new HTTPError(badRequest);
+    }
+
+    user.name = userDetails.name;
+    user.password = userDetails.password;
+
+    user = await this.userRepository.saveUser(user);
+
+    return {
+      user: convertUserEntityToInterface(user),
+      log: getLog(new Date()),
+    };
   }
 }
