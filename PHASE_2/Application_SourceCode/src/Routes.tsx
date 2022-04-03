@@ -6,7 +6,25 @@ const Routes = () => (
     <Route path="/home">
       <Home />
     </Route>
-    <Route path="/*">
+    <Route path='/favourites'>
+      
+    </Route>
+    <Route path='destinations'>
+
+    </Route>
+    <Route path='knownOutbreaks'>
+
+    </Route>
+    <Route path='profile'>
+
+    </Route>
+    <Route path='flightInfo'>
+
+    </Route>
+    <Route path='settings'>
+
+    </Route>
+    <Route path='/*'>
       <Home />
     </Route>
   </Switch>
