@@ -130,3 +130,13 @@ export interface IUserBookmarkCountrySuccessResponse {
   country: Country;
   log: Log;
 }
+
+export interface IUserUpdateRequestBody {
+  name: string;
+  password: string;
+}
+
+export interface IUserUpdateSuccessResponse {
+  user: User;
+  log: Log;
+}

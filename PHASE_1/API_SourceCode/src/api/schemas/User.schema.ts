@@ -30,3 +30,8 @@ export const UserBookmarkCountrySchema = Joi.object({
     .required(),
   status: Joi.boolean().required(),
 });
+
+export const UserUpdateSchema = Joi.object({
+  name: Joi.string().required(),
+  password: Joi.string().required(),
+});
