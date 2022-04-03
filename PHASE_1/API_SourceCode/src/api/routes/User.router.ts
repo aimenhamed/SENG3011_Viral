@@ -5,13 +5,15 @@ import { UserService } from "../services/User.service";
 import validationMiddleware from "../middlewares/validation";
 import {
   UserRegisterSchema,
-  UserBookmarkArticleSchema,
   UserLoginSchema,
+  UserBookmarkArticleSchema,
+  UserBookmarkCountrySchema,
 } from "../schemas/User.schema";
 import {
   IUserRegisterRequestBody,
-  IUserBookmarkArticleRequestBody,
   IUserLoginRequestBody,
+  IUserBookmarkArticleRequestBody,
+  IUserBookmarkCountryRequestBody,
 } from "IApiResponses";
 import { HTTPError } from "../../utils/Errors";
 import { badRequest } from "../../utils/Constants";
@@ -133,6 +135,30 @@ export class UserRouter implements IRouter {
           } catch (err: any) {
             this.logger.warn(
               `An error occurred when trying to POST login user ${formatError(
+                err
+              )}`
+            );
+            return next(err);
+          }
+        }
+      )
+      .put(
+        "/users/bookmark-country",
+        validationMiddleware(UserBookmarkCountrySchema, "body"),
+        async (req: Request, res: Response, next: NextFunction) => {
+          this.logger.info(`Received /users/remove-bookmark request`);
+
+          const bookmarkDetails = req.body as IUserBookmarkCountryRequestBody;
+          if (!bookmarkDetails) throw new HTTPError(badRequest);
+
+          try {
+            const result = await this.userService.bookmarkCountry(
+              bookmarkDetails
+            );
+            return res.status(200).json(result);
+          } catch (err: any) {
+            this.logger.warn(
+              `An error occurred when trying to PUT bookmark country for user ${formatError(
                 err
               )}`
             );
