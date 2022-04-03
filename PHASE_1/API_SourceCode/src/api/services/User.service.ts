@@ -4,29 +4,32 @@ import {
   IUserRegisterSuccessResponse,
   IUserBookmarkArticleRequestBody,
   IUserBookmarkArticleSuccessResponse,
-  IUserDashboardRequestBody,
-  IUserDashboardSuccessResponse,
   IUserLoginRequestBody,
   IUserLoginSuccessResponse,
   IUserSpecificSuccessResponse,
   IUserRemoveBookmarkSuccessResponse,
+  IUserBookmarkCountryRequestBody,
+  IUserBookmarkCountrySuccessResponse,
+  IUserUpdateRequestBody,
+  IUserUpdateSuccessResponse,
 } from "IApiResponses";
 import { UserRepository } from "../../repositories/User.respository";
 import { ArticleRepository } from "../../repositories/Article.repository";
-import { DashboardRepository } from "../../repositories/Dashboard.repository";
-import { WidgetRepository } from "../../repositories/Widget.repository";
+import { CountryRepository } from "../../repositories/Country.repository";
 import { UserEntity } from "../../entity/User.entity";
-import { WidgetEntity } from "../../entity/Widget.entity";
 import { ArticleEntity } from "../../entity/Article.entity";
+import { CountryEntity } from "../../entity/Country.entity";
 import { HTTPError } from "../../utils/Errors";
 import {
   internalServerError,
   badRequest,
   notFoundError,
+  secret,
+  jwt,
 } from "../../utils/Constants";
 import { convertArticleEntityToInterface } from "../../converters/Article.converter";
 import { convertUserEntityToInterface } from "../../converters/User.converter";
-import { convertDashboardEntityToInterface } from "../../converters/Dashboard.converter";
+import { convertCountryEntityToInterface } from "../../converters/Country.converter";
 import { getLog } from "../../utils/Helpers";
 
 export class UserService {
@@ -34,8 +37,7 @@ export class UserService {
   constructor(
     readonly userRepository: UserRepository,
     readonly articleRepository: ArticleRepository,
-    readonly dashboardRepository: DashboardRepository,
-    readonly widgetRepository: WidgetRepository
+    readonly countryRepository: CountryRepository
   ) {}
 
   async registerUser(
@@ -57,7 +59,7 @@ export class UserService {
     newUser.email = userDetails.email;
     newUser.password = userDetails.password;
     newUser.bookmarkedArticles = [];
-    newUser.dashboards = [];
+    newUser.bookmarkedCountries = [];
 
     const userEntity: UserEntity = await this.userRepository.saveUser(newUser);
     if (userEntity === undefined) {
@@ -71,6 +73,7 @@ export class UserService {
       `Successfully registered new user, with userId: ${newUser.userId}`
     );
     return {
+      token: jwt.sign(userEntity.userId, secret),
       user: convertUserEntityToInterface(userEntity),
       log: getLog(new Date()),
     };
@@ -81,23 +84,21 @@ export class UserService {
   ): Promise<IUserBookmarkArticleSuccessResponse | undefined> {
     let user = await this.getUser(bookmarkDetails.userId);
     const bookmarkedArticle = await this.getArticle(bookmarkDetails.articleId);
+    const status = bookmarkDetails.status;
 
-    if (
-      user.bookmarkedArticles &&
-      user.bookmarkedArticles.includes(bookmarkedArticle.articleId)
-    ) {
-      this.logger.error(
-        `User with userId ${user.userId} has already bookmarked article with articleId ${bookmarkedArticle.articleId}`
-      );
-      throw new HTTPError(badRequest);
+    user.bookmarkedArticles = user.bookmarkedArticles.filter(
+      (a) => a.articleId !== bookmarkedArticle.articleId
+    );
+    if (status) {
+      user.bookmarkedArticles = [...user.bookmarkedArticles, bookmarkedArticle];
     }
-    user.bookmarkedArticles = [
-      ...user.bookmarkedArticles,
-      bookmarkedArticle.articleId,
-    ];
-
     user = await this.userRepository.saveUser(user);
-
+    if (user === undefined) {
+      this.logger.info(
+        `Failed to change status for article ${bookmarkDetails.articleId} in user ${bookmarkDetails.userId} to ${bookmarkDetails.status}`
+      );
+      throw new HTTPError(internalServerError);
+    }
     return {
       user: convertUserEntityToInterface(user),
       article: convertArticleEntityToInterface(bookmarkedArticle),
@@ -105,81 +106,27 @@ export class UserService {
     };
   }
 
-  async removeBookmark(
-    bookmarkDetails: IUserBookmarkArticleRequestBody
-  ): Promise<IUserRemoveBookmarkSuccessResponse | undefined> {
+  async bookmarkCountry(
+    bookmarkDetails: IUserBookmarkCountryRequestBody
+  ): Promise<IUserBookmarkCountrySuccessResponse | undefined> {
     let user = await this.getUser(bookmarkDetails.userId);
+    const country = await this.getCountry(bookmarkDetails.countryId);
+    const status = bookmarkDetails.status;
 
-    if (
-      !user.bookmarkedArticles ||
-      user.bookmarkedArticles.length === 0 ||
-      !user.bookmarkedArticles.includes(bookmarkDetails.articleId)
-    ) {
-      this.logger.error(
-        `User with userId ${user.userId} has not bookmarked article with articleId ${bookmarkDetails.articleId}`
-      );
-      throw new HTTPError(badRequest);
-    }
-
-    user.bookmarkedArticles = user.bookmarkedArticles.filter(
-      (e) => e !== bookmarkDetails.articleId
+    user.bookmarkedCountries = user.bookmarkedCountries.filter(
+      (c) => c.countryId !== country.countryId
     );
+    if (status) {
+      user.bookmarkedCountries = [...user.bookmarkedCountries, country];
+    }
 
     user = await this.userRepository.saveUser(user);
-
-    if (user === undefined) {
-      this.logger.error(
-        `Failed to remove bookmarked article ${bookmarkDetails.articleId} from user ${bookmarkDetails.userId}`
-      );
-      throw new HTTPError(internalServerError);
-    }
-
-    return {
-      user: convertUserEntityToInterface(user),
-      log: getLog(new Date()),
-    };
-  }
-
-  async addDashboardToUser(
-    userDashboard: IUserDashboardRequestBody
-  ): Promise<IUserDashboardSuccessResponse | undefined> {
-    let user = await this.userRepository.getUser(userDashboard.userId);
-    if (user === undefined) {
-      this.logger.error(
-        `Failed to find user with userId ${userDashboard.userId}`
-      );
-      throw new HTTPError(badRequest);
-    }
-
-    const dashboard = await this.dashboardRepository.getDashboard(
-      userDashboard.dashboardId
-    );
-
-    if (dashboard === undefined) {
-      this.logger.error(
-        `Failed to find article with articleId ${userDashboard.dashboardId}`
-      );
-      throw new HTTPError(badRequest);
-    }
-
-    if (
-      user.dashboards &&
-      user.dashboards.includes(userDashboard.dashboardId)
-    ) {
-      this.logger.error(
-        `User with userId ${user.userId} has already bookmarked article with articleId ${userDashboard.dashboardId}`
-      );
-      throw new HTTPError(badRequest);
-    }
-    user.dashboards = [...user.dashboards, userDashboard.dashboardId];
-
-    user = await this.userRepository.saveUser(user);
-    const widgets: WidgetEntity[] = await this.widgetRepository.getWidgetById(
-      dashboard.widgets
+    this.logger.info(
+      `Successfully changed bookmarked status for country ${country.code} for user ${user.userId}`
     );
     return {
       user: convertUserEntityToInterface(user),
-      dashboard: convertDashboardEntityToInterface(dashboard, widgets),
+      country: convertCountryEntityToInterface(country),
       log: getLog(new Date()),
     };
   }
@@ -219,6 +166,7 @@ export class UserService {
 
     this.logger.info(`Successfully logged in user ${user.name}`);
     return {
+      token: jwt.sign(user.userId, secret),
       user: convertUserEntityToInterface(user),
       log: getLog(new Date()),
     };
@@ -243,5 +191,37 @@ export class UserService {
     }
 
     return article;
+  }
+
+  async getCountry(countryId: string): Promise<CountryEntity> {
+    const country = await this.countryRepository.getCountry(countryId);
+
+    if (country === undefined) {
+      this.logger.error(`Failed to find country with countryId ${country}`);
+      throw new HTTPError(badRequest);
+    }
+
+    return country;
+  }
+
+  async updateUser(
+    userId: string,
+    userDetails: IUserUpdateRequestBody
+  ): Promise<IUserUpdateSuccessResponse | undefined> {
+    let user = await this.userRepository.getUser(userId);
+    if (user === undefined) {
+      this.logger.error(`Failed to find user with userId ${userId}`);
+      throw new HTTPError(badRequest);
+    }
+
+    user.name = userDetails.name;
+    user.password = userDetails.password;
+
+    user = await this.userRepository.saveUser(user);
+
+    return {
+      user: convertUserEntityToInterface(user),
+      log: getLog(new Date()),
+    };
   }
 }

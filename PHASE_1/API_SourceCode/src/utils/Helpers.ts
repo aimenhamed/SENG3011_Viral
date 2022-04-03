@@ -11,7 +11,7 @@ export const parseHeaders = (
   const keyTermsString = String(headers.key_terms);
   const keyTerms: string[] = JSON.parse(keyTermsString);
 
-  const location: string = JSON.parse(headers.location as string);
+  const location: string = headers.location as string;
 
   return {
     periodOfInterest,

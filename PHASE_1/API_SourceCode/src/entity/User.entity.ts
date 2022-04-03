@@ -1,4 +1,12 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import {
+  Column,
+  Entity,
+  PrimaryGeneratedColumn,
+  ManyToMany,
+  JoinTable,
+} from "typeorm";
+import { ArticleEntity } from "./Article.entity";
+import { CountryEntity } from "./Country.entity";
 
 @Entity({ name: "user", schema: "public" })
 export class UserEntity {
@@ -14,19 +22,33 @@ export class UserEntity {
   @Column("text", { name: "password", nullable: false })
   password: string;
 
-  @Column("uuid", {
-    array: true,
-    name: "dashboards",
-    nullable: false,
-    default: () => "array[]::uuid[]",
+  @ManyToMany(() => ArticleEntity, {
+    eager: true,
   })
-  dashboards: string[];
+  @JoinTable({
+    name: "user_articles",
+    joinColumn: {
+      name: "user_id",
+      referencedColumnName: "userId",
+    },
+    inverseJoinColumn: {
+      name: "article_id",
+      referencedColumnName: "articleId",
+    },
+  })
+  bookmarkedArticles: ArticleEntity[];
 
-  @Column("uuid", {
-    array: true,
-    name: "bookmarked_articles",
-    nullable: false,
-    default: () => "array[]::uuid[]",
+  @ManyToMany(() => CountryEntity, { eager: true })
+  @JoinTable({
+    name: "user_countries",
+    joinColumn: {
+      name: "user_id",
+      referencedColumnName: "userId",
+    },
+    inverseJoinColumn: {
+      name: "country_id",
+      referencedColumnName: "countryId",
+    },
   })
-  bookmarkedArticles: string[];
+  bookmarkedCountries: CountryEntity[];
 }

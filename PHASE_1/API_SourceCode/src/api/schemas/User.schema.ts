@@ -13,18 +13,25 @@ export const UserBookmarkArticleSchema = Joi.object({
   articleId: Joi.string()
     .uuid({ version: ["uuidv4"] })
     .required(),
-});
-
-export const UserDashboardSchema = Joi.object({
-  userId: Joi.string()
-    .uuid({ version: ["uuidv4"] })
-    .required(),
-  dashboardId: Joi.string()
-    .uuid({ version: ["uuidv4"] })
-    .required(),
+  status: Joi.boolean().required(),
 });
 
 export const UserLoginSchema = Joi.object({
   email: Joi.string().required(),
+  password: Joi.string().required(),
+});
+
+export const UserBookmarkCountrySchema = Joi.object({
+  userId: Joi.string()
+    .uuid({ version: ["uuidv4"] })
+    .required(),
+  countryId: Joi.string()
+    .uuid({ version: ["uuidv4"] })
+    .required(),
+  status: Joi.boolean().required(),
+});
+
+export const UserUpdateSchema = Joi.object({
+  name: Joi.string().required(),
   password: Joi.string().required(),
 });

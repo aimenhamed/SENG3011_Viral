@@ -13,21 +13,29 @@ import { ReportService } from "./api/services/Report.service";
 import { UserRepository } from "./repositories/User.respository";
 import { UserService } from "./api/services/User.service";
 import { UserRouter } from "./api/routes/User.router";
-import { DashboardRepository } from "./repositories/Dashboard.repository";
-import { DashboardService } from "./api/services/Dashboard.service";
-import { WidgetRepository } from "./repositories/Widget.repository";
-import { DashboardRouter } from "./api/routes/Dashboard.router";
-
+import { AdviceRepository } from "./repositories/Advice.repository";
+import { AdviceService } from "./api/services/Advice.service";
+import { AdviceRouter } from "./api/routes/Advice.router";
+import { CountryRepository } from "./repositories/Country.repository";
+import { CommentRepository } from "./repositories/Comment.repository";
+import { CommentRouter } from "./api/routes/Comment.router";
+import { CommentService } from "./api/services/Comment.service";
+import { FetchWrapper } from "./modules/FetchWrapper";
+import { CountryRouter } from "./api/routes/Country.router";
+import { CountryService } from "./api/services/Country.service";
 export default class App {
   readonly logger = getLogger();
   private ex = new ExpressWrapper();
   private db = new Database("default");
 
+  private readonly fetchWrapper = new FetchWrapper();
+
   private readonly articleRepository = new ArticleRepository();
   private readonly reportRepository = new ReportRepository();
   private readonly userRepository = new UserRepository();
-  private readonly dashboardRepository = new DashboardRepository();
-  private readonly widgetRepository = new WidgetRepository();
+  private readonly adviceRepository = new AdviceRepository();
+  private readonly countryRepository = new CountryRepository();
+  private readonly commentRepository = new CommentRepository();
   // add services here
   private readonly articleService = new ArticleService(this.articleRepository);
   private readonly searchService = new SearchService(
@@ -38,30 +46,37 @@ export default class App {
   private readonly userService = new UserService(
     this.userRepository,
     this.articleRepository,
-    this.dashboardRepository,
-    this.widgetRepository
+    this.countryRepository
   );
-  private readonly dashboardService = new DashboardService(
-    this.widgetRepository,
-    this.userRepository,
-    this.dashboardRepository
+  private readonly adviceService = new AdviceService(
+    this.adviceRepository,
+    this.commentRepository,
+    this.fetchWrapper
   );
-
+  private readonly commentService = new CommentService(
+    this.commentRepository,
+    this.countryRepository,
+    this.userRepository
+  );
+  private readonly countryService = new CountryService(this.fetchWrapper);
   constructor() {
     // add routers here .. e.g.
     const articleRouter = new ArticleRouter(this.articleService);
     const searchRouter = new SearchRouter(this.searchService);
     const reportRouter = new ReportRouter(this.reportService);
     const userRouter = new UserRouter(this.userService);
-    const dashboardRouter = new DashboardRouter(this.dashboardService);
-
+    const adviceRouter = new AdviceRouter(this.adviceService);
+    const commentRouter = new CommentRouter(this.commentService);
+    const countryRouter = new CountryRouter(this.countryService);
     this.ex.addRouters(
       // ... add routers here
       articleRouter,
       searchRouter,
       reportRouter,
       userRouter,
-      dashboardRouter
+      adviceRouter,
+      commentRouter,
+      countryRouter
     );
   }
 

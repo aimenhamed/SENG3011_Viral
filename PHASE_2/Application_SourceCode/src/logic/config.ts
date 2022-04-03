@@ -1,7 +1,7 @@
 export enum AppEnv {
   DEV = "DEV",
   PROD = "PROD",
-};
+}
 
 class AppConfig {
   public readonly apiUrl: string;
@@ -9,7 +9,7 @@ class AppConfig {
   public readonly env: AppEnv;
 
   constructor() {
-    this.apiUrl = "http://localhost:3001/api";
+    this.apiUrl = "https://teamviral-api.herokuapp.com/api";
     this.env = AppEnv.DEV;
   }
 }

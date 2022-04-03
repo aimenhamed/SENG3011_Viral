@@ -37,3 +37,7 @@ export const baseLog = {
   teamName: "Team Viral",
   dataSource: "https://www.who.int/csr/don/en/",
 };
+
+export const secret: string = require("crypto").randomBytes(64).toString("hex");
+
+export const jwt = require("jsonwebtoken");

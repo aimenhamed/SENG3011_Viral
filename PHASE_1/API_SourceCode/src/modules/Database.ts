@@ -5,13 +5,14 @@ import config from "config";
 import { ArticleEntity } from "../entity/Article.entity";
 import { ReportEntity } from "../entity/Report.entity";
 import { UserEntity } from "../entity/User.entity";
-import { DashboardEntity } from "../entity/Dashboard.entity";
-import { WidgetEntity } from "../entity/Widget.entity";
+import { AdviceEntity } from "../entity/Advice.entity";
+import { CountryEntity } from "../entity/Country.entity";
+import { CommentEntity } from "../entity/Comment.entity";
 
 export default class Database {
   private logger = getLogger();
   constructor(readonly connectionName: string) {}
-  // testing new db: POSTGRESQL_USER=ytodeyyosrgpen POSTGRESQL_PASSWORD=8356074ac9f65aad0aa219bcf46118e9ea940529b2db3307ed143cc033034a38 POSTGRESQL_HOST=ec2-35-153-35-94.compute-1.amazonaws.com POSTGRESQL_DATABASE=db9penvi7i6jkk
+  // testing new db: API_KEY=VDPSvlYDu2GGea9xzRGUGEe0DDorBywd API_SECRET=JX9GXGrL2a3BoBKv POSTGRESQL_USER=fsggrwwrbsxbkk POSTGRESQL_PASSWORD=0bbabdc7704f4a9cc4b6fbf80a2acc5c8f5f0c70e6a9bcc5238a0e31b5191f56 POSTGRESQL_HOST=ec2-18-210-191-5.compute-1.amazonaws.com POSTGRESQL_DATABASE=dd4u9qmc5pk0gv
   // testing locally: POSTGRESQL_USER=postgres POSTGRESQL_PASSWORD=mysecretpassword POSTGRESQL_HOST=0.0.0.0 POSTGRESQL_DATABASE=mydb
 
   async start(): Promise<void> {
@@ -37,8 +38,9 @@ export default class Database {
         ArticleEntity,
         ReportEntity,
         UserEntity,
-        DashboardEntity,
-        WidgetEntity,
+        AdviceEntity,
+        CountryEntity,
+        CommentEntity,
       ],
     });
     this.logger.info(

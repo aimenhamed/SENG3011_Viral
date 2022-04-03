@@ -18,11 +18,7 @@ module.exports = {
       version: "detect",
     },
   },
-  extends: [
-    "airbnb-typescript",
-    "prettier/@typescript-eslint",
-    "prettier",
-  ],
+  extends: ["airbnb-typescript", "prettier/@typescript-eslint", "prettier"],
   rules: {
     "@typescript-eslint/camelcase": "off",
     "react/destructuring-assignment": "off",
@@ -69,6 +65,7 @@ module.exports = {
     "import/no-cycle": "off",
     "global-require": "off",
     "@typescript-eslint/dot-notation": "off",
-    "no-else-return": "off"
+    "no-else-return": "off",
+    "react/jsx-curly-newline": "off",
   },
 };
