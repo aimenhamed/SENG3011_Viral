@@ -104,43 +104,6 @@ export class UserService {
     };
   }
 
-  async removeBookmark(
-    bookmarkDetails: IUserBookmarkArticleRequestBody
-  ): Promise<IUserRemoveBookmarkSuccessResponse | undefined> {
-    let user = await this.getUser(bookmarkDetails.userId);
-    const bookmarkedArticle = await this.getArticle(bookmarkDetails.articleId);
-    if (
-      !user.bookmarkedArticles ||
-      user.bookmarkedArticles.length === 0 ||
-      !user.bookmarkedArticles.some(
-        (article) => article.articleId === bookmarkedArticle.articleId
-      )
-    ) {
-      this.logger.error(
-        `User with userId ${user.userId} has not bookmarked article with articleId ${bookmarkDetails.articleId}`
-      );
-      throw new HTTPError(badRequest);
-    }
-
-    user.bookmarkedArticles = user.bookmarkedArticles.filter(
-      (article) => article.articleId !== bookmarkedArticle.articleId
-    );
-
-    user = await this.userRepository.saveUser(user);
-
-    if (user === undefined) {
-      this.logger.error(
-        `Failed to remove bookmarked article ${bookmarkDetails.articleId} from user ${bookmarkDetails.userId}`
-      );
-      throw new HTTPError(internalServerError);
-    }
-
-    return {
-      user: convertUserEntityToInterface(user),
-      log: getLog(new Date()),
-    };
-  }
-
   async bookmarkCountry(
     bookmarkDetails: IUserBookmarkCountryRequestBody
   ): Promise<IUserBookmarkCountrySuccessResponse | undefined> {
