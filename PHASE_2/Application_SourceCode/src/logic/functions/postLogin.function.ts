@@ -16,7 +16,10 @@ export const postLogin = async (
     body: JSON.stringify(req),
   };
   console.log(options);
-  return post(`${AppConfig.apiUrl}/v1/user/login/`, {
+  return post(`${AppConfig.apiUrl}/v1/users/login/`, {
+    headers: {
+      "Content-Type": "application/json",
+    },
     body: JSON.stringify(req),
   }) as Promise<IUserLoginSuccessResponse>;
 };
