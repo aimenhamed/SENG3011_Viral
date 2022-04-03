@@ -8,3 +8,9 @@ export interface User {
   bookmarkedCountries: Country[];
   bookmarkedArticles: Article[];
 }
+
+export interface UserOnly {
+  userId: string;
+  name: string;
+  email: string;
+}

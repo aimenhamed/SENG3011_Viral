@@ -50,6 +50,7 @@ export default class App {
   );
   private readonly adviceService = new AdviceService(
     this.adviceRepository,
+    this.commentRepository,
     this.fetchWrapper
   );
   private readonly commentService = new CommentService(
