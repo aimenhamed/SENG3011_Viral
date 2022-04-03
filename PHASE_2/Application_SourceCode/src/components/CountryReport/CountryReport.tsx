@@ -40,7 +40,6 @@ const CountryReport = ({ advice, country }: CountryReportProps) => {
 
   const { flights, loadingStatus } = useAppSelector(selectFlights);
   const { articles, articleloadingStatus } = useAppSelector(selectArticles);
-  console.log(commentDialog);
 
   const renderText = (text: string[]) =>
     text.map((req) => <Text key={req}>{req}</Text>);
@@ -62,6 +61,7 @@ const CountryReport = ({ advice, country }: CountryReportProps) => {
                   {advice.advice.country.name} Map - Continent{" "}
                   {advice.advice.continent}
                 </Text>
+                <button type="button">Bookmark this country</button>
                 <Map />
               </TileLockup>
               <TileLockup>
@@ -177,6 +177,7 @@ const CountryReport = ({ advice, country }: CountryReportProps) => {
             </TileLockup>
           </Section>
           <AddCommentDialog
+            countryId={advice.advice.country.countryId}
             isOpen={commentDialog}
             toggleOpen={() => setCommentDialog(false)}
           />
