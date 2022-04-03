@@ -1,9 +1,7 @@
-import { render } from 'src/helpers/rtl';
-import App from './App';
+import { render } from "src/helpers/rtl";
+import App from "./App";
 
-test('renders home page', () => {
-  const { getByTestId } = render(
-    <App />
-  );
-  expect(getByTestId("loading-page")).not.toBeNull();
+test("renders home page", () => {
+  const { getByText } = render(<App />);
+  expect(getByText("Welcome to Viral Travel")).not.toBeNull();
 });

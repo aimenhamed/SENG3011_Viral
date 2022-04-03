@@ -1,7 +1,7 @@
-import LoadingPage from "../../components/LoadingPage/LoadingPage";
+// import LoadingPage from "../../components/LoadingPage/LoadingPage";
 
 const Home = () => {
-  return <LoadingPage />;
+  return <div>Home page</div>;
 };
 
 export default Home;
