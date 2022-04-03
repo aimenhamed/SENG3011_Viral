@@ -82,20 +82,21 @@ export class UserService {
   ): Promise<IUserBookmarkArticleSuccessResponse | undefined> {
     let user = await this.getUser(bookmarkDetails.userId);
     const bookmarkedArticle = await this.getArticle(bookmarkDetails.articleId);
+    const status = bookmarkDetails.status;
 
-    if (
-      user.bookmarkedArticles &&
-      user.bookmarkedArticles.includes(bookmarkedArticle)
-    ) {
-      this.logger.error(
-        `User with userId ${user.userId} has already bookmarked article with articleId ${bookmarkedArticle.articleId}`
-      );
-      throw new HTTPError(badRequest);
+    user.bookmarkedArticles = user.bookmarkedArticles.filter(
+      (a) => a.articleId !== bookmarkedArticle.articleId
+    );
+    if (status) {
+      user.bookmarkedArticles = [...user.bookmarkedArticles, bookmarkedArticle];
     }
-    user.bookmarkedArticles = [...user.bookmarkedArticles, bookmarkedArticle];
-
     user = await this.userRepository.saveUser(user);
-
+    if (user === undefined) {
+      this.logger.info(
+        `Failed to change status for article ${bookmarkDetails.articleId} in user ${bookmarkDetails.userId} to ${bookmarkDetails.status}`
+      );
+      throw new HTTPError(internalServerError);
+    }
     return {
       user: convertUserEntityToInterface(user),
       article: convertArticleEntityToInterface(bookmarkedArticle),
