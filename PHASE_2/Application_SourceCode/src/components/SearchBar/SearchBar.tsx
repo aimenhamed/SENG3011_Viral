@@ -15,11 +15,11 @@ const SearchBar: React.FC<SearchProps>  = ({setHeading, setShowMap}) => {
     const [searchResults, setSearchResults] = useState<stringSimilarity.Rating[]>([]);
 
 
-    // const searchResultTxtStyle = {
-    //     color: 'white',
-    //     textDecoration: 'none',
-    //     fontSize: 'small',
-    // }
+    const searchResultTxtStyle = {
+        color: 'white',
+        textDecoration: 'none',
+        fontSize: 'small',
+    }
 
     const searchResultDivStyle = {
         backgroundColor: '#2a9763',
@@ -28,6 +28,7 @@ const SearchBar: React.FC<SearchProps>  = ({setHeading, setShowMap}) => {
         borderBottom: '1px solid #e8e8e8',
         borderLeft: '1px solid #e8e8e8',
         borderRight: '1px solid #e8e8e8',
+        cursor: 'pointer',
     }
 
     const regionNames: string[] = [];
@@ -82,11 +83,11 @@ const SearchBar: React.FC<SearchProps>  = ({setHeading, setShowMap}) => {
 
             {
                 search ? (
-                    <div style={{position: 'absolute', zIndex: '1'}}>
+                    <div id='resultsDiv' style={{position: 'absolute', zIndex: '1', width: '210px'}} onMouseLeave={(e) => setSearch(false)}> { /* eslint-disable-line */}
                         {searchResults.map((result) => 
                             // <Link to='/' style={searchResultTxtStyle}>
                                 <div id={result.target} style={searchResultDivStyle} onMouseOver={(e) => highlightOnHover(e, result.target)} onMouseLeave={(e) => unHighlight(e, result.target)} onClick={(e) => adjustHomePage(result.target)}> { /* eslint-disable-line */}
-                                    <p>{result.target}</p>
+                                    <p style={searchResultTxtStyle}>{result.target}</p>
                                 </div>
                             // </Link>
                         )}
