@@ -25,7 +25,8 @@ describe("AdviceService", () => {
     jest.clearAllMocks();
     jest.resetAllMocks();
   });
-  const adviceService = () => new AdviceService(repository, commentRepository, fetchWrapper);
+  const adviceService = () =>
+    new AdviceService(repository, commentRepository, fetchWrapper);
 
   describe("getAdvice", () => {
     it("should resolve and return expected advice", () => {
