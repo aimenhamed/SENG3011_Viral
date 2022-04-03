@@ -6,7 +6,7 @@ export class CountryService {
   private logger = getLogger();
   constructor(readonly fetchWrapper: FetchWrapper) {}
 
-  async getFlights(flightDetails: {
+  async getFlights(flightDetails?: {
     originLocationCode: string;
     destinationLocationCode: string;
     departureDate: string;
