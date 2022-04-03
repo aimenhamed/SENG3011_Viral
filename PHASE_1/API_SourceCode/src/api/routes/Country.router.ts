@@ -26,8 +26,7 @@ export class CountryRouter implements IRouter {
             destinationLocationCode: req.query
               .destinationLocationCode as string,
             departureDate: req.query.departureDate as string,
-            adults: +req.query.adults! as number,
-            max: +req.query.max! as number,
+            adults: req.query.adults as string,
           };
 
           const result = await this.countryService.getFlights(flightStuff);

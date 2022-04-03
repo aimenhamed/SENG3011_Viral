@@ -1,6 +1,7 @@
 import { getLogger } from "../../utils/Logger";
 import { getLog } from "../../utils/Helpers";
 import { FetchWrapper } from "../../modules/FetchWrapper";
+import { SimpleConsoleLogger } from "typeorm";
 
 export class CountryService {
   private logger = getLogger();
@@ -11,8 +12,17 @@ export class CountryService {
     destinationLocationCode: string;
     departureDate: string;
     adults: string;
-    max: string;
   }): Promise<any | undefined> {
+    const data = await this.fetchWrapper.getFlightOffers(
+      flightDetails.originLocationCode,
+      flightDetails.destinationLocationCode,
+      flightDetails.departureDate,
+      flightDetails.adults
+    );
+
+    console.log(data);
+
+    /*
     this.logger.info("Flight API unimplemented. Returning dummy data");
     return {
       flights: [
@@ -59,5 +69,6 @@ export class CountryService {
       ],
       log: getLog(new Date()),
     };
+    */
   }
 }
