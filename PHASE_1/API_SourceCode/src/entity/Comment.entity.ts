@@ -12,7 +12,7 @@ export class CommentEntity {
   @PrimaryGeneratedColumn("uuid", { name: "comment_id" })
   commentId: string;
 
-  @ManyToOne(() => UserEntity, (user) => user.userId)
+  @ManyToOne(() => UserEntity, (user) => user.userId, { eager: true })
   @JoinColumn({ name: "created_by" })
   createdBy: UserEntity;
 
@@ -23,6 +23,6 @@ export class CommentEntity {
   @Column("text", { name: "message" })
   message: string;
 
-  @Column("date", { name: "created_date" })
+  @Column("timestamp", { name: "created_date" })
   date: Date;
 }
