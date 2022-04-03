@@ -1,4 +1,11 @@
-import { Article, Report, User, Advice, IAdviceOnly } from "./ViralInterface";
+import {
+  Article,
+  Report,
+  User,
+  Advice,
+  IAdviceOnly,
+  Comment,
+} from "./ViralInterface";
 
 export interface ApiError {
   errorCode: string;
@@ -90,6 +97,8 @@ export interface IUserSpecificSuccessResponse {
 
 export interface IAdviceSpecificSuccessResponse {
   advice: Advice;
+  data: AmadeusData;
+  comments: Comment[];
   log: Log;
 }
 
@@ -107,4 +116,60 @@ export interface ICommentPostRequestBody {
 export interface ICommentPostSuccessResponse {
   comment: Comment;
   log: Log;
+}
+
+export interface AmadeusResponse {
+  data: AmadeusData;
+}
+
+export interface AmadeusData {
+  area: {
+    name: string;
+  };
+  summary: string;
+  diseaseRiskLevel: string;
+  diseaseInfection: {
+    date: string;
+    level: string;
+  };
+  diseaseCases: {
+    date: string;
+    deaths: number;
+    confirmed: number;
+  };
+  hotspots: string;
+  areaAccessRestriction: {
+    transportation: {
+      date: string;
+      text: string;
+      isBanned: string;
+    };
+    quarantineModality: {
+      date: string;
+      text: string;
+      rules: string;
+    };
+    mask: {
+      date: string;
+      text: string;
+      isRequired: string;
+    };
+    exit: {
+      date: string;
+      text: string;
+      isBanned: string;
+    };
+    diseaseVaccination: {
+      date: string;
+      isRequired: string;
+      acceptedCertificates: string[];
+      qualifiedVaccines: string[];
+      policy: string;
+    };
+  };
+  areaVaccinated: {
+    date: string;
+    vaccinationDoseStatus: string;
+    percentage: number;
+  }[];
 }

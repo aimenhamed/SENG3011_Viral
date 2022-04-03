@@ -1,4 +1,21 @@
+import { useEffect } from "react";
+import { AmadeusData } from "src/interfaces/ResponseInterface";
+import { useAppSelector } from "src/logic/redux/hooks";
 import { Advice } from "src/interfaces/ViralInterface";
+import { useDispatch } from "react-redux";
+import {
+  getFlightsDispatch,
+  LoadingStatusTypes,
+  selectFlights,
+} from "src/logic/redux/reducers/flightsSlice/flightsSlice";
+import {
+  getSearchDispatch,
+  selectArticles,
+  ArticleLoadingStatusTypes,
+} from "src/logic/redux/reducers/articleSlice/articleSlice";
+import Text from "../common/text/Text";
+import Map from "../Map/Map";
+import { FlexLayout } from "../common/layouts/screenLayout";
 import {
   Container,
   Content,
@@ -8,20 +25,25 @@ import {
   Tile,
   SubText,
 } from "./style";
-import Text from "../common/text/Text";
-import Map from "../Map/Map";
-import { FlexLayout } from "../common/layouts/screenLayout";
+import FlightInfo from "../FlightInfo/FlightInfo";
 
 type CountryReportProps = {
   advice: Advice;
+  data: AmadeusData;
+  // comments?: Comment[];
 };
 
-const vaxReq: string[] = ["Johnson & Johnson", "Astrazenica"];
-const travAdvice: string[] = ["Exercise a high degree of caution", "Very bad"];
+const CountryReport = ({ advice, data }: CountryReportProps) => {
+  const dispatch = useDispatch();
+  const { flights, loadingStatus } = useAppSelector(selectFlights);
+  const { articles, articleloadingStatus } = useAppSelector(selectArticles);
 
-const CountryReport = ({ advice }: CountryReportProps) => {
   const renderText = (text: string[]) =>
     text.map((req) => <Text key={req}>{req}</Text>);
+  useEffect(() => {
+    dispatch(getFlightsDispatch());
+    dispatch(getSearchDispatch(advice.country.name));
+  }, []);
 
   return (
     <FlexLayout>
@@ -42,7 +64,12 @@ const CountryReport = ({ advice }: CountryReportProps) => {
                 <Text bold fontSize="1.125rem" align="center">
                   Vaccine Requirements
                 </Text>
-                <Tile>{renderText(vaxReq)}</Tile>
+                <Tile>
+                  {renderText(
+                    data.areaAccessRestriction.diseaseVaccination
+                      .qualifiedVaccines
+                  )}
+                </Tile>
               </TileLockup>
             </SubSection>
             <SubSection>
@@ -50,13 +77,26 @@ const CountryReport = ({ advice }: CountryReportProps) => {
                 <Text bold fontSize="1.125rem" align="center">
                   Articles
                 </Text>
-                <Tile>{renderText(vaxReq)}</Tile>
+                <Tile>
+                  {articleloadingStatus ===
+                  ArticleLoadingStatusTypes.GET_SEARCH_LOADING ? (
+                    <Text>Loading...</Text>
+                  ) : (
+                    articles.map((article) => (
+                      <Text key={article.articleId}>{article.headline}</Text>
+                    ))
+                  )}
+                </Tile>
               </TileLockup>
               <TileLockup>
                 <Text bold fontSize="1.125rem" align="center">
                   Disease Report
                 </Text>
-                <Tile>{renderText(vaxReq)}</Tile>
+                <Tile>
+                  <Text>{data.diseaseCases.date}</Text>
+                  <Text>Deaths Reported: {data.diseaseCases.deaths}</Text>
+                  <Text>Disease Cases: {data.diseaseCases.confirmed}</Text>
+                </Tile>
               </TileLockup>
             </SubSection>
           </Section>
@@ -64,18 +104,24 @@ const CountryReport = ({ advice }: CountryReportProps) => {
             <TileLockup style={{ width: "50%" }}>
               <Text bold fontSize="1.125rem" align="center">
                 Travel Advice
-                <SubText>
-                  {` - Last updated: ${advice.lastUpdate.toDateString()}`}
-                </SubText>
+                <SubText>{` - Last updated: ${advice.lastUpdate}`}</SubText>
               </Text>
               <Tile style={{ marginBottom: "1rem" }}>{advice.adviceLevel}</Tile>
               <Tile style={{ textAlign: "left" }}>{advice.latestAdvice}</Tile>
             </TileLockup>
-            <TileLockup>
+            <TileLockup style={{ width: "50%" }}>
               <Text bold fontSize="1.125rem" align="center">
-                Flight Info
+                Available flights to {advice.country.name}
               </Text>
-              <Tile>{renderText(travAdvice)}</Tile>
+              <Tile>
+                {loadingStatus === LoadingStatusTypes.GET_FLIGHTS_LOADING ? (
+                  <Text>Loading...</Text>
+                ) : (
+                  flights.map((flight) => (
+                    <FlightInfo flight={flight} key={flight.price} />
+                  ))
+                )}
+              </Tile>
             </TileLockup>
           </Section>
         </Content>

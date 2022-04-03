@@ -12,7 +12,7 @@ export interface Advice {
   continent: string;
   adviceLevel: string;
   latestAdvice: string;
-  lastUpdate: Date;
+  lastUpdate: string;
 }
 
 export interface IAdviceOnly {
@@ -51,4 +51,13 @@ export interface Comment {
   country: Country;
   message: string;
   date: Date;
+}
+
+export interface Flight {
+  departure: string;
+  destination: string;
+  departureTime: string;
+  arrivalTime: string;
+  duration: string;
+  price: number;
 }

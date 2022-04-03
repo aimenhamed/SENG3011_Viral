@@ -1,6 +1,6 @@
 import { Switch, Route } from "react-router-dom";
 import CountryReport from "./components/CountryReport/CountryReport";
-import { usaAdvice } from "./constants/Countries";
+import { usaAdvice, amadeusMock } from "./constants/Countries";
 import Home from "./pages/Home/Home";
 
 const Routes = () => (
@@ -9,7 +9,7 @@ const Routes = () => (
       <Home />
     </Route>
     <Route path="/country">
-      <CountryReport advice={usaAdvice} />
+      <CountryReport advice={usaAdvice} data={amadeusMock} />
     </Route>
     <Route path="/*">
       <Home />

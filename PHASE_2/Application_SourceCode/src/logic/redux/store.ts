@@ -1,9 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { subscriptionSlice } from "./reducers/subscriptionSlice/subscriptionSlice";
+import { flightsSlice } from "./reducers/flightsSlice/flightsSlice";
+import { articleSlice } from "./reducers/articleSlice/articleSlice";
 
 export const store = configureStore({
   reducer: {
-    app: subscriptionSlice.reducer,
+    articles: articleSlice.reducer,
+    flights: flightsSlice.reducer,
   },
 });
 
