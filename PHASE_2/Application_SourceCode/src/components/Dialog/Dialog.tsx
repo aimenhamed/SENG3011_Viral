@@ -8,12 +8,13 @@ type DialogProps = {
   close: () => void;
   title?: string;
   children: ReactNode;
+  modalSize?: string;
 };
 
-const Dialog = ({ close, title, children }: DialogProps) => {
+const Dialog = ({ close, title, children, modalSize }: DialogProps) => {
   return (
     <Dim>
-      <ModalContent>
+      <ModalContent style={{ width: modalSize ? `${modalSize}%` : "85%" }}>
         <CloseLockup>
           <Icon src={CloseIcon} size={1} onClick={close} />
         </CloseLockup>
