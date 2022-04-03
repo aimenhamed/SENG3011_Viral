@@ -11,6 +11,9 @@ export const postRegister = async (
   req: IUserRegisterRequestBody
 ): Promise<IUserRegisterSuccessResponse | ApiError> => {
   const options: Options = {
+    headers: {
+      "Content-Type": "application/json",
+    },
     body: JSON.stringify(req),
   };
   return post(

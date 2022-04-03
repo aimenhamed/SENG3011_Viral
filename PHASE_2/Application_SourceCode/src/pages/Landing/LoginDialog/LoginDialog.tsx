@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react";
 import Dialog from "src/components/Dialog/Dialog";
 import Text from "src/components/common/text/Text";
-import "./LoginDialog.css";
 import { useDispatch } from "react-redux";
 import {
   postLoginDispatch,
-  selectUser,
+  selectUserLoadingStatus,
   UserLoadingStatusTypes,
 } from "src/logic/redux/reducers/userSlice.ts/userSlice";
 import { IUserLoginRequestBody } from "src/interfaces/ResponseInterface";
@@ -21,18 +20,16 @@ const LoginDialog = ({ isOpen, toggleOpen }: LoginDialogProps) => {
   const dispatch = useDispatch();
   const history = useHistory();
 
-  const { userLoadingStatus } = useAppSelector(selectUser);
+  const loadingStatus = useAppSelector(selectUserLoadingStatus);
 
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-  console.log(email);
-  console.log(password);
 
   useEffect(() => {
-    if (userLoadingStatus === UserLoadingStatusTypes.POST_LOGIN_COMPLETED) {
+    if (loadingStatus === UserLoadingStatusTypes.POST_LOGIN_COMPLETED) {
       history.push("/home");
     }
-  }, [userLoadingStatus]);
+  }, [loadingStatus]);
 
   const login = () => {
     const req: IUserLoginRequestBody = {

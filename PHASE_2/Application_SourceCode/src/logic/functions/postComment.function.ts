@@ -11,6 +11,9 @@ export const postComment = async (
   req: ICommentPostRequestBody
 ): Promise<ICommentPostSuccessResponse | ApiError> => {
   const options: Options = {
+    headers: {
+      "Content-Type": "application/json",
+    },
     body: JSON.stringify(req),
   };
   return post(

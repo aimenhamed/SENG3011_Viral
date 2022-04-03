@@ -63,7 +63,7 @@ export enum UserLoadingStatusTypes {
 }
 
 export interface UserState {
-  user?: IUserLoginSuccessResponse;
+  user?: IUserLoginSuccessResponse | IUserRegisterSuccessResponse;
   userLoadingStatus: UserLoadingStatusTypes;
   error: any;
 }
@@ -97,7 +97,7 @@ export const userSlice = createSlice({
     });
     builder.addCase(postRegisterDispatch.fulfilled, (state, action) => ({
       ...state,
-      userloadingStatus: UserLoadingStatusTypes.POST_REGISTER_COMPLETED,
+      userLoadingStatus: UserLoadingStatusTypes.POST_REGISTER_COMPLETED,
       user: action.payload,
     }));
     builder.addCase(postRegisterDispatch.pending, (state) => {
