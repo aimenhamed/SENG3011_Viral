@@ -28,7 +28,6 @@ export class AdviceService {
       this.logger.error(`No advice for country ${country} found in db`);
       throw new HTTPError(notFoundError);
     }
-    console.log(advice.country.code);
     const data = await this.fetchWrapper.getCountryDiseases(
       advice.country.code
     );

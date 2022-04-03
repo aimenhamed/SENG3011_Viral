@@ -10,7 +10,7 @@ import { AdviceService } from "./Advice.service";
 import { FetchWrapper } from "../../modules/FetchWrapper";
 import { getMockAdvice, getMockAdvices } from "../../utils/testData";
 
-describe("AdviceService", () => {
+describe.only("AdviceService", () => {
   let repository: AdviceRepository;
   let commentRepository: CommentRepository;
   let fetchWrapper: FetchWrapper;
@@ -28,14 +28,17 @@ describe("AdviceService", () => {
   const adviceService = () =>
     new AdviceService(repository, commentRepository, fetchWrapper);
 
-  describe("getAdvice", () => {
+  describe.only("getAdvice", () => {
     it("should resolve and return expected advice", () => {
       const service = adviceService();
       const advice = getMockAdvice();
       repository.getAdviceByCountry = jest.fn().mockReturnValue(advice);
-
+      fetchWrapper.getCountryDiseases = jest.fn().mockReturnValue({});
+      commentRepository.getCommentsByCountry = jest.fn().mockReturnValue([]);
       expect(service.getAdvice(advice.country.name)).resolves.toEqual({
         advice,
+        data: {},
+        comments: [],
         log: {
           ...baseLog,
           accessTime: expect.any(String),
