@@ -1,4 +1,5 @@
-import React from 'react'
-import { Button, Popup } from 'semantic-ui-react'
+// import React from 'react'
+// import { Button, Popup } from 'semantic-ui-react'
 
-// finish popup
+// // finish popup
+export const me = {};

@@ -11,9 +11,10 @@ import CountryReport from "src/components/CountryReport/CountryReport";
 
 type CountryProps = {
   countryName: string;
+  backToMap: () => void;
 };
 
-const Country = ({ countryName }: CountryProps) => {
+const Country = ({ countryName, backToMap }: CountryProps) => {
   const dispatch = useDispatch();
   const { advice, adviceloadingStatus } = useAppSelector(selectAdvice);
 
@@ -23,6 +24,10 @@ const Country = ({ countryName }: CountryProps) => {
 
   if (adviceloadingStatus === AdviceLoadingStatusTypes.GET_ADVICE_LOADING) {
     return <LoadingPage />;
+  }
+
+  if (adviceloadingStatus === AdviceLoadingStatusTypes.GET_ADVICE_FAILED) {
+    backToMap();
   }
 
   if (advice) {

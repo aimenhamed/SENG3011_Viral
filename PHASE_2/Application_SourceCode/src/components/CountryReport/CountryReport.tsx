@@ -6,6 +6,7 @@ import {
   LoadingStatusTypes,
   selectFlights,
 } from "src/logic/redux/reducers/flightsSlice/flightsSlice";
+import { keyTerms } from "src/constants/KeyTerms";
 import {
   putBookmarkCountryDispatch,
   selectUser,
@@ -19,6 +20,7 @@ import {
 } from "src/logic/redux/reducers/articleSlice/articleSlice";
 import {
   IAdviceSpecificSuccessResponse,
+  ISearchRequestHeaders,
   IUserBookmarkCountryRequestBody,
 } from "src/interfaces/ResponseInterface";
 import { useHistory } from "react-router-dom";
@@ -63,11 +65,14 @@ const CountryReport = ({ advice, country }: CountryReportProps) => {
   useEffect(() => {
     if (!user) history.push("/");
     dispatch(getFlightsDispatch());
-    dispatch(getSearchDispatch(country));
+    const req: ISearchRequestHeaders = {
+      keyTerms,
+      location: country,
+      periodOfInterest: { start: "2009-09-23", end: "2021-09-24" },
+    };
+    dispatch(getSearchDispatch(req));
   }, []);
-  console.log(user);
-  console.log(advice.advice.country === user?.user.bookmarkedCountries[0]);
-  console.log(bookmarked);
+
   const bookmarkCountry = () => {
     const req: IUserBookmarkCountryRequestBody = {
       userId: user?.user.userId!,
@@ -110,9 +115,14 @@ const CountryReport = ({ advice, country }: CountryReportProps) => {
                   Vaccine Requirements
                 </Text>
                 <Tile>
-                  {renderText(
-                    advice.data.data.areaAccessRestriction.diseaseVaccination
-                      .qualifiedVaccines
+                  {advice.data.data.areaAccessRestriction.diseaseVaccination
+                    .qualifiedVaccines ? (
+                    renderText(
+                      advice.data.data.areaAccessRestriction.diseaseVaccination
+                        .qualifiedVaccines
+                    )
+                  ) : (
+                    <Text>No required vaccines to travel.</Text>
                   )}
                 </Tile>
               </TileLockup>

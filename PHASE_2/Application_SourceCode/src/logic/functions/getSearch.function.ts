@@ -1,20 +1,20 @@
 import {
   ApiError,
+  ISearchRequestHeaders,
   ISearchSuccessResponse,
 } from "src/interfaces/ResponseInterface";
 import { Options } from "ky";
-import { keyTerms } from "src/constants/KeyTerms";
 import AppConfig from "../config";
 import { get } from "../createRequest";
 
 export const getSearch = async (
-  location: string
+  req: ISearchRequestHeaders
 ): Promise<ISearchSuccessResponse | ApiError> => {
   const options: Options = {
     headers: {
-      period_of_interest: '{"start":"2009-09-23","end":"2021-09-24"}',
-      key_terms: JSON.stringify(keyTerms),
-      location,
+      period_of_interest: JSON.stringify(req.periodOfInterest),
+      key_terms: JSON.stringify(req.keyTerms),
+      location: req.location,
     },
   };
 

@@ -67,6 +67,7 @@ export interface IUserRegisterSuccessResponse {
 export interface IUserBookmarkArticleRequestBody {
   userId: string;
   articleId: string;
+  status: boolean;
 }
 
 export interface IUserBookmarkArticleSuccessResponse {

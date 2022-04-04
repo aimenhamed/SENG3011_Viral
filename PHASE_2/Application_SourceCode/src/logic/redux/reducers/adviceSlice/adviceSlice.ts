@@ -1,10 +1,12 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { HTTPError } from "ky";
 import {
+  IAdviceAllSuccessResponse,
   IAdviceSpecificSuccessResponse,
   ICommentPostRequestBody,
   ICommentPostSuccessResponse,
 } from "src/interfaces/ResponseInterface";
+import { getAdviceAll } from "src/logic/functions/getAdviceAll.function";
 import { getSpecificAdvice } from "src/logic/functions/getSpecificAdvice.function";
 import { postComment } from "src/logic/functions/postComment.function";
 import { RootState } from "../../store";
@@ -53,6 +55,27 @@ export const postCommentDispatch = createAsyncThunk<
   }
 });
 
+export const getAdviceAllDispatch = createAsyncThunk<
+  IAdviceAllSuccessResponse,
+  undefined,
+  { state: RootState }
+>("getAdviceAllDispatch", async (_, { rejectWithValue }) => {
+  try {
+    const res = (await getAdviceAll()) as IAdviceAllSuccessResponse;
+    return res;
+  } catch (err) {
+    if (err instanceof HTTPError) {
+      return rejectWithValue({
+        name: err.name,
+        message: err.message,
+        code: err.response.status,
+        stack: err.stack,
+      });
+    }
+    throw err;
+  }
+});
+
 export enum AdviceLoadingStatusTypes {
   IDLE = "IDLE",
   GET_ADVICE_LOADING = "GET_ADVICE_LOADING",
@@ -61,10 +84,14 @@ export enum AdviceLoadingStatusTypes {
   POST_COMMENT_LOADING = "POST_COMMENT_LOADING",
   POST_COMMENT_FAILED = "POST_COMMENT_FAILED",
   POST_COMMENT_COMPLETED = "POST_COMMENT_COMPLETED",
+  GET_ADVICE_ALL_LOADING = "GET_ADVICE_ALL_LOADING",
+  GET_ADVICE_ALL_FAILED = "GET_ADVICE_ALL_FAILED",
+  GET_ADVICE_ALL_COMPLETED = "GET_ADVICE_ALL_COMPLETED",
 }
 
 export interface ArticleState {
   advice?: IAdviceSpecificSuccessResponse;
+  all?: IAdviceAllSuccessResponse;
   adviceloadingStatus: AdviceLoadingStatusTypes;
   error: any;
 }
@@ -126,6 +153,20 @@ export const adviceSlice = createSlice({
     builder.addCase(postCommentDispatch.rejected, (state, action) => {
       state.error = action.payload ? action.payload : action.error;
       state.adviceloadingStatus = AdviceLoadingStatusTypes.POST_COMMENT_FAILED;
+    });
+    builder.addCase(getAdviceAllDispatch.fulfilled, (state, action) => ({
+      ...state,
+      adviceloadingStatus: AdviceLoadingStatusTypes.GET_ADVICE_ALL_COMPLETED,
+      all: action.payload,
+    }));
+    builder.addCase(getAdviceAllDispatch.pending, (state) => {
+      state.adviceloadingStatus =
+        AdviceLoadingStatusTypes.GET_ADVICE_ALL_LOADING;
+    });
+    builder.addCase(getAdviceAllDispatch.rejected, (state, action) => {
+      state.error = action.payload ? action.payload : action.error;
+      state.adviceloadingStatus =
+        AdviceLoadingStatusTypes.GET_ADVICE_ALL_FAILED;
     });
   },
 });

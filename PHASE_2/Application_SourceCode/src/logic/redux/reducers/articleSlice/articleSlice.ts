@@ -1,17 +1,20 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { HTTPError } from "ky";
-import { ISearchSuccessResponse } from "src/interfaces/ResponseInterface";
+import {
+  ISearchRequestHeaders,
+  ISearchSuccessResponse,
+} from "src/interfaces/ResponseInterface";
 import { Article } from "src/interfaces/ViralInterface";
 import { getSearch } from "src/logic/functions/getSearch.function";
 import { RootState } from "../../store";
 
 export const getSearchDispatch = createAsyncThunk<
   ISearchSuccessResponse,
-  string,
+  ISearchRequestHeaders,
   { state: RootState }
->("getSearchDispatch", async (location, { rejectWithValue }) => {
+>("getSearchDispatch", async (req, { rejectWithValue }) => {
   try {
-    const res = (await getSearch(location)) as ISearchSuccessResponse;
+    const res = (await getSearch(req)) as ISearchSuccessResponse;
     return res;
   } catch (err) {
     if (err instanceof HTTPError) {

@@ -1,6 +1,8 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { HTTPError } from "ky";
 import {
+  IUserBookmarkArticleRequestBody,
+  IUserBookmarkArticleSuccessResponse,
   IUserBookmarkCountryRequestBody,
   IUserBookmarkCountrySuccessResponse,
   IUserLoginRequestBody,
@@ -14,6 +16,7 @@ import { putBookmarkCountry } from "src/logic/functions/putBookmarkCountry.funct
 import { postLogin } from "src/logic/functions/postLogin.function";
 import { postRegister } from "src/logic/functions/postRegister.function";
 import { putUserUpdate } from "src/logic/functions/putUpdateUser.function";
+import { putBookmarkArticle } from "src/logic/functions/putBookmarkArticle.function";
 import { RootState } from "../../store";
 
 export const postLoginDispatch = createAsyncThunk<
@@ -110,6 +113,29 @@ export const putBookmarkCountryDispatch = createAsyncThunk<
   }
 });
 
+export const putBookmarkArticleDispatch = createAsyncThunk<
+  IUserBookmarkArticleSuccessResponse,
+  IUserBookmarkArticleRequestBody,
+  { state: RootState }
+>("putBookmarkArticleDispatch", async (req, { rejectWithValue }) => {
+  try {
+    const res = (await putBookmarkArticle(
+      req
+    )) as IUserBookmarkArticleSuccessResponse;
+    return res;
+  } catch (err) {
+    if (err instanceof HTTPError) {
+      return rejectWithValue({
+        name: err.name,
+        message: err.message,
+        code: err.response.status,
+        stack: err.stack,
+      });
+    }
+    throw err;
+  }
+});
+
 export enum UserLoadingStatusTypes {
   IDLE = "IDLE",
   POST_LOGIN_LOADING = "POST_LOGIN_LOADING",
@@ -124,6 +150,9 @@ export enum UserLoadingStatusTypes {
   PUT_BOOKMARK_COUNTRY_LOADING = "PUT_BOOKMARK_COUNTRY_LOADING",
   PUT_BOOKMARK_COUNTRY_FAILED = "PUT_BOOKMARK_COUNTRY_FAILED",
   PUT_BOOKMARK_COUNTRY_COMPLETED = "PUT_BOOKMARK_COUNTRY_COMPLETED",
+  PUT_BOOKMARK_ARTICLE_LOADING = "PUT_BOOKMARK_ARTICLE_LOADING",
+  PUT_BOOKMARK_ARTICLE_FAILED = "PUT_BOOKMARK_ARTICLE_FAILED",
+  PUT_BOOKMARK_ARTICLE_COMPLETED = "PUT_BOOKMARK_ARTICLE_COMPLETED",
 }
 
 export interface UserState {
@@ -131,7 +160,8 @@ export interface UserState {
     | IUserLoginSuccessResponse
     | IUserRegisterSuccessResponse
     | IUserUpdateSuccessResponse
-    | IUserBookmarkCountrySuccessResponse;
+    | IUserBookmarkCountrySuccessResponse
+    | IUserBookmarkArticleSuccessResponse;
   userLoadingStatus: UserLoadingStatusTypes;
   error: any;
 }
@@ -145,9 +175,9 @@ export const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    updateUser: (state, action: PayloadAction<IUserLoginSuccessResponse>) => ({
+    clearUser: (state) => ({
       ...state,
-      user: action.payload,
+      user: undefined,
     }),
   },
   extraReducers: (builder) => {
@@ -201,10 +231,24 @@ export const userSlice = createSlice({
       state.userLoadingStatus =
         UserLoadingStatusTypes.PUT_BOOKMARK_COUNTRY_FAILED;
     });
+    builder.addCase(putBookmarkArticleDispatch.fulfilled, (state, action) => ({
+      ...state,
+      userLoadingStatus: UserLoadingStatusTypes.PUT_BOOKMARK_ARTICLE_COMPLETED,
+      user: action.payload,
+    }));
+    builder.addCase(putBookmarkArticleDispatch.pending, (state) => {
+      state.userLoadingStatus =
+        UserLoadingStatusTypes.PUT_BOOKMARK_ARTICLE_LOADING;
+    });
+    builder.addCase(putBookmarkArticleDispatch.rejected, (state, action) => {
+      state.error = action.payload ? action.payload : action.error;
+      state.userLoadingStatus =
+        UserLoadingStatusTypes.PUT_BOOKMARK_ARTICLE_FAILED;
+    });
   },
 });
 
-export const { updateUser } = userSlice.actions;
+export const { clearUser } = userSlice.actions;
 
 export const selectUser = (state: RootState) => state.user;
 export const selectUserLoadingStatus = (state: RootState) =>
