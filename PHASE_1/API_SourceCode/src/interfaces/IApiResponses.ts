@@ -1,8 +1,11 @@
+import { Advice } from "IAdvice";
 import { Article } from "IArticle";
-import { Dashboard } from "IDashboard";
 import { Report } from "IReport";
 import { User } from "IUser";
-import { WidgetType } from "IWidget";
+import { Comment, CommentNoCountry } from "IComment";
+import { IAdviceOnly } from "IAdvice";
+import { AmadeusData } from "IFetchResponses";
+import { Country } from "ICountry";
 
 export interface IHttpError {
   errorCode: number;
@@ -55,6 +58,7 @@ export interface IUserRegisterRequestBody {
 }
 
 export interface IUserRegisterSuccessResponse {
+  token: string;
   user: User;
   log: Log;
 }
@@ -62,6 +66,7 @@ export interface IUserRegisterSuccessResponse {
 export interface IUserBookmarkArticleRequestBody {
   userId: string;
   articleId: string;
+  status: boolean;
 }
 
 export interface IUserBookmarkArticleSuccessResponse {
@@ -75,47 +80,63 @@ export interface IUserRemoveBookmarkSuccessResponse {
   log: Log;
 }
 
-export interface WidgetRequest {
-  widgetType: WidgetType;
-  articleId: string;
-}
-
-export interface ICommonDashboardRequestBody {
-  userId: string;
-  widgets: WidgetRequest[];
-}
-
-export interface ICommonDashboardSuccessResponse {
-  dashboard: Dashboard;
-  user: User;
-  log: Log;
-}
-
-export type IDeleteDashboardSuccessResponse = IUserRegisterSuccessResponse;
-
-export interface IGetDashboardSuccessResponse {
-  dashboard: Dashboard;
-  log: Log;
-}
-
-export interface IUserDashboardRequestBody {
-  userId: string;
-  dashboardId: string;
-}
-
-export type IUserDashboardSuccessResponse = ICommonDashboardSuccessResponse;
-
 export interface IUserLoginRequestBody {
   email: string;
   password: string;
 }
 
 export interface IUserLoginSuccessResponse {
+  token: string;
   user: User;
   log: Log;
 }
 
 export interface IUserSpecificSuccessResponse {
+  user: User;
+  log: Log;
+}
+
+export interface IAdviceSpecificSuccessResponse {
+  advice: Advice;
+  data: AmadeusData;
+  comments: CommentNoCountry[];
+  log: Log;
+}
+
+export interface IAdviceAllSuccessResponse {
+  countries: IAdviceOnly[];
+  log: Log;
+}
+
+export interface ICommentPostRequestBody {
+  countryId: string;
+  message: string;
+  userId: string;
+}
+
+export interface ICommentPostSuccessResponse {
+  comment: Comment;
+  log: Log;
+}
+
+export interface IUserBookmarkCountryRequestBody {
+  userId: string;
+  countryId: string;
+  status: boolean;
+}
+
+export interface IUserBookmarkCountrySuccessResponse {
+  user: User;
+  country: Country;
+  log: Log;
+}
+
+export interface IUserUpdateRequestBody {
+  name?: string;
+  password?: string;
+}
+
+export interface IUserUpdateSuccessResponse {
   user: User;
   log: Log;
 }

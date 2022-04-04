@@ -1,8 +1,7 @@
-import ReactDOM from 'react-dom';
-import './index.css';
-import { Provider } from 'react-redux';
-import { makeServer } from './stubbing/server';
-import { store } from './logic/redux/store';
+import ReactDOM from "react-dom";
+import "./index.css";
+import { Provider } from "react-redux";
+import { store } from "./logic/redux/store";
 import AppConfig, { AppEnv } from "./logic/config";
 
 const render = () => {
@@ -13,13 +12,10 @@ const render = () => {
     </Provider>
   );
   if (AppConfig.env !== AppEnv.PROD) {
-    makeServer({ environment: "test" });
-    window.localStorage.setItem("user_client_id", "sample-id");
-    ReactDOM.render(site, document.getElementById('root'));
+    ReactDOM.render(site, document.getElementById("root"));
   } else {
     ReactDOM.render(site, document.getElementById("root"));
   }
 };
 
 render();
-
