@@ -84,7 +84,7 @@ const MenuBar = ({ navigate }: MenuBarProps) => {
         boxSizing: "border-box",
       }}
     >
-      <div style={{ height: "40px" }}></div>
+      <div style={{ height: "40px" }} />
       <div style={{ display: "flex", flexDirection: "row" }}>
         <div
           style={{
@@ -108,12 +108,12 @@ const MenuBar = ({ navigate }: MenuBarProps) => {
             />
           </div>
         </div>
-        <div style={{ width: "10px" }}></div>
+        <div style={{ width: "10px" }} />
         <div>
           <p>{user?.user.name}</p>
         </div>
       </div>
-      <div style={{ height: "40px" }}></div>
+      <div style={{ height: "40px" }} />
       <div>
         {menuItems.map((menuItem) => (
           <div
@@ -143,7 +143,7 @@ const MenuBar = ({ navigate }: MenuBarProps) => {
           </div>
         ))}
       </div>
-      <div style={{ height: "100px" }}></div>
+      <div style={{ height: "100px" }} />
       <div style={{ marginLeft: "10px" }}>
         <button
           id="signOutBtn"
@@ -176,7 +176,7 @@ const MenuBar = ({ navigate }: MenuBarProps) => {
             }}
           >
             <FontAwesomeIcon icon={AllIcons.faSignOut} />
-            <div style={{ width: "10px" }}></div>
+            <div style={{ width: "10px" }} />
             <p>Logout</p>
           </div>
         </button>

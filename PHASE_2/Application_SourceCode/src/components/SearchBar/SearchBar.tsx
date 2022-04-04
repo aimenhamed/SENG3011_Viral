@@ -7,7 +7,6 @@ import jvmCountries from "./countries";
 
 interface SearchProps {
   setHeading: React.Dispatch<React.SetStateAction<string>>;
-  // setShowMap: React.Dispatch<React.SetStateAction<boolean>>,
 }
 
 const SearchBar: React.FC<SearchProps> = ({ setHeading }) => {
@@ -38,7 +37,6 @@ const SearchBar: React.FC<SearchProps> = ({ setHeading }) => {
   });
 
   const searchRegion = (searchTerm: string) => {
-    // (searchTerm.length > 0) ? setSearch(true) :  setSearch(false);
     if (searchTerm.length > 0) {
       setSearch(true);
     } else {
@@ -49,9 +47,9 @@ const SearchBar: React.FC<SearchProps> = ({ setHeading }) => {
       searchTerm,
       regionNames
     );
-    const ratings: stringSimilarity.Rating[] = bestMatchResults.ratings; // eslint-disable-line prefer-destructuring
+    const {ratings} = bestMatchResults;
     ratings.sort((a, b) => b.rating - a.rating); // desc order
-    const topFiveResults = ratings.slice(0, 5); // eslint-disable-line prefer-destructuring
+    const topFiveResults = ratings.slice(0, 5);
 
     setSearchResults(topFiveResults);
   };
@@ -78,7 +76,7 @@ const SearchBar: React.FC<SearchProps> = ({ setHeading }) => {
           }}
           placeholder="Search a country"
           onChange={(e) => searchRegion(e.target.value)}
-        ></input>
+        />
       </div>
 
       {search ? (
@@ -87,34 +85,22 @@ const SearchBar: React.FC<SearchProps> = ({ setHeading }) => {
           style={{ position: "absolute", zIndex: "1", width: "210px" }}
           onMouseLeave={() => setSearch(false)}
         >
-          {" "}
-          {/* eslint-disable-line */}
-          {searchResults.map(
-            (result) => (
-              // <Link to='/' style={searchResultTxtStyle}>
-              <div
-                key={result.target}
-                tabIndex={0}
-                role="button"
-                onKeyDown={() => adjustHomePage(result.target)}
-                id={result.target}
-                style={searchResultDivStyle}
-                onClick={() => adjustHomePage(result.target)}
-              >
-                <p style={searchResultTxtStyle}>{result.target}</p>
-              </div>
-            )
-            // </Link>
-          )}
-          {/* <Link to='/' style={searchResultTxtStyle}>
-                            <div id='seeMoreOption' style={Object.assign({backgroundColor: 'rgb(232, 232, 232)'}, searchResultDivStyle)} onMouseOver={(e) => highlightOnHover(e, 'seeMoreOption')} onMouseLeave={(e) => unHighlight(e, 'seeMoreOption')}> 
-                                <p>See more</p>
-                                <FontAwesomeIcon icon={faArrowRight} size="sm" />
-                            </div>
-                        </Link> */}
+          {searchResults.map((result) => (
+            <div
+              key={result.target}
+              tabIndex={0}
+              role="button"
+              onKeyDown={() => adjustHomePage(result.target)}
+              id={result.target}
+              style={searchResultDivStyle}
+              onClick={() => adjustHomePage(result.target)}
+            >
+              <p style={searchResultTxtStyle}>{result.target}</p>
+            </div>
+          ))}
         </div>
       ) : (
-        <div style={{ display: "none" }}></div>
+        <div style={{ display: "none" }} />
       )}
     </div>
   );

@@ -79,14 +79,14 @@ const Legend = () => {
       {adviceLvls.map((adviceLvl) => (
         <Collapsible
           key={adviceLvl.id}
-          trigger={
+          trigger={(
             <div
               style={{ backgroundColor: adviceLvl.color, ...adviceLvlDivStyle }}
             >
               {`${adviceLvl.lvlName}`}
               <FontAwesomeIcon icon={faAngleDown} />
             </div>
-          }
+          )}
         >
           <div style={{ backgroundColor: "white" }}>
             <p style={{ fontWeight: "700", ...adviceLvlParaStyle }}>
