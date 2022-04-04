@@ -1,6 +1,10 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { HTTPError } from "ky";
 import {
+  IUserBookmarkArticleRequestBody,
+  IUserBookmarkArticleSuccessResponse,
+  IUserBookmarkCountryRequestBody,
+  IUserBookmarkCountrySuccessResponse,
   IUserLoginRequestBody,
   IUserLoginSuccessResponse,
   IUserRegisterRequestBody,
@@ -8,9 +12,11 @@ import {
   IUserUpdateRequestBody,
   IUserUpdateSuccessResponse,
 } from "src/interfaces/ResponseInterface";
+import { putBookmarkCountry } from "src/logic/functions/putBookmarkCountry.function";
 import { postLogin } from "src/logic/functions/postLogin.function";
 import { postRegister } from "src/logic/functions/postRegister.function";
 import { putUserUpdate } from "src/logic/functions/putUpdateUser.function";
+import { putBookmarkArticle } from "src/logic/functions/putBookmarkArticle.function";
 import { RootState } from "../../store";
 
 export const postLoginDispatch = createAsyncThunk<
@@ -61,24 +67,73 @@ export interface UpdateUserInterface {
 }
 
 export const putUserUpdateDispatch = createAsyncThunk<
-IUserUpdateSuccessResponse,
-UpdateUserInterface,
-{ state: RootState }
+  IUserUpdateSuccessResponse,
+  UpdateUserInterface,
+  { state: RootState }
 >("putUserUpdateDispatch", async (req, { rejectWithValue }) => {
-try {
-  const res = (await putUserUpdate(req.userId, req.body)) as IUserUpdateSuccessResponse;
-  return res;
-} catch (err) {
-  if (err instanceof HTTPError) {
-    return rejectWithValue({
-      name: err.name,
-      message: err.message,
-      code: err.response.status,
-      stack: err.stack,
-    });
+  try {
+    const res = (await putUserUpdate(
+      req.userId,
+      req.body
+    )) as IUserUpdateSuccessResponse;
+    return res;
+  } catch (err) {
+    if (err instanceof HTTPError) {
+      return rejectWithValue({
+        name: err.name,
+        message: err.message,
+        code: err.response.status,
+        stack: err.stack,
+      });
+    }
+    throw err;
   }
-  throw err;
-}
+});
+
+export const putBookmarkCountryDispatch = createAsyncThunk<
+  IUserBookmarkCountrySuccessResponse,
+  IUserBookmarkCountryRequestBody,
+  { state: RootState }
+>("putBookmarkCountryDispatch", async (req, { rejectWithValue }) => {
+  try {
+    const res = (await putBookmarkCountry(
+      req
+    )) as IUserBookmarkCountrySuccessResponse;
+    return res;
+  } catch (err) {
+    if (err instanceof HTTPError) {
+      return rejectWithValue({
+        name: err.name,
+        message: err.message,
+        code: err.response.status,
+        stack: err.stack,
+      });
+    }
+    throw err;
+  }
+});
+
+export const putBookmarkArticleDispatch = createAsyncThunk<
+  IUserBookmarkArticleSuccessResponse,
+  IUserBookmarkArticleRequestBody,
+  { state: RootState }
+>("putBookmarkArticleDispatch", async (req, { rejectWithValue }) => {
+  try {
+    const res = (await putBookmarkArticle(
+      req
+    )) as IUserBookmarkArticleSuccessResponse;
+    return res;
+  } catch (err) {
+    if (err instanceof HTTPError) {
+      return rejectWithValue({
+        name: err.name,
+        message: err.message,
+        code: err.response.status,
+        stack: err.stack,
+      });
+    }
+    throw err;
+  }
 });
 
 export enum UserLoadingStatusTypes {
@@ -92,10 +147,21 @@ export enum UserLoadingStatusTypes {
   PUT_USER_UPDATE_LOADING = "PUT_USER_UPDATE_LOADING",
   PUT_USER_UPDATE_FAILED = "PUT_USER_UPDATE_FAILED",
   PUT_USER_UPDATE_COMPLETED = "PUT_USER_UPDATE_COMPLETED",
+  PUT_BOOKMARK_COUNTRY_LOADING = "PUT_BOOKMARK_COUNTRY_LOADING",
+  PUT_BOOKMARK_COUNTRY_FAILED = "PUT_BOOKMARK_COUNTRY_FAILED",
+  PUT_BOOKMARK_COUNTRY_COMPLETED = "PUT_BOOKMARK_COUNTRY_COMPLETED",
+  PUT_BOOKMARK_ARTICLE_LOADING = "PUT_BOOKMARK_ARTICLE_LOADING",
+  PUT_BOOKMARK_ARTICLE_FAILED = "PUT_BOOKMARK_ARTICLE_FAILED",
+  PUT_BOOKMARK_ARTICLE_COMPLETED = "PUT_BOOKMARK_ARTICLE_COMPLETED",
 }
 
 export interface UserState {
-  user?: IUserLoginSuccessResponse | IUserRegisterSuccessResponse | IUserUpdateSuccessResponse;
+  user?:
+    | IUserLoginSuccessResponse
+    | IUserRegisterSuccessResponse
+    | IUserUpdateSuccessResponse
+    | IUserBookmarkCountrySuccessResponse
+    | IUserBookmarkArticleSuccessResponse;
   userLoadingStatus: UserLoadingStatusTypes;
   error: any;
 }
@@ -109,9 +175,9 @@ export const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    updateUser: (state, action: PayloadAction<IUserLoginSuccessResponse>) => ({
+    clearUser: (state) => ({
       ...state,
-      user: action.payload,
+      user: undefined,
     }),
   },
   extraReducers: (builder) => {
@@ -151,10 +217,38 @@ export const userSlice = createSlice({
       state.error = action.payload ? action.payload : action.error;
       state.userLoadingStatus = UserLoadingStatusTypes.PUT_USER_UPDATE_FAILED;
     });
+    builder.addCase(putBookmarkCountryDispatch.fulfilled, (state, action) => ({
+      ...state,
+      userLoadingStatus: UserLoadingStatusTypes.PUT_BOOKMARK_COUNTRY_COMPLETED,
+      user: action.payload,
+    }));
+    builder.addCase(putBookmarkCountryDispatch.pending, (state) => {
+      state.userLoadingStatus =
+        UserLoadingStatusTypes.PUT_BOOKMARK_COUNTRY_LOADING;
+    });
+    builder.addCase(putBookmarkCountryDispatch.rejected, (state, action) => {
+      state.error = action.payload ? action.payload : action.error;
+      state.userLoadingStatus =
+        UserLoadingStatusTypes.PUT_BOOKMARK_COUNTRY_FAILED;
+    });
+    builder.addCase(putBookmarkArticleDispatch.fulfilled, (state, action) => ({
+      ...state,
+      userLoadingStatus: UserLoadingStatusTypes.PUT_BOOKMARK_ARTICLE_COMPLETED,
+      user: action.payload,
+    }));
+    builder.addCase(putBookmarkArticleDispatch.pending, (state) => {
+      state.userLoadingStatus =
+        UserLoadingStatusTypes.PUT_BOOKMARK_ARTICLE_LOADING;
+    });
+    builder.addCase(putBookmarkArticleDispatch.rejected, (state, action) => {
+      state.error = action.payload ? action.payload : action.error;
+      state.userLoadingStatus =
+        UserLoadingStatusTypes.PUT_BOOKMARK_ARTICLE_FAILED;
+    });
   },
 });
 
-export const { updateUser } = userSlice.actions;
+export const { clearUser } = userSlice.actions;
 
 export const selectUser = (state: RootState) => state.user;
 export const selectUserLoadingStatus = (state: RootState) =>
