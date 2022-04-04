@@ -33,7 +33,6 @@ const LoginDialog = ({ isOpen, toggleOpen }: LoginDialogProps) => {
   }, [loadingStatus]);
 
   const login = () => {
-    console.log(`password is ${password}`);
     const req: IUserLoginRequestBody = {
       email,
       password,
@@ -50,12 +49,12 @@ const LoginDialog = ({ isOpen, toggleOpen }: LoginDialogProps) => {
               <BadText>The email or password was incorrect.</BadText>
             )}
             <GenericLabel>Email</GenericLabel>
-            <GenericInput placeholder="Email" type="text" onBlur={(e) => setEmail(e.target.value)} />
+            <GenericInput placeholder="Email" type="text" onChange={(e) => setEmail(e.target.value)} />
             <GenericLabel>Password</GenericLabel>
             <GenericInput
               placeholder="Password"
               type="password"
-              onBlur={(e) => setPassword(sha256(e.target.value))}
+              onChange={(e) => setPassword(sha256(e.target.value))}
             />
             <ModalButton type="button" onClick={login}>
               Login!
