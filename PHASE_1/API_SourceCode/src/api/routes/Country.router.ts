@@ -17,7 +17,6 @@ export class CountryRouter implements IRouter {
   setupRoutes(): Router {
     return Router().get(
       "/country/flights",
-      // validationMiddleware(FlightsGetSchema, "body"),
       async (req: Request, res: Response, next: NextFunction) => {
         this.logger.info(`Received GET /flights request`);
         try {

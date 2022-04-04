@@ -4,6 +4,7 @@ import {
   AmadeusFlightResponse,
   AmadeusResponse,
 } from "../interfaces/IFetchResponses";
+import { SimpleConsoleLogger } from "typeorm";
 
 export enum RequestPaths {
   AMADEUS,
@@ -23,7 +24,7 @@ export const getRequestPath = (
     case RequestPaths.AMADEUS:
       return `https://test.api.amadeus.com/v1/duty-of-care/diseases/covid19-area-report?countryCode=${pathId}`;
     case RequestPaths.AMADEUS_FLIGHTS:
-      return `https://test.api.amadeus.com/v2/shopping/flight-offers?originLocationCode=${olc}&destinationLocationCode=${dlc}&departureDate=${depDate}&adults=${adults}`;
+      return `https://test.api.amadeus.com/v2/shopping/flight-offers?originLocationCode=${olc}&destinationLocationCode=${dlc}&departureDate=${depDate}&adults=${adults}&nonStop=true`;
     case RequestPaths.AMADEUS_TOKEN:
       return `https://test.api.amadeus.com/v1/security/oauth2/token`;
     default:
@@ -38,8 +39,8 @@ export class FetchWrapper {
   private accessToken: string;
 
   constructor() {
-    this.apiKey = `${process.env.API_KEY}`;
-    this.apiSecret = `${process.env.API_SECRET}`;
+    this.apiKey = `VDPSvlYDu2GGea9xzRGUGEe0DDorBywd`;
+    this.apiSecret = `JX9GXGrL2a3BoBKv`;
   }
 
   async getToken(): Promise<any> {
@@ -102,13 +103,17 @@ export class FetchWrapper {
   ): Promise<any> {
     try {
       await this.getToken();
+
+      const pathId = "";
       const path = getRequestPath(
         RequestPaths.AMADEUS_FLIGHTS,
+        pathId,
         originLocationCode,
         destinationLocationCode,
         departureDate,
         adults
       );
+
       const request = {
         options: {
           headers: {
