@@ -1,5 +1,6 @@
 import { Switch, Route } from "react-router-dom";
 import Country from "./pages/Country/Country";
+import MenuBar from "./components/MenuBar/MenuBar";
 import Home from "./pages/Home/Home";
 import Landing from "./pages/Landing/Landing";
 import Settings from "./pages/Settings/Settings";
