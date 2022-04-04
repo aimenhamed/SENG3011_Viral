@@ -28,7 +28,7 @@ export class AdviceRepository {
       .createQueryBuilder("advice")
       .innerJoinAndSelect("advice.country", "country")
       .select([
-        "country.name as country",
+        "country.code as country",
         'advice.adviceLevel as "adviceLevel"',
       ])
       .getRawMany();
