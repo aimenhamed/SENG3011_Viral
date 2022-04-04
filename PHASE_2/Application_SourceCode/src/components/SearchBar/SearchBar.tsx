@@ -1,14 +1,19 @@
-import { faArrowRight, faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
+import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
-import { Link } from "react-router-dom";
 import * as stringSimilarity from "string-similarity";
 import { BestMatch } from "string-similarity";
 import jvmCountries from "./countries" ;
 
-const SearchBar = () => {
+interface SearchProps {
+    setHeading: React.Dispatch<React.SetStateAction<string>>,
+    setShowMap: React.Dispatch<React.SetStateAction<boolean>>,
+}
+
+const SearchBar: React.FC<SearchProps>  = ({setHeading, setShowMap}) => {
     const [search, setSearch] = useState(false);
     const [searchResults, setSearchResults] = useState<stringSimilarity.Rating[]>([]);
+
 
     const searchResultTxtStyle = {
         color: 'white',
@@ -23,6 +28,7 @@ const SearchBar = () => {
         borderBottom: '1px solid #e8e8e8',
         borderLeft: '1px solid #e8e8e8',
         borderRight: '1px solid #e8e8e8',
+        cursor: 'pointer',
     }
 
     const regionNames: string[] = [];
@@ -63,6 +69,11 @@ const SearchBar = () => {
         }
     }
 
+    const adjustHomePage = (newCountry: string) => {
+        setHeading(newCountry)
+        setShowMap(false)
+    }
+
     return (
         <div>
 			<div id="search">
@@ -72,20 +83,20 @@ const SearchBar = () => {
 
             {
                 search ? (
-                    <div style={{position: 'absolute', zIndex: '1'}}>
+                    <div id='resultsDiv' style={{position: 'absolute', zIndex: '1', width: '210px'}} onMouseLeave={(e) => setSearch(false)}> { /* eslint-disable-line */}
                         {searchResults.map((result) => 
-                            <Link to='/' style={searchResultTxtStyle}>
-                                <div id={result.target} style={searchResultDivStyle} onMouseOver={(e) => highlightOnHover(e, result.target)} onMouseLeave={(e) => unHighlight(e, result.target)}> { /* eslint-disable-line */}
-                                    <p>{result.target}</p>
+                            // <Link to='/' style={searchResultTxtStyle}>
+                                <div id={result.target} style={searchResultDivStyle} onMouseOver={(e) => highlightOnHover(e, result.target)} onMouseLeave={(e) => unHighlight(e, result.target)} onClick={(e) => adjustHomePage(result.target)}> { /* eslint-disable-line */}
+                                    <p style={searchResultTxtStyle}>{result.target}</p>
                                 </div>
-                            </Link>
+                            // </Link>
                         )}
-                        <Link to='/' style={searchResultTxtStyle}>
-                            <div id='seeMoreOption' style={Object.assign({backgroundColor: 'rgb(232, 232, 232)'}, searchResultDivStyle)} onMouseOver={(e) => highlightOnHover(e, 'seeMoreOption')} onMouseLeave={(e) => unHighlight(e, 'seeMoreOption')}> { /* eslint-disable-line */}
+                        {/* <Link to='/' style={searchResultTxtStyle}>
+                            <div id='seeMoreOption' style={Object.assign({backgroundColor: 'rgb(232, 232, 232)'}, searchResultDivStyle)} onMouseOver={(e) => highlightOnHover(e, 'seeMoreOption')} onMouseLeave={(e) => unHighlight(e, 'seeMoreOption')}> 
                                 <p>See more</p>
                                 <FontAwesomeIcon icon={faArrowRight} size="sm" />
                             </div>
-                        </Link>
+                        </Link> */}
                     </div>)
                 : (<div style={{display: 'none'}}></div>)
             }
