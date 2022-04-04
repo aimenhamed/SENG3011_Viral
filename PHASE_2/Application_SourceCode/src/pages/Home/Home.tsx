@@ -1,5 +1,5 @@
-import { VectorMap } from "@react-jvectormap/core";
 import { useDispatch } from "react-redux";
+import {VectorMap} from "@react-jvectormap/core";
 import { useAppSelector } from "src/logic/redux/hooks";
 import { getSubscriptionDispatch, LoadingStatusTypes, selectAPP } from "src/logic/redux/reducers/subscriptionSlice/subscriptionSlice";
 import { worldMill } from '@react-jvectormap/world'
@@ -50,7 +50,7 @@ const Home = () => {
 					<div style={{display: 'flex', flexDirection: 'row', alignItems: 'baseline', justifyContent: 'space-between'}}>
 						<div>
 							<h1>
-								Select a destination
+								Select a destination 1
 							</h1>
 						</div>
 						<SearchBar />

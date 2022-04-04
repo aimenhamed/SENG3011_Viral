@@ -5,6 +5,7 @@ module.exports = {
     jest: true,
   },
   parser: "@typescript-eslint/parser",
+  plugins: ['@typescript-eslint'],
   parserOptions: {
     project: "./tsconfig.json",
     ecmaVersion: 2020,
@@ -20,7 +21,7 @@ module.exports = {
   },
   extends: [
     "airbnb-typescript",
-    "prettier/@typescript-eslint",
+    //"prettier/@typescript-eslint",
     "prettier",
   ],
   rules: {
