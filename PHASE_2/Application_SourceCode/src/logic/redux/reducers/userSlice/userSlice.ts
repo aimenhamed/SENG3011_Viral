@@ -5,9 +5,12 @@ import {
   IUserLoginSuccessResponse,
   IUserRegisterRequestBody,
   IUserRegisterSuccessResponse,
+  IUserUpdateRequestBody,
+  IUserUpdateSuccessResponse,
 } from "src/interfaces/ResponseInterface";
 import { postLogin } from "src/logic/functions/postLogin.function";
 import { postRegister } from "src/logic/functions/postRegister.function";
+import { putUserUpdate } from "src/logic/functions/putUpdateUser.function";
 import { RootState } from "../../store";
 
 export const postLoginDispatch = createAsyncThunk<
@@ -52,6 +55,32 @@ export const postRegisterDispatch = createAsyncThunk<
   }
 });
 
+export interface UpdateUserInterface {
+  userId: string;
+  body: IUserUpdateRequestBody;
+}
+
+export const putUserUpdateDispatch = createAsyncThunk<
+IUserUpdateSuccessResponse,
+UpdateUserInterface,
+{ state: RootState }
+>("putUserUpdateDispatch", async (req, { rejectWithValue }) => {
+try {
+  const res = (await putUserUpdate(req.userId, req.body)) as IUserUpdateSuccessResponse;
+  return res;
+} catch (err) {
+  if (err instanceof HTTPError) {
+    return rejectWithValue({
+      name: err.name,
+      message: err.message,
+      code: err.response.status,
+      stack: err.stack,
+    });
+  }
+  throw err;
+}
+});
+
 export enum UserLoadingStatusTypes {
   IDLE = "IDLE",
   POST_LOGIN_LOADING = "POST_LOGIN_LOADING",
@@ -60,10 +89,13 @@ export enum UserLoadingStatusTypes {
   POST_REGISTER_LOADING = "POST_REGISTER_LOADING",
   POST_REGISTER_FAILED = "POST_REGISTER_FAILED",
   POST_REGISTER_COMPLETED = "POST_REGISTER_COMPLETED",
+  PUT_USER_UPDATE_LOADING = "PUT_USER_UPDATE_LOADING",
+  PUT_USER_UPDATE_FAILED = "PUT_USER_UPDATE_FAILED",
+  PUT_USER_UPDATE_COMPLETED = "PUT_USER_UPDATE_COMPLETED",
 }
 
 export interface UserState {
-  user?: IUserLoginSuccessResponse | IUserRegisterSuccessResponse;
+  user?: IUserLoginSuccessResponse | IUserRegisterSuccessResponse | IUserUpdateSuccessResponse;
   userLoadingStatus: UserLoadingStatusTypes;
   error: any;
 }
@@ -106,6 +138,18 @@ export const userSlice = createSlice({
     builder.addCase(postRegisterDispatch.rejected, (state, action) => {
       state.error = action.payload ? action.payload : action.error;
       state.userLoadingStatus = UserLoadingStatusTypes.POST_REGISTER_FAILED;
+    });
+    builder.addCase(putUserUpdateDispatch.fulfilled, (state, action) => ({
+      ...state,
+      userLoadingStatus: UserLoadingStatusTypes.PUT_USER_UPDATE_COMPLETED,
+      user: action.payload,
+    }));
+    builder.addCase(putUserUpdateDispatch.pending, (state) => {
+      state.userLoadingStatus = UserLoadingStatusTypes.PUT_USER_UPDATE_LOADING;
+    });
+    builder.addCase(putUserUpdateDispatch.rejected, (state, action) => {
+      state.error = action.payload ? action.payload : action.error;
+      state.userLoadingStatus = UserLoadingStatusTypes.PUT_USER_UPDATE_FAILED;
     });
   },
 });
