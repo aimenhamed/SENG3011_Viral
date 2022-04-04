@@ -215,7 +215,7 @@ export class UserService {
     }
 
     user.name = userDetails.name ? userDetails.name : user.name;
-    user.password = userDetails.password ? userDetails.password: user.password;
+    user.password = userDetails.password ? userDetails.password : user.password;
 
     user = await this.userRepository.saveUser(user);
 
