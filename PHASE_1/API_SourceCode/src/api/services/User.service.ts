@@ -214,8 +214,8 @@ export class UserService {
       throw new HTTPError(badRequest);
     }
 
-    user.name = userDetails.name;
-    user.password = userDetails.password;
+    user.name = userDetails.name ? userDetails.name : user.name;
+    user.password = userDetails.password ? userDetails.password : user.password;
 
     user = await this.userRepository.saveUser(user);
 

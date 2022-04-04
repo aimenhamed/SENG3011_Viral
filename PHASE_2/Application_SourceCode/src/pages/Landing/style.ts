@@ -4,14 +4,14 @@ import { LandingPageBackdrop } from "src/components/common/image/imageIndex";
 export const FullScreen = styled.div`
   background: url(${LandingPageBackdrop}) no-repeat center fixed;     
   background-size: cover;
-  width: 100%  ;  
+  width: 100%;  
   height: 100vh;
   align-content: center;
 `;
 
 export const Title = styled.div`
-padding-top: 60vh;  
-position: flex;
+padding-top: 10vh;  
+display: flex;
 
   min-width: 800px;
   font-family: 'Calibri';
@@ -20,7 +20,7 @@ position: flex;
   font-size: 4em;
   line-height: 86px;
   text-align: center;
-  
+  flex-direction: column;
   color: #FFFFFF;
 `;
 
@@ -75,6 +75,7 @@ font-size: 28px;
 `
 
 export const GenericLabel = styled.label`
+text-align: left;
 margin-top: 5px;
 font-size: 14px;
 font-weight: 700;
@@ -123,6 +124,28 @@ border-width: 1px;
 border-style: solid;
 border-radius: 3px;
 width: 100%;  
+margin: 3px auto;
+padding: 3px 5px;
+`
+
+export const GoodText = styled.div`
+color: #52c489;  
+background-color: #effbf5;
+border-color: #52c489;  
+border-width: 1px;
+border-style: solid;
+border-radius: 3px;
+width: 100%;  
 margin: 3x auto;
 padding: 3px 5px;
+`
+
+export const LogoLanding = styled.img`
+margin: auto;
+height: 160px;
+width: 160px;
+margin-bottom: 30vh;
+background-color: #fff;
+padding: 1rem;
+border-radius: 50%;
 `

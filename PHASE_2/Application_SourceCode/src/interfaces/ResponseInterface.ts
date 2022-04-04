@@ -95,6 +95,16 @@ export interface IUserSpecificSuccessResponse {
   log: Log;
 }
 
+export interface IUserUpdateRequestBody {
+  name?: string;
+  password?: string;
+}
+
+export interface IUserUpdateSuccessResponse {
+  user: User;
+  log: Log;
+}
+
 export interface IAdviceSpecificSuccessResponse {
   advice: Advice;
   data: AmadeusResponse;

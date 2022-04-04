@@ -132,8 +132,8 @@ export interface IUserBookmarkCountrySuccessResponse {
 }
 
 export interface IUserUpdateRequestBody {
-  name: string;
-  password: string;
+  name?: string;
+  password?: string;
 }
 
 export interface IUserUpdateSuccessResponse {

@@ -1,7 +1,9 @@
 import { useState } from "react";
+import { Logo } from "src/components/common/image/imageIndex";
 import LoginDialog from "./LoginDialog/LoginDialog";
 import RegisterDialog from "./RegisterDialog/RegisterDialog";
-import { FullScreen, Title, WelcomeMessage, MenuButtons, Button } from './style';
+
+import { FullScreen, Title, WelcomeMessage, MenuButtons, Button, LogoLanding } from './style';
 
 const LandingPage = () => {
   const [isLoginOpen, setIsLoginOpen] = useState<boolean>(false);
@@ -9,7 +11,8 @@ const LandingPage = () => {
   return (
 
     <FullScreen>
-      <Title>Welcome to Viral Travel</Title>
+
+      <Title><LogoLanding src={Logo} />Welcome to Viral Travel</Title>
       <WelcomeMessage>Stay safe while travelling abroad</WelcomeMessage>
       <MenuButtons>
         <Button onClick={() => setIsLoginOpen(true)}>
