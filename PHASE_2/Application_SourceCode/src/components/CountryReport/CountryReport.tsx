@@ -7,11 +7,21 @@ import {
   selectFlights,
 } from "src/logic/redux/reducers/flightsSlice/flightsSlice";
 import {
+  putBookmarkCountryDispatch,
+  selectUser,
+} from "src/logic/redux/reducers/userSlice/userSlice";
+import { Country } from "src/interfaces/ViralInterface";
+import { BsHeartFill, BsHeart } from "react-icons/bs";
+import {
   getSearchDispatch,
   selectArticles,
   ArticleLoadingStatusTypes,
 } from "src/logic/redux/reducers/articleSlice/articleSlice";
-import { IAdviceSpecificSuccessResponse } from "src/interfaces/ResponseInterface";
+import {
+  IAdviceSpecificSuccessResponse,
+  IUserBookmarkCountryRequestBody,
+} from "src/interfaces/ResponseInterface";
+import { useHistory } from "react-router-dom";
 import Text from "../common/text/Text";
 import Map from "../Map/Map";
 import { FlexLayout } from "../common/layouts/screenLayout";
@@ -35,18 +45,37 @@ type CountryReportProps = {
 
 const CountryReport = ({ advice, country }: CountryReportProps) => {
   const dispatch = useDispatch();
+  const history = useHistory();
+
+  const { user } = useAppSelector(selectUser);
 
   const [commentDialog, setCommentDialog] = useState<boolean>(false);
+  const bookmarked = user?.user.bookmarkedCountries.filter(
+    (c) => advice.advice.country.countryId === c.countryId
+  ) as Country[];
 
   const { flights, loadingStatus } = useAppSelector(selectFlights);
   const { articles, articleloadingStatus } = useAppSelector(selectArticles);
 
   const renderText = (text: string[]) =>
     text.map((req) => <Text key={req}>{req}</Text>);
+
   useEffect(() => {
+    if (!user) history.push("/");
     dispatch(getFlightsDispatch());
     dispatch(getSearchDispatch(country));
   }, []);
+  console.log(user);
+  console.log(advice.advice.country === user?.user.bookmarkedCountries[0]);
+  console.log(bookmarked);
+  const bookmarkCountry = () => {
+    const req: IUserBookmarkCountryRequestBody = {
+      userId: user?.user.userId!,
+      countryId: advice.advice.country.countryId,
+      status: !bookmarked,
+    };
+    dispatch(putBookmarkCountryDispatch(req));
+  };
   return (
     <FlexLayout>
       <Container>
@@ -61,7 +90,19 @@ const CountryReport = ({ advice, country }: CountryReportProps) => {
                   {advice.advice.country.name} Map - Continent{" "}
                   {advice.advice.continent}
                 </Text>
-                <button type="button">Bookmark this country</button>
+                {bookmarked.length > 0 ? (
+                  <BsHeartFill
+                    color="ff5c5c"
+                    size="2rem"
+                    onClick={bookmarkCountry}
+                  />
+                ) : (
+                  <BsHeart
+                    color="ff5c5c"
+                    size="2rem"
+                    onClick={bookmarkCountry}
+                  />
+                )}
                 <Map />
               </TileLockup>
               <TileLockup>
@@ -141,7 +182,7 @@ const CountryReport = ({ advice, country }: CountryReportProps) => {
                     <Text>No comments posted yet.</Text>
                   ) : (
                     advice.comments.map((comment) => (
-                      <CommentCard comment={comment} />
+                      <CommentCard key={comment.commentId} comment={comment} />
                     ))
                   )}
                 </Tile>

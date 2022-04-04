@@ -87,11 +87,17 @@ export const adviceSlice = createSlice({
     }),
   },
   extraReducers: (builder) => {
-    builder.addCase(getSpecificAdviceDispatch.fulfilled, (state, action) => ({
-      ...state,
-      adviceloadingStatus: AdviceLoadingStatusTypes.GET_ADVICE_COMPLETED,
-      advice: action.payload,
-    }));
+    builder.addCase(getSpecificAdviceDispatch.fulfilled, (state, action) => {
+      const comments = [...action.payload.comments];
+      comments.sort((a, b) => {
+        return new Date(b.date).getTime() - new Date(a.date).getTime();
+      });
+      return {
+        ...state,
+        adviceloadingStatus: AdviceLoadingStatusTypes.GET_ADVICE_COMPLETED,
+        advice: { ...action.payload, comments },
+      };
+    });
     builder.addCase(getSpecificAdviceDispatch.pending, (state) => {
       state.adviceloadingStatus = AdviceLoadingStatusTypes.GET_ADVICE_LOADING;
     });
@@ -108,6 +114,9 @@ export const adviceSlice = createSlice({
           (comment) => comment.commentId !== newComment.commentId
         );
         newComments.push(newComment);
+        newComments.sort((a, b) => {
+          return new Date(b.date).getTime() - new Date(a.date).getTime();
+        });
         state.advice.comments = newComments;
       }
     });

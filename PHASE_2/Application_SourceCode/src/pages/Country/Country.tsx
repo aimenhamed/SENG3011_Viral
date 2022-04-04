@@ -25,7 +25,7 @@ const Country = ({ countryName }: CountryProps) => {
     return <LoadingPage />;
   }
 
-  if (adviceloadingStatus === AdviceLoadingStatusTypes.GET_ADVICE_COMPLETED) {
+  if (advice) {
     return <CountryReport advice={advice!} country={countryName} />;
   }
   return <></>;
