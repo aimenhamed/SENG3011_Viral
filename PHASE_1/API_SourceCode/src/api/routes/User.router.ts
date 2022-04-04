@@ -8,12 +8,14 @@ import {
   UserLoginSchema,
   UserBookmarkArticleSchema,
   UserBookmarkCountrySchema,
+  UserUpdateSchema,
 } from "../schemas/User.schema";
 import {
   IUserRegisterRequestBody,
   IUserLoginRequestBody,
   IUserBookmarkArticleRequestBody,
   IUserBookmarkCountryRequestBody,
+  IUserUpdateRequestBody,
 } from "IApiResponses";
 import { HTTPError } from "../../utils/Errors";
 import { badRequest } from "../../utils/Constants";
@@ -95,30 +97,6 @@ export class UserRouter implements IRouter {
           }
         }
       )
-      .put(
-        "/users/remove-bookmark",
-        validationMiddleware(UserBookmarkArticleSchema, "body"),
-        async (req: Request, res: Response, next: NextFunction) => {
-          this.logger.info(`Received /users/remove-bookmark request`);
-
-          const bookmarkDetails = req.body as IUserBookmarkArticleRequestBody;
-          if (!bookmarkDetails) throw new HTTPError(badRequest);
-
-          try {
-            const result = await this.userService.removeBookmark(
-              bookmarkDetails
-            );
-            return res.status(200).json(result);
-          } catch (err: any) {
-            this.logger.warn(
-              `An error occured when trying to PUT remove bookmark for user ${formatError(
-                err
-              )}`
-            );
-            return next(err);
-          }
-        }
-      )
       .post(
         "/users/login",
         validationMiddleware(UserLoginSchema, "body"),
@@ -159,6 +137,29 @@ export class UserRouter implements IRouter {
           } catch (err: any) {
             this.logger.warn(
               `An error occurred when trying to PUT bookmark country for user ${formatError(
+                err
+              )}`
+            );
+            return next(err);
+          }
+        }
+      )
+      .put(
+        "/users/:userId",
+        validationMiddleware(UserUpdateSchema, "body"),
+        async (req: Request, res: Response, next: NextFunction) => {
+          this.logger.info(`Received /users/:userId put request`);
+
+          const userDetails = req.body as IUserUpdateRequestBody;
+          const user = req.params.userId;
+          if (!userDetails) throw new HTTPError(badRequest);
+
+          try {
+            const result = await this.userService.updateUser(user, userDetails);
+            return res.status(200).json(result);
+          } catch (err: any) {
+            this.logger.warn(
+              `An error occurred when trying to PUT user details for user ${formatError(
                 err
               )}`
             );

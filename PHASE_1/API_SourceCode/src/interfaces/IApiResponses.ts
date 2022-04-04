@@ -2,7 +2,7 @@ import { Advice } from "IAdvice";
 import { Article } from "IArticle";
 import { Report } from "IReport";
 import { User } from "IUser";
-import { Comment } from "IComment";
+import { Comment, CommentNoCountry } from "IComment";
 import { IAdviceOnly } from "IAdvice";
 import { AmadeusData } from "IFetchResponses";
 import { Country } from "ICountry";
@@ -66,6 +66,7 @@ export interface IUserRegisterSuccessResponse {
 export interface IUserBookmarkArticleRequestBody {
   userId: string;
   articleId: string;
+  status: boolean;
 }
 
 export interface IUserBookmarkArticleSuccessResponse {
@@ -98,6 +99,7 @@ export interface IUserSpecificSuccessResponse {
 export interface IAdviceSpecificSuccessResponse {
   advice: Advice;
   data: AmadeusData;
+  comments: CommentNoCountry[];
   log: Log;
 }
 
@@ -126,5 +128,15 @@ export interface IUserBookmarkCountryRequestBody {
 export interface IUserBookmarkCountrySuccessResponse {
   user: User;
   country: Country;
+  log: Log;
+}
+
+export interface IUserUpdateRequestBody {
+  name: string;
+  password: string;
+}
+
+export interface IUserUpdateSuccessResponse {
+  user: User;
   log: Log;
 }

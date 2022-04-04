@@ -1,7 +1,7 @@
 import { Switch, Route } from "react-router-dom";
-import CountryReport from "./components/CountryReport/CountryReport";
-import { USA } from "./constants/Countries";
+import Country from "./pages/Country/Country";
 import Home from "./pages/Home/Home";
+import Landing from "./pages/Landing/Landing";
 
 const Routes = () => (
   <Switch>
@@ -9,10 +9,10 @@ const Routes = () => (
       <Home />
     </Route>
     <Route path="/country">
-      <CountryReport country={USA} />
+      <Country countryName="Ukraine" />
     </Route>
     <Route path="/*">
-      <Home />
+      <Landing />
     </Route>
   </Switch>
 );

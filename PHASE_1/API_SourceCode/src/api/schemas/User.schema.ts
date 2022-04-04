@@ -13,6 +13,7 @@ export const UserBookmarkArticleSchema = Joi.object({
   articleId: Joi.string()
     .uuid({ version: ["uuidv4"] })
     .required(),
+  status: Joi.boolean().required(),
 });
 
 export const UserLoginSchema = Joi.object({
@@ -28,4 +29,9 @@ export const UserBookmarkCountrySchema = Joi.object({
     .uuid({ version: ["uuidv4"] })
     .required(),
   status: Joi.boolean().required(),
+});
+
+export const UserUpdateSchema = Joi.object({
+  name: Joi.string().required(),
+  password: Joi.string().required(),
 });

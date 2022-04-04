@@ -1,9 +1,7 @@
 import { Router, Request, Response, NextFunction } from "express";
 import { formatError, getLogger } from "../../utils/Logger";
 import { IRouter } from "../../interfaces/IRouter";
-import validationMiddleware from "../middlewares/validation";
 import { CountryService } from "../services/Country.service";
-import { CommentPostSchema } from "../schemas/Comment.schema";
 
 export class CountryRouter implements IRouter {
   private readonly logger = getLogger();
@@ -20,7 +18,7 @@ export class CountryRouter implements IRouter {
       async (req: Request, res: Response, next: NextFunction) => {
         this.logger.info(`Received GET /flights request`);
         try {
-          const flightStuff = {
+          const flightDetails = {
             originLocationCode: req.query.originLocationCode as string,
             destinationLocationCode: req.query
               .destinationLocationCode as string,
@@ -28,7 +26,7 @@ export class CountryRouter implements IRouter {
             adults: req.query.adults as string,
           };
 
-          const result = await this.countryService.getFlights(flightStuff);
+          const result = await this.countryService.getFlights(flightDetails);
           this.logger.info(`Responding to client in GET /flights`);
           return res.status(200).json(result);
         } catch (err: any) {

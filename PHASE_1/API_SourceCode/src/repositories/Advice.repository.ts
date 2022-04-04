@@ -26,7 +26,7 @@ export class AdviceRepository {
     // aliasing is required as it ignores IAdviceOnly interface for some reason
     return await getRepository(AdviceEntity)
       .createQueryBuilder("advice")
-      .leftJoinAndSelect("advice.country", "country")
+      .innerJoinAndSelect("advice.country", "country")
       .select([
         "country.name as country",
         'advice.adviceLevel as "adviceLevel"',
