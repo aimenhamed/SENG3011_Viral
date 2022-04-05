@@ -1,12 +1,83 @@
 import styled from "styled-components";
-import { LandingPageBackdrop } from "src/components/common/image/imageIndex";
 
-export const FullScreen = styled.div`
-  background: url(${LandingPageBackdrop}) no-repeat center fixed;
-  background-size: cover;
+export const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding: 1rem 2rem;
+`;
+
+export const Content = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+`;
+
+export const Section = styled.div`
+  display: flex;
+  flex-direction: column;
   width: 100%;
-  height: 100vh;
-  align-content: center;
+`;
+
+export const SubSection = styled.div`
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  justify-content: space-between;
+`;
+
+export const MockMap = styled.div`
+  border-radius: 1.5rem;
+  background: #33ccee;
+  width: 50%;
+  padding: 6rem;
+`;
+
+export const TileLockup = styled.div`
+  :hover {
+    transition-timing-function: ease-out;
+    transform: perspective(8000px) rotateY(10deg);
+    transition: 1s;
+  }
+`;
+
+export const Tile = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  border-radius: 1.5rem;
+  background: #eeee;
+`;
+
+export const SubText = styled.span`
+  font-weight: normal;
+`;
+
+export const GenericLabel = styled.label`
+  text-align: left;
+  margin-top: 5px;
+  font-size: 14px;
+  font-weight: 700;
+`;
+
+export const GenericInput = styled.input`
+  margin: 5px 0px;
+  padding: 5px 0px;
+  padding-left: 5px;
+  font-size: 16px;
+  width: 100%;
+  box-sizing: border-box;
+`;
+
+export const ArticleResult = styled.div`
+  background: #5dd29a;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1rem;
+  :hover {
+    background: #1aa562;
+  }
 `;
 
 export const Title = styled.div`
@@ -72,22 +143,6 @@ export const LoginModal = styled.div`
 
 export const ModalTitle = styled.h2`
   font-size: 28px;
-`;
-
-export const GenericLabel = styled.label`
-  text-align: left;
-  margin-top: 5px;
-  font-size: 14px;
-  font-weight: 700;
-`;
-
-export const GenericInput = styled.input`
-  margin: 5px 0px;
-  padding: 5px 0px;
-  padding-left: 5px;
-  font-size: 16px;
-  width: 100%;
-  box-sizing: border-box;
 `;
 
 export const ModalButton = styled.button`

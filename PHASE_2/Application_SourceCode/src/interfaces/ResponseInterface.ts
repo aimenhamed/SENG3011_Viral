@@ -5,6 +5,7 @@ import {
   Advice,
   IAdviceOnly,
   Comment,
+  Country,
 } from "./ViralInterface";
 
 export interface ApiError {
@@ -66,6 +67,7 @@ export interface IUserRegisterSuccessResponse {
 export interface IUserBookmarkArticleRequestBody {
   userId: string;
   articleId: string;
+  status: boolean;
 }
 
 export interface IUserBookmarkArticleSuccessResponse {
@@ -182,4 +184,16 @@ export interface AmadeusData {
     vaccinationDoseStatus: string;
     percentage: number;
   }[];
+}
+
+export interface IUserBookmarkCountryRequestBody {
+  userId: string;
+  countryId: string;
+  status: boolean;
+}
+
+export interface IUserBookmarkCountrySuccessResponse {
+  user: User;
+  country: Country;
+  log: Log;
 }
