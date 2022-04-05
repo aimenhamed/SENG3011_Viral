@@ -1,9 +1,9 @@
 import { Router, Request, Response, NextFunction } from "express";
 import { formatError, getLogger } from "../../utils/Logger";
 import { IRouter } from "../../interfaces/IRouter";
-// import validationMiddleware from "../middlewares/validation";
+import validationMiddleware from "../middlewares/validation";
 import { CountryService } from "../services/Country.service";
-// import { CommentPostSchema } from "../schemas/Comment.schema";
+import { FlightsSchema } from "../schemas/Country.schema";
 
 export class CountryRouter implements IRouter {
   private readonly logger = getLogger();
@@ -17,20 +17,19 @@ export class CountryRouter implements IRouter {
   setupRoutes(): Router {
     return Router().get(
       "/country/flights",
-      // validationMiddleware(FlightsGetSchema, "body"),
+      validationMiddleware(FlightsSchema, "query"),
       async (req: Request, res: Response, next: NextFunction) => {
         this.logger.info(`Received GET /flights request`);
         try {
-          // const flightStuff = {
-          //   originLocationCode: req.query.originLocationCode as string,
-          //   destinationLocationCode: req.query
-          //     .destinationLocationCode as string,
-          //   departureDate: req.query.departureDate as string,
-          //   adults: +req.query.adults! as number,
-          //   max: +req.query.max! as number,
-          // };
+          const flightDetails = {
+            originLocationCode: req.query.originLocationCode as string,
+            destinationLocationCode: req.query
+              .destinationLocationCode as string,
+            departureDate: req.query.departureDate as string,
+            adults: req.query.adults as string,
+          };
 
-          const result = await this.countryService.getFlights();
+          const result = await this.countryService.getFlights(flightDetails);
           this.logger.info(`Responding to client in GET /flights`);
           return res.status(200).json(result);
         } catch (err: any) {

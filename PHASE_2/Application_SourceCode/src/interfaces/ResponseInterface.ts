@@ -197,3 +197,10 @@ export interface IUserBookmarkCountrySuccessResponse {
   country: Country;
   log: Log;
 }
+
+export interface IFlightQuery {
+  originLocationCode: string;
+  destinationLocationCode: string;
+  departureDate: string;
+  adults: string;
+}

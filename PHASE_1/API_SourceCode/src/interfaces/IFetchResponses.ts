@@ -69,7 +69,7 @@ export interface AmadeusFlightData {
   instantTicketingRequired: boolean;
   nonHomogenous: boolean;
   oneWay: boolean;
-  lastTicketingDate: Date;
+  lastTicketingDate: string;
   numberOfBookableSeats: number;
   itineraries: [
     {
@@ -78,7 +78,7 @@ export interface AmadeusFlightData {
         {
           departure: {
             iataCode: string;
-            termial: string;
+            terminal: string;
             at: string;
           };
           arrival: {
@@ -137,7 +137,7 @@ export interface AmadeusFlightData {
           class: string;
           includedCheckedBags: {
             weight: number;
-            weightUnit: string;
+            weightsUnit: string;
           };
         }
       ];

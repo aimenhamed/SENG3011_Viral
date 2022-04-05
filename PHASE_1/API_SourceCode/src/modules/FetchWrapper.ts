@@ -4,6 +4,7 @@ import {
   AmadeusFlightResponse,
   AmadeusResponse,
 } from "../interfaces/IFetchResponses";
+import { SimpleConsoleLogger } from "typeorm";
 
 export enum RequestPaths {
   AMADEUS,
@@ -17,14 +18,13 @@ export const getRequestPath = (
   olc?: string,
   dlc?: string,
   depDate?: string,
-  adults?: string,
-  max?: string
+  adults?: string
 ): string => {
   switch (prefix) {
     case RequestPaths.AMADEUS:
       return `https://test.api.amadeus.com/v1/duty-of-care/diseases/covid19-area-report?countryCode=${pathId}`;
     case RequestPaths.AMADEUS_FLIGHTS:
-      return `https://test.api.amadeus.com/v2/shopping/flight-offers?originLocationCode=${olc}&destinationLocationCode=${dlc}&departureDate=${depDate}&adults=${adults}&max=${max}`;
+      return `https://test.api.amadeus.com/v2/shopping/flight-offers?originLocationCode=${olc}&destinationLocationCode=${dlc}&departureDate=${depDate}&adults=${adults}&nonStop=true`;
     case RequestPaths.AMADEUS_TOKEN:
       return `https://test.api.amadeus.com/v1/security/oauth2/token`;
     default:
@@ -39,8 +39,8 @@ export class FetchWrapper {
   private accessToken: string;
 
   constructor() {
-    this.apiKey = `${process.env.API_KEY}`;
-    this.apiSecret = `${process.env.API_SECRET}`;
+    this.apiKey = `VDPSvlYDu2GGea9xzRGUGEe0DDorBywd`;
+    this.apiSecret = `JX9GXGrL2a3BoBKv`;
   }
 
   async getToken(): Promise<any> {
@@ -99,19 +99,21 @@ export class FetchWrapper {
     originLocationCode: string,
     destinationLocationCode: string,
     departureDate: string,
-    adults: string,
-    max: string
+    adults: string
   ): Promise<any> {
     try {
       await this.getToken();
+
+      const pathId = "";
       const path = getRequestPath(
         RequestPaths.AMADEUS_FLIGHTS,
+        pathId,
         originLocationCode,
         destinationLocationCode,
         departureDate,
-        adults,
-        max
+        adults
       );
+
       const request = {
         options: {
           headers: {
@@ -128,11 +130,11 @@ export class FetchWrapper {
         },
       });
 
-      const flightsResponse = JSON.parse(res.body) as AmadeusFlightResponse;
+      const flightsResponse: AmadeusFlightResponse = JSON.parse(res.body);
       return flightsResponse;
     } catch (err: any) {
       this.logger.error(
-        `An error occurred when getting flights with origin: ${originLocationCode}, destination: ${destinationLocationCode}, departure date: ${departureDate}, adults: ${adults}, max: ${max}: ${formatError(
+        `An error occurred when getting flights with origin: ${originLocationCode}, destination: ${destinationLocationCode}, departure date: ${departureDate}, adults: ${adults}: ${formatError(
           err
         )}`
       );

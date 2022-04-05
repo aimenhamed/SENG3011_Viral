@@ -183,3 +183,28 @@ export const getMockCountries = (): CountryEntity[] => {
     },
   ];
 };
+
+export const getMockFlights = (): any[] => {
+  return [
+    {
+      departure: "SYD",
+      arrival: "BKK",
+      duration: "PT9H40M",
+      departureTime: "2022-11-01T10:30:00",
+      arrivalTime: "2022-11-01T16:10:00",
+      carrierCode: "EK",
+      currency: "EUR",
+      price: "473.20",
+    },
+    {
+      departure: "SYD",
+      arrival: "BKK",
+      duration: "PT9H40M",
+      departureTime: "2022-11-01T10:30:00",
+      arrivalTime: "2022-11-01T16:10:00",
+      carrierCode: "QF",
+      currency: "EUR",
+      price: "602.20",
+    },
+  ];
+};

@@ -33,11 +33,7 @@ export const MockMap = styled.div`
 `;
 
 export const TileLockup = styled.div`
-  :hover {
-    transition-timing-function: ease-out;
-    transform: perspective(8000px) rotateY(10deg);
-    transition: 1s;
-  }
+
 `;
 
 export const Tile = styled.div`

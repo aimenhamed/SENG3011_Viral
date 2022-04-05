@@ -55,7 +55,7 @@ export interface Comment {
 
 export interface Flight {
   departure: string;
-  destination: string;
+  arrival: string;
   departureTime: string;
   arrivalTime: string;
   duration: string;
