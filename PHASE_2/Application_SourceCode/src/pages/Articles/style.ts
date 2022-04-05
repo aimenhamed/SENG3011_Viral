@@ -68,6 +68,18 @@ export const GenericInput = styled.input`
   box-sizing: border-box;
 `;
 
+export const GenericSelect = styled.select`
+  margin: 5px 0px;
+  padding: 5px 0px;
+  padding-left: 5px;
+  font-size: 16px;
+  width: 100%;
+  box-sizing: border-box;
+  background-color: #fff;
+  border: solid 1px #8f8f9d;
+  border-radius: 2px;
+`
+
 export const ArticleResult = styled.div`
   background: #5dd29a;
   border-radius: 0.5rem;
@@ -202,3 +214,14 @@ export const LogoLanding = styled.img`
   padding: 1rem;
   border-radius: 50%;
 `;
+
+export const SearchButton = styled.button`
+border: none;
+border-radius: 3px;
+padding:10px; 
+font-weight: 600;
+transition: 0.3s ease;
+:onHover {
+  background-color: #2a9763;
+}
+`

@@ -4,8 +4,9 @@ import Text from "src/components/common/text/Text";
 import { Article } from "src/interfaces/ViralInterface";
 import { useAppSelector } from "src/logic/redux/hooks";
 import { selectUser } from "src/logic/redux/reducers/userSlice/userSlice";
+import ArticleResult from "src/components/ArticleResult/ArticleResult";
 import ArticleDialog from "../Articles/ArticleDialog/ArticleDialog";
-import { Container, ArticleResult } from "./style";
+import { Container } from "./style";
 
 const BookmarkedArticles = () => {
   const { user } = useAppSelector(selectUser);
@@ -27,15 +28,12 @@ const BookmarkedArticles = () => {
           ) : (
             articles.map((article) => (
               <ArticleResult
-                key={article.articleId}
-                onClick={() => {
+                article={article}
+                click={() => {
                   setSelectedArticle(article);
                   setArticleDialog(true);
                 }}
-              >
-                <Text bold>{article.headline}</Text>
-                <Text>DoP: {article.dateOfPublication}</Text>
-              </ArticleResult>
+              />
             ))
           )}
         </div>

@@ -10,8 +10,9 @@ import {
   getSearchDispatch,
   selectArticles,
 } from "src/logic/redux/reducers/articleSlice/articleSlice";
+import ArticleResult from "src/components/ArticleResult/ArticleResult";
 import ArticleDialog from "./ArticleDialog/ArticleDialog";
-import { ArticleResult, Container, GenericInput, GenericLabel } from "./style";
+import { Container, GenericInput, GenericLabel, GenericSelect, SearchButton } from "./style";
 
 const Articles = () => {
   const dispatch = useDispatch();
@@ -58,19 +59,19 @@ const Articles = () => {
             onChange={(e) => setEndDate(e.target.value)}
           />
           <GenericLabel>Diseases</GenericLabel>
-          <select name="diseases" onChange={(e) => setTerm(e.target.value)}>
+          <GenericSelect name="diseases" onChange={(e) => setTerm(e.target.value)}>
             {keyTerms.map((keyTerm) => (
               <option key={keyTerm} value={keyTerm}>
                 {keyTerm}
               </option>
             ))}
-          </select>
-          <button type="button" onClick={search}>
+          </GenericSelect>
+          <SearchButton type="button" onClick={search}>
             Search
-          </button>
+          </SearchButton>
         </div>
         <div style={{ display: "flex", flexDirection: "column", width: "50%" }}>
-          <Text bold fontSize="2rem">
+          <Text bold fontSize="1.5rem">
             Results
           </Text>
           {results.length === 0 ? (
@@ -78,14 +79,12 @@ const Articles = () => {
           ) : (
             results.map((article) => (
               <ArticleResult
-                key={article.articleId}
-                onClick={() => {
+                article={article}
+                click={() => {
                   setSelectedArticle(article);
                   setArticleDialog(true);
                 }}
-              >
-                {article.headline}
-              </ArticleResult>
+              />
             ))
           )}
         </div>
