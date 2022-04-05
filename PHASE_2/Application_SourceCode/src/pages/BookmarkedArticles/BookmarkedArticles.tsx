@@ -33,7 +33,8 @@ const BookmarkedArticles = () => {
                   setArticleDialog(true);
                 }}
               >
-                {article.headline}
+                <Text bold>{article.headline}</Text>
+                <Text>DoP: {article.dateOfPublication}</Text>
               </ArticleResult>
             ))
           )}
