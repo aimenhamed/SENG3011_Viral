@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { HTTPError } from "ky";
+import { IFlightQuery } from "src/interfaces/ResponseInterface";
 import { Flight } from "src/interfaces/ViralInterface";
 import {
   getFlightInfo,
@@ -9,11 +10,11 @@ import { RootState } from "../../store";
 
 export const getFlightsDispatch = createAsyncThunk<
   FlightRes,
-  void,
+  IFlightQuery,
   { state: RootState }
->("getFlightsDispatch", async (_, { rejectWithValue }) => {
+>("getFlightsDispatch", async (req, { rejectWithValue }) => {
   try {
-    const res = (await getFlightInfo()) as FlightRes;
+    const res = (await getFlightInfo(req)) as FlightRes;
     return res;
   } catch (err) {
     if (err instanceof HTTPError) {

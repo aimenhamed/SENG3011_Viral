@@ -1,7 +1,9 @@
 import { Router, Request, Response, NextFunction } from "express";
 import { formatError, getLogger } from "../../utils/Logger";
 import { IRouter } from "../../interfaces/IRouter";
+import validationMiddleware from "../middlewares/validation";
 import { CountryService } from "../services/Country.service";
+import { FlightsSchema } from "../schemas/Country.schema";
 
 export class CountryRouter implements IRouter {
   private readonly logger = getLogger();
@@ -15,6 +17,7 @@ export class CountryRouter implements IRouter {
   setupRoutes(): Router {
     return Router().get(
       "/country/flights",
+      validationMiddleware(FlightsSchema, "query"),
       async (req: Request, res: Response, next: NextFunction) => {
         this.logger.info(`Received GET /flights request`);
         try {

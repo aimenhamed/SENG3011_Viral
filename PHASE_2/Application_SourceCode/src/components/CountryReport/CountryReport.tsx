@@ -22,6 +22,7 @@ import {
   IAdviceSpecificSuccessResponse,
   ISearchRequestHeaders,
   IUserBookmarkCountryRequestBody,
+  IFlightQuery,
 } from "src/interfaces/ResponseInterface";
 import { useHistory } from "react-router-dom";
 import Text from "../common/text/Text";
@@ -40,6 +41,7 @@ import FlightInfo from "../FlightInfo/FlightInfo";
 import CommentCard from "../Comment/Comment";
 import AddCommentDialog from "../AddCommentDialog/AddCommentDialog";
 
+
 type CountryReportProps = {
   advice: IAdviceSpecificSuccessResponse;
   country: string;
@@ -51,20 +53,22 @@ const CountryReport = ({ advice, country }: CountryReportProps) => {
 
   const { user } = useAppSelector(selectUser);
 
+  const { flights, loadingStatus } = useAppSelector(selectFlights);
+  const { articles, articleloadingStatus } = useAppSelector(selectArticles);
+  const [ originCode, setOriginCode ] = useState<string>("SYD");
+  const [ destCode, setDestCode ]  = useState<string>("BKK");
+  const [ departDate,  setDepartDate ] = useState<string>("2022-11-01");
+  const [ numAdults, setNumAdults ] = useState<string>("1");
   const [commentDialog, setCommentDialog] = useState<boolean>(false);
   const bookmarked = user?.user.bookmarkedCountries.filter(
     (c) => advice.advice.country.countryId === c.countryId
   ) as Country[];
-
-  const { flights, loadingStatus } = useAppSelector(selectFlights);
-  const { articles, articleloadingStatus } = useAppSelector(selectArticles);
 
   const renderText = (text: string[]) =>
     text.map((req) => <Text key={req}>{req}</Text>);
 
   useEffect(() => {
     if (!user) history.push("/");
-    dispatch(getFlightsDispatch());
     const req: ISearchRequestHeaders = {
       keyTerms,
       location: country,
@@ -81,6 +85,16 @@ const CountryReport = ({ advice, country }: CountryReportProps) => {
     };
     dispatch(putBookmarkCountryDispatch(req));
   };
+
+  const getFlightInfo = () => {
+    const req: IFlightQuery = {
+      originLocationCode: originCode,
+      destinationLocationCode: destCode,
+      departureDate: departDate,
+      adults: numAdults,
+    }
+    dispatch(getFlightsDispatch(req));
+  }
   return (
     <FlexLayout>
       <Container>
@@ -212,11 +226,16 @@ const CountryReport = ({ advice, country }: CountryReportProps) => {
                 {advice.advice.latestAdvice}
               </Tile>
             </TileLockup>
-            <TileLockup style={{ width: "50%" }}>
+            <TileLockup>
               <Text bold fontSize="1.125rem" align="center">
                 Available flights to {advice.advice.country.name}
               </Text>
               <Tile>
+                <input type="text" placeholder="Start location code" onChange={(e)=>setOriginCode(e.target.value)} />
+                <input type="text" placeholder="Destination location code" onChange={(e)=>setDestCode(e.target.value)} />
+                <input type="date" placeholder={new Date().toLocaleString()} onChange={(e)=>setDepartDate(e.target.value)} />
+                <input type="number" placeholder="Number of adults" onChange={(e)=>setNumAdults(e.target.value as string)} />
+                <button type="button" onClick={()=>getFlightInfo()}>Submit</button>
                 {loadingStatus === LoadingStatusTypes.GET_FLIGHTS_LOADING ? (
                   <Text>Loading...</Text>
                 ) : (
