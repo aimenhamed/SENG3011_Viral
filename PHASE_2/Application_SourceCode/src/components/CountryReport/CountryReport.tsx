@@ -65,7 +65,7 @@ const CountryReport = ({ advice, country }: CountryReportProps) => {
   const bookmarked = user?.user.bookmarkedCountries.filter(
     (c) => advice.advice.country.countryId === c.countryId
   ) as Country[];
-  
+
   const [ selectedArticle,  setSelectedArticle ] = useState<Article | undefined>()
   const [ isArticleDialogOpen, setIsArticleDialogOpen ] = useState<boolean>(false);
 
@@ -106,14 +106,15 @@ const CountryReport = ({ advice, country }: CountryReportProps) => {
     } else if (articles.length > 0 ) {
         return (
           <div style={{width:'300px', maxHeight: '200px', overflowY: "scroll", padding: "5px"}}>
-          {articles.map((article) => (
-            <ArticleResult 
-              article={article} 
-              click={()=>{
+            {articles.map((article) => (
+              <ArticleResult
+                article={article}
+                click={()=>{
                 setSelectedArticle(article);
                 setIsArticleDialogOpen(true)
-              }} 
-            />))}
+              }}
+              />
+))}
           </div>
         )
     } else {
@@ -273,16 +274,18 @@ const CountryReport = ({ advice, country }: CountryReportProps) => {
       </Container>
       {
         selectedArticle
-        ? <ArticleDialog 
-            article={selectedArticle} 
-            isOpen={isArticleDialogOpen} 
+        ? (
+          <ArticleDialog
+            article={selectedArticle}
+            isOpen={isArticleDialogOpen}
             toggleOpen={() => setIsArticleDialogOpen(false)}
-        />
+          />
+)
         : null
       }
-      
+
     </FlexLayout>
   );
 };
-  
+
 export default CountryReport;

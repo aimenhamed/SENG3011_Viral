@@ -53,7 +53,7 @@ const LandingPage = () => {
         isOpen={isRegisterOpen}
         toggleOpen={() => setIsRegisterOpen(false)}
       />
-      <LoadingDialog 
+      <LoadingDialog
         isOpen={isLoadingOpen}
         toggleOpen={()=> setIsLoadingOpen(false)}
       />
