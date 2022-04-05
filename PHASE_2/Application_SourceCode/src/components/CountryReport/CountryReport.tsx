@@ -250,10 +250,10 @@ const CountryReport = ({ advice, country }: CountryReportProps) => {
                 Available flights to {advice.advice.country.name}
               </Text>
               <Tile>
-                <input type="text" placeholder="Start location code" onChange={(e)=>setOriginCode(e.target.value)} />
-                <input type="text" placeholder="Destination location code" onChange={(e)=>setDestCode(e.target.value)} />
-                <input type="date" placeholder={new Date().toLocaleString()} onChange={(e)=>setDepartDate(e.target.value)} />
-                <input type="number" placeholder="Number of adults" onChange={(e)=>setNumAdults(e.target.value as string)} />
+                <input type="text" placeholder="Start location code" onChange={(e)=>setOriginCode(e.target.value)} value="SYD" />
+                <input type="text" placeholder="Destination location code" onChange={(e)=>setDestCode(e.target.value)} value="BKK" />
+                <input type="date" placeholder={new Date().toLocaleString()} onChange={(e)=>setDepartDate(e.target.value)} value="2022-11-01" />
+                <input type="number" placeholder="Number of adults" onChange={(e)=>setNumAdults(e.target.value as string)} value="1" />
                 <button type="button" onClick={()=>getFlightInfo()}>Submit</button>
                 {loadingStatus === LoadingStatusTypes.GET_FLIGHTS_LOADING ? (
                   <Text>Loading...</Text>

@@ -15085,4 +15085,3 @@ export const AirportCodes = [
   ,
   {"id":"13726","name":"Beijing Xijiao Airport","city":"Beijing","country":"China","iata":"\\N","icao":"ZBBB","latitude":"39.9608","longitude":"116.257004","altitude":"0","timezone":"\\N","dst":"\\N","tz":"\\N"}
   ]
-  
