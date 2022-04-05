@@ -69,15 +69,18 @@ export const GenericInput = styled.input`
 `;
 
 export const ArticleResult = styled.div`
-  background: #5dd29a;
-  border-radius: 0.5rem;
-  padding: 1rem;
-  display: flex;
-  justify-content: center;
-  margin-bottom: 1rem;
-  :hover {
-    background: #1aa562;
-  }
+background: #fff;
+border-radius: 0.5rem;
+padding: 1rem;
+display: flex;
+width: 200px;
+flex-direction: column;
+box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
+justify-content: center;
+margin-bottom: 1rem;
+:hover {
+  background: #f0f0f0;
+}
 `;
 
 export const Title = styled.div`
