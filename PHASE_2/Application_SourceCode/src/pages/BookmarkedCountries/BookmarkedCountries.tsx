@@ -11,7 +11,7 @@ type BookmarkedCountriesProps = {
 const BookmarkedCountries = ({ countryClick }: BookmarkedCountriesProps) => {
   const { user } = useAppSelector(selectUser);
 
-  const articles = user?.user.bookmarkedCountries
+  const countries = user?.user.bookmarkedCountries
     ? [...user.user.bookmarkedCountries]
     : [];
   return (
@@ -21,17 +21,17 @@ const BookmarkedCountries = ({ countryClick }: BookmarkedCountriesProps) => {
           <Text bold fontSize="2rem">
             Bookmarked Countries
           </Text>
-          {user?.user.bookmarkedArticles.length === 0 ? (
+          {user?.user.bookmarkedCountries.length === 0 ? (
             <Text>You have no bookmarked countries.</Text>
           ) : (
-            articles.map((article) => (
+            countries.map((country) => (
               <ArticleResult
-                key={article.countryId}
+                key={country.countryId}
                 onClick={() => {
-                  countryClick(article.name);
+                  countryClick(country.name);
                 }}
               >
-                {article.name}
+                <b>{country.name}</b>
               </ArticleResult>
             ))
           )}

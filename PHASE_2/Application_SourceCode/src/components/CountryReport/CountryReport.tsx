@@ -11,7 +11,7 @@ import {
   putBookmarkCountryDispatch,
   selectUser,
 } from "src/logic/redux/reducers/userSlice/userSlice";
-import { Country } from "src/interfaces/ViralInterface";
+import { Article, Country } from "src/interfaces/ViralInterface";
 import { BsHeartFill, BsHeart } from "react-icons/bs";
 import {
   getSearchDispatch,
@@ -24,6 +24,8 @@ import {
   IUserBookmarkCountryRequestBody,
 } from "src/interfaces/ResponseInterface";
 import { useHistory } from "react-router-dom";
+import ArticleDialog from "src/pages/Articles/ArticleDialog/ArticleDialog";
+import ArticleResult from "../ArticleResult/ArticleResult";
 import Text from "../common/text/Text";
 import Map from "../Map/Map";
 import { FlexLayout } from "../common/layouts/screenLayout";
@@ -39,6 +41,7 @@ import {
 import FlightInfo from "../FlightInfo/FlightInfo";
 import CommentCard from "../Comment/Comment";
 import AddCommentDialog from "../AddCommentDialog/AddCommentDialog";
+
 
 type CountryReportProps = {
   advice: IAdviceSpecificSuccessResponse;
@@ -58,6 +61,9 @@ const CountryReport = ({ advice, country }: CountryReportProps) => {
 
   const { flights, loadingStatus } = useAppSelector(selectFlights);
   const { articles, articleloadingStatus } = useAppSelector(selectArticles);
+  
+  const [ selectedArticle,  setSelectedArticle ] = useState<Article | undefined>()
+  const [ isArticleDialogOpen, setIsArticleDialogOpen ] = useState<boolean>(false);
 
   const renderText = (text: string[]) =>
     text.map((req) => <Text key={req}>{req}</Text>);
@@ -81,6 +87,27 @@ const CountryReport = ({ advice, country }: CountryReportProps) => {
     };
     dispatch(putBookmarkCountryDispatch(req));
   };
+
+  const showArticles = () => {
+    if (articleloadingStatus === ArticleLoadingStatusTypes.GET_SEARCH_LOADING) {
+      return (<Text>Loading...</Text>)
+    } else if (articles.length > 0 ) {
+        return (
+          <div style={{width:'300px', maxHeight: '200px', overflowY: "scroll", padding: "5px"}}>
+          {articles.map((article) => (
+            <ArticleResult 
+              article={article} 
+              click={()=>{
+                setSelectedArticle(article);
+                setIsArticleDialogOpen(true)
+              }} 
+            />))}
+          </div>
+        )
+    } else {
+      return <Text>Loading</Text>
+    }
+  }
   return (
     <FlexLayout>
       <Container>
@@ -133,14 +160,7 @@ const CountryReport = ({ advice, country }: CountryReportProps) => {
                   Articles
                 </Text>
                 <Tile>
-                  {articleloadingStatus ===
-                  ArticleLoadingStatusTypes.GET_SEARCH_LOADING ? (
-                    <Text>Loading...</Text>
-                  ) : (
-                    articles.map((article) => (
-                      <Text key={article.articleId}>{article.headline}</Text>
-                    ))
-                  )}
+                  {showArticles()}
                 </Tile>
               </TileLockup>
               <TileLockup>
@@ -234,8 +254,18 @@ const CountryReport = ({ advice, country }: CountryReportProps) => {
           />
         </Content>
       </Container>
+      {
+        selectedArticle
+        ? <ArticleDialog 
+            article={selectedArticle} 
+            isOpen={isArticleDialogOpen} 
+            toggleOpen={() => setIsArticleDialogOpen(false)}
+        />
+        : null
+      }
+      
     </FlexLayout>
   );
 };
-
+  
 export default CountryReport;
