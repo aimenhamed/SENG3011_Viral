@@ -7,7 +7,11 @@ import {
 import { CountryService } from "./Country.service";
 import { CountryRepository } from "../../repositories/Country.repository";
 import { FetchWrapper } from "../../modules/FetchWrapper";
-import { getMockCountries, getMockFlights } from "../../utils/testData";
+import {
+  getMockCountries,
+  getMockFlightOffers,
+  getMockFlights,
+} from "../../utils/testData";
 
 describe("Country service", () => {
   let fetchWrapper: FetchWrapper;
@@ -105,6 +109,9 @@ describe("Country service", () => {
     it("should resolve and return expected flights", () => {
       const service = countryService();
       const flights = getMockFlights();
+      fetchWrapper.getFlightOffers = jest
+        .fn()
+        .mockReturnValue(getMockFlightOffers());
 
       const flightDetails = {
         originLocationCode: "SYD",

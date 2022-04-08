@@ -239,7 +239,7 @@ const CountryReport = ({ advice, country }: CountryReportProps) => {
                   <SubText>{` - Last updated: ${advice.country.advice.lastUpdate}`}</SubText>
                 )}
               </Text>
-              {advice.country.advice ? 
+              {advice.country.advice ? (
                 <>
                   <Tile style={{ marginBottom: "1rem" }}>
                     {advice.country.advice.adviceLevel}
@@ -248,14 +248,15 @@ const CountryReport = ({ advice, country }: CountryReportProps) => {
                     {advice.country.advice.latestAdvice}
                   </Tile>
                 </>
-              : 
+              )
+              : (
                 <>
                   <Tile style={{ textAlign: "left" }}>
                     No advice found.
                   </Tile>
                 </>
-              }
-              
+              )}
+
             </TileLockup>
             <TileLockup>
               <Text bold fontSize="1.125rem" align="center">

@@ -202,7 +202,7 @@ export const getMockFlights = (): any[] => {
       arrivalTime: "2022-11-01T16:10:00",
       carrierCode: "EK",
       currency: "EUR",
-      price: "473.20",
+      price: "460.91",
     },
     {
       departure: "SYD",
@@ -212,7 +212,213 @@ export const getMockFlights = (): any[] => {
       arrivalTime: "2022-11-01T16:10:00",
       carrierCode: "QF",
       currency: "EUR",
-      price: "602.20",
+      price: "587.91",
     },
   ];
+};
+
+export const getMockFlightOffers = () => {
+  return {
+    meta: {
+      count: 2,
+      links: {
+        self: "https://test.api.amadeus.com/v2/shopping/flight-offers?originLocationCode=SYD&destinationLocationCode=BKK&departureDate=2022-11-01&adults=1&nonStop=true&max=3",
+      },
+    },
+    data: [
+      {
+        type: "flight-offer",
+        id: "1",
+        source: "GDS",
+        instantTicketingRequired: false,
+        nonHomogeneous: false,
+        oneWay: false,
+        lastTicketingDate: "2022-04-15",
+        numberOfBookableSeats: 3,
+        itineraries: [
+          {
+            duration: "PT9H40M",
+            segments: [
+              {
+                departure: {
+                  iataCode: "SYD",
+                  terminal: "1",
+                  at: "2022-11-01T10:30:00",
+                },
+                arrival: {
+                  iataCode: "BKK",
+                  at: "2022-11-01T16:10:00",
+                },
+                carrierCode: "EK",
+                number: "5023",
+                aircraft: {
+                  code: "333",
+                },
+                operating: {
+                  carrierCode: "QF",
+                },
+                duration: "PT9H40M",
+                id: "1",
+                numberOfStops: 0,
+                blacklistedInEU: false,
+              },
+            ],
+          },
+        ],
+        price: {
+          currency: "EUR",
+          total: "460.91",
+          base: "389.00",
+          fees: [
+            {
+              amount: "0.00",
+              type: "SUPPLIER",
+            },
+            {
+              amount: "0.00",
+              type: "TICKETING",
+            },
+          ],
+          grandTotal: "460.91",
+        },
+        pricingOptions: {
+          fareType: ["PUBLISHED"],
+          includedCheckedBagsOnly: true,
+        },
+        validatingAirlineCodes: ["EK"],
+        travelerPricings: [
+          {
+            travelerId: "1",
+            fareOption: "STANDARD",
+            travelerType: "ADULT",
+            price: {
+              currency: "EUR",
+              total: "460.91",
+              base: "389.00",
+            },
+            fareDetailsBySegment: [
+              {
+                segmentId: "1",
+                cabin: "ECONOMY",
+                fareBasis: "QLEOPAU1",
+                brandedFare: "ECOSAVER",
+                class: "Q",
+                includedCheckedBags: {
+                  weight: 30,
+                  weightUnit: "KG",
+                },
+              },
+            ],
+          },
+        ],
+      },
+      {
+        type: "flight-offer",
+        id: "2",
+        source: "GDS",
+        instantTicketingRequired: false,
+        nonHomogeneous: false,
+        oneWay: false,
+        lastTicketingDate: "2022-04-22",
+        numberOfBookableSeats: 9,
+        itineraries: [
+          {
+            duration: "PT9H40M",
+            segments: [
+              {
+                departure: {
+                  iataCode: "SYD",
+                  terminal: "1",
+                  at: "2022-11-01T10:30:00",
+                },
+                arrival: {
+                  iataCode: "BKK",
+                  at: "2022-11-01T16:10:00",
+                },
+                carrierCode: "QF",
+                number: "23",
+                aircraft: {
+                  code: "333",
+                },
+                operating: {
+                  carrierCode: "QF",
+                },
+                duration: "PT9H40M",
+                id: "2",
+                numberOfStops: 0,
+                blacklistedInEU: false,
+              },
+            ],
+          },
+        ],
+        price: {
+          currency: "EUR",
+          total: "587.91",
+          base: "505.00",
+          fees: [
+            {
+              amount: "0.00",
+              type: "SUPPLIER",
+            },
+            {
+              amount: "0.00",
+              type: "TICKETING",
+            },
+          ],
+          grandTotal: "587.91",
+        },
+        pricingOptions: {
+          fareType: ["PUBLISHED"],
+          includedCheckedBagsOnly: true,
+        },
+        validatingAirlineCodes: ["QF"],
+        travelerPricings: [
+          {
+            travelerId: "1",
+            fareOption: "STANDARD",
+            travelerType: "ADULT",
+            price: {
+              currency: "EUR",
+              total: "587.91",
+              base: "505.00",
+            },
+            fareDetailsBySegment: [
+              {
+                segmentId: "2",
+                cabin: "ECONOMY",
+                fareBasis: "SLATDO",
+                class: "S",
+                includedCheckedBags: {
+                  weight: 30,
+                  weightUnit: "KG",
+                },
+              },
+            ],
+          },
+        ],
+      },
+    ],
+    dictionaries: {
+      locations: {
+        BKK: {
+          cityCode: "BKK",
+          countryCode: "TH",
+        },
+        SYD: {
+          cityCode: "SYD",
+          countryCode: "AU",
+        },
+      },
+      aircraft: {
+        "333": "AIRBUS A330-300",
+      },
+      currencies: {
+        EUR: "EURO",
+      },
+      carriers: {
+        QF: "QANTAS AIRWAYS",
+        EK: "EMIRATES",
+      },
+    },
+  };
 };
