@@ -14,7 +14,6 @@ import { UserRepository } from "./repositories/User.respository";
 import { UserService } from "./api/services/User.service";
 import { UserRouter } from "./api/routes/User.router";
 import { AdviceRepository } from "./repositories/Advice.repository";
-import { AdviceService } from "./api/services/Advice.service";
 import { AdviceRouter } from "./api/routes/Advice.router";
 import { CountryRepository } from "./repositories/Country.repository";
 import { CommentRepository } from "./repositories/Comment.repository";
@@ -48,24 +47,22 @@ export default class App {
     this.articleRepository,
     this.countryRepository
   );
-  private readonly adviceService = new AdviceService(
-    this.adviceRepository,
-    this.commentRepository,
-    this.fetchWrapper
-  );
   private readonly commentService = new CommentService(
     this.commentRepository,
     this.countryRepository,
     this.userRepository
   );
-  private readonly countryService = new CountryService(this.fetchWrapper);
+  private readonly countryService = new CountryService(
+    this.fetchWrapper,
+    this.countryRepository
+  );
   constructor() {
     // add routers here .. e.g.
     const articleRouter = new ArticleRouter(this.articleService);
     const searchRouter = new SearchRouter(this.searchService);
     const reportRouter = new ReportRouter(this.reportService);
     const userRouter = new UserRouter(this.userService);
-    const adviceRouter = new AdviceRouter(this.adviceService);
+    const adviceRouter = new AdviceRouter(this.countryService);
     const commentRouter = new CommentRouter(this.commentService);
     const countryRouter = new CountryRouter(this.countryService);
     this.ex.addRouters(
