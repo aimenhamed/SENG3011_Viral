@@ -63,7 +63,7 @@ const CountryReport = ({ advice, country }: CountryReportProps) => {
   const [ numAdults, setNumAdults ] = useState<string>("1");
   const [commentDialog, setCommentDialog] = useState<boolean>(false);
   const bookmarked = user?.user.bookmarkedCountries.filter(
-    (c) => advice.advice.country.countryId === c.countryId
+    (c) => advice.country.countryId === c.countryId
   ) as Country[];
 
   const [ selectedArticle,  setSelectedArticle ] = useState<Article | undefined>()
@@ -85,7 +85,7 @@ const CountryReport = ({ advice, country }: CountryReportProps) => {
   const bookmarkCountry = () => {
     const req: IUserBookmarkCountryRequestBody = {
       userId: user?.user.userId!,
-      countryId: advice.advice.country.countryId,
+      countryId: advice.country.countryId,
       status: !bookmarked,
     };
     dispatch(putBookmarkCountryDispatch(req));
@@ -125,15 +125,14 @@ const CountryReport = ({ advice, country }: CountryReportProps) => {
     <FlexLayout>
       <Container>
         <Text bold fontSize="2rem" align="center">
-          {advice.advice.country.name}
+          {advice.country.name}
         </Text>
         <Content>
           <Section id="left" style={{ marginRight: "2.5rem" }}>
             <SubSection>
               <TileLockup style={{ width: "50%" }}>
                 <Text bold fontSize="1.125rem" align="center">
-                  {advice.advice.country.name} Map - Continent{" "}
-                  {advice.advice.continent}
+                  {advice.country.name} Map
                 </Text>
                 {bookmarked.length > 0 ? (
                   <BsHeartFill
@@ -221,10 +220,10 @@ const CountryReport = ({ advice, country }: CountryReportProps) => {
                   </div>
                 </div>
                 <Tile>
-                  {advice.comments.length === 0 ? (
+                  {advice.country.comments.length === 0 ? (
                     <Text>No comments posted yet.</Text>
                   ) : (
-                    advice.comments.map((comment) => (
+                    advice.country.comments.map((comment) => (
                       <CommentCard key={comment.commentId} comment={comment} />
                     ))
                   )}
@@ -236,18 +235,31 @@ const CountryReport = ({ advice, country }: CountryReportProps) => {
             <TileLockup style={{ width: "50%" }}>
               <Text bold fontSize="1.125rem" align="center">
                 Travel Advice
-                <SubText>{` - Last updated: ${advice.advice.lastUpdate}`}</SubText>
+                {advice.country.advice && (
+                  <SubText>{` - Last updated: ${advice.country.advice.lastUpdate}`}</SubText>
+                )}
               </Text>
-              <Tile style={{ marginBottom: "1rem" }}>
-                {advice.advice.adviceLevel}
-              </Tile>
-              <Tile style={{ textAlign: "left" }}>
-                {advice.advice.latestAdvice}
-              </Tile>
+              {advice.country.advice ? 
+                <>
+                  <Tile style={{ marginBottom: "1rem" }}>
+                    {advice.country.advice.adviceLevel}
+                  </Tile>
+                  <Tile style={{ textAlign: "left" }}>
+                    {advice.country.advice.latestAdvice}
+                  </Tile>
+                </>
+              : 
+                <>
+                  <Tile style={{ textAlign: "left" }}>
+                    No advice found.
+                  </Tile>
+                </>
+              }
+              
             </TileLockup>
             <TileLockup>
               <Text bold fontSize="1.125rem" align="center">
-                Available flights to {advice.advice.country.name}
+                Available flights to {advice.country.name}
               </Text>
               <Tile>
                 <input type="text" placeholder="Start location code" onChange={(e)=>setOriginCode(e.target.value)} value="SYD" />
@@ -266,7 +278,7 @@ const CountryReport = ({ advice, country }: CountryReportProps) => {
             </TileLockup>
           </Section>
           <AddCommentDialog
-            countryId={advice.advice.country.countryId}
+            countryId={advice.country.countryId}
             isOpen={commentDialog}
             toggleOpen={() => setCommentDialog(false)}
           />

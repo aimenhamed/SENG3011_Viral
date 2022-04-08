@@ -1,27 +1,23 @@
 import { AmadeusData } from "src/interfaces/ResponseInterface";
 import { Advice, Country } from "src/interfaces/ViralInterface";
 
-export const USA: Country = {
-  name: "USA",
-  code: "US",
-  countryId: "",
-  coords: [],
-};
-
 export const usaAdvice: Advice = {
   adviceId: "84ee17ac-c345-48d8-9c99-1c6c7616c775",
   url: "https://www.smartraveller.gov.au/destinations/europe/ukraine",
-  country: {
-    countryId: "b1b08336-d818-4e09-adbb-08b55895f34b",
-    name: "Ukraine",
-    code: "UA",
-    coords: [49, 32],
-  },
   continent: "Europe",
   adviceLevel: "Do not travel",
   latestAdvice:
     "The Russian invasion of Ukraine is ongoing. The security situation continues to be volatile and is deteriorating rapidly. Infrastructure and military facilities have been struck by rocket attacks in Lviv. Heavy fighting, including bombardments, explosions and missile launches, is ongoing throughout Ukraine. There have been many civilian casualties. Foreigners have been killed and may be targeted, including in areas not directly affected by fighting. Do not travel to Ukraine, there is a real risk to life.  If you’re in Ukraine, shelter in place until you judge it’s safe to depart. Seek shelter in a hardened structure away from windows. Review your personal security plans. Be alert and aware of your surroundings. Continue to monitor advice on Smartraveller and reputable local and international media. Where it is safe to do so, you should leave Ukraine. You're responsible for your own safety and that of your family.",
   lastUpdate: "2022-03-30",
+};
+
+export const USA: Country = {
+  name: "USA",
+  code: "US",
+  countryId: "",
+  coords: [],
+  advice: usaAdvice,
+  comments: [],
 };
 
 export const amadeusMock: AmadeusData = {
