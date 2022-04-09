@@ -9,6 +9,7 @@ import { CountryRepository } from "../../repositories/Country.repository";
 import { FetchWrapper } from "../../modules/FetchWrapper";
 import {
   getMockCountries,
+  getMockCountryDiseases,
   getMockFlightOffers,
   getMockFlights,
 } from "../../utils/testData";
@@ -37,11 +38,13 @@ describe("Country service", () => {
       countryRepository.getAllCountryInfoByName = jest
         .fn()
         .mockReturnValue(country);
-      fetchWrapper.getCountryDiseases = jest.fn().mockReturnValue({});
+      fetchWrapper.getCountryDiseases = jest
+        .fn()
+        .mockReturnValue(getMockCountryDiseases());
 
       expect(service.getCountryInfo(country.name)).resolves.toEqual({
         country,
-        data: {},
+        data: getMockCountryDiseases(),
         log: {
           ...baseLog,
           accessTime: expect.any(String),
