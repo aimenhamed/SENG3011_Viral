@@ -1,4 +1,12 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import {
+  Column,
+  Entity,
+  PrimaryGeneratedColumn,
+  OneToOne,
+  OneToMany,
+} from "typeorm";
+import { AdviceEntity } from "./Advice.entity";
+import { CommentEntity } from "./Comment.entity";
 
 @Entity({ name: "country", schema: "public" })
 export class CountryEntity {
@@ -18,4 +26,10 @@ export class CountryEntity {
     default: () => "array[]::integer[]",
   })
   coords: number[];
+
+  @OneToOne(() => AdviceEntity, (advice) => advice.country)
+  advice: AdviceEntity;
+
+  @OneToMany(() => CommentEntity, (comment) => comment.country)
+  comments: CommentEntity[];
 }

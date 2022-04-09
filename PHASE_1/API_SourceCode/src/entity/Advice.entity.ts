@@ -15,7 +15,9 @@ export class AdviceEntity {
   @Column("text", { name: "url", nullable: false })
   url: string;
 
-  @OneToOne(() => CountryEntity)
+  @OneToOne(() => CountryEntity, (country) => country.advice, {
+    nullable: true,
+  })
   @JoinColumn({ name: "country" })
   country: CountryEntity;
 

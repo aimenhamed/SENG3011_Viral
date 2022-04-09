@@ -30,7 +30,7 @@ const FlightInfo = ({ flight }: FlightInfoProps) => {
         </Text>
         <Text fontSize="1.5rem">{` -> `}</Text>
         <Text fontSize="1.5rem" style={{ paddingLeft: "1rem" }}>
-          {flight.destination}
+          {flight.arrival}
         </Text>
       </div>
       <div

@@ -2,7 +2,6 @@ import {
   Article,
   Report,
   User,
-  Advice,
   IAdviceOnly,
   Comment,
   Country,
@@ -108,9 +107,8 @@ export interface IUserUpdateSuccessResponse {
 }
 
 export interface IAdviceSpecificSuccessResponse {
-  advice: Advice;
+  country: Country;
   data: AmadeusResponse;
-  comments: Comment[];
   log: Log;
 }
 
@@ -196,4 +194,11 @@ export interface IUserBookmarkCountrySuccessResponse {
   user: User;
   country: Country;
   log: Log;
+}
+
+export interface IFlightQuery {
+  originLocationCode: string;
+  destinationLocationCode: string;
+  departureDate: string;
+  adults: string;
 }

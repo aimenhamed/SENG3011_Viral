@@ -3,12 +3,13 @@ export interface Country {
   name: string;
   code: string;
   coords: number[];
+  advice: Advice;
+  comments: Comment[];
 }
 
 export interface Advice {
   adviceId: string;
   url: string;
-  country: Country;
   continent: string;
   adviceLevel: string;
   latestAdvice: string;
@@ -48,14 +49,13 @@ export interface User {
 export interface Comment {
   commentId: string;
   createdBy: User;
-  country: Country;
   message: string;
   date: Date;
 }
 
 export interface Flight {
   departure: string;
-  destination: string;
+  arrival: string;
   departureTime: string;
   arrivalTime: string;
   duration: string;

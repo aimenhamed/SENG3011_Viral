@@ -140,3 +140,10 @@ export interface IUserUpdateSuccessResponse {
   user: User;
   log: Log;
 }
+
+export interface IFlightQuery {
+  originLocationCode: string;
+  destinationLocationCode: string;
+  departureDate: string;
+  adults: string;
+}
