@@ -39,8 +39,8 @@ export class FetchWrapper {
   private accessToken: string;
 
   constructor() {
-    this.apiKey = `VDPSvlYDu2GGea9xzRGUGEe0DDorBywd`;
-    this.apiSecret = `JX9GXGrL2a3BoBKv`;
+    this.apiKey = `AOHTSX8TY5Yx1oe9Cv185PtS7wn1S1mk`;
+    this.apiSecret = `7m2lelmlOGBI4PRI`;
   }
 
   async getToken(): Promise<any> {
