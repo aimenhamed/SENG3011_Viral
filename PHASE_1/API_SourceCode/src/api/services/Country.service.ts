@@ -19,8 +19,6 @@ export class CountryService {
       countryName
     );
 
-    console.log(country);
-
     if (country === undefined) {
       this.logger.error(`No country ${countryName} found in db`);
       throw new HTTPError(notFoundError);
