@@ -14,8 +14,8 @@ export class ReviewEntity {
   reviewId: string;
 
   @ManyToOne(() => UserEntity, (user) => user.userId, { eager: true })
-  @JoinColumn({ name: "review_created_by" })
-  reviewCreatedBy: UserEntity;
+  @JoinColumn({ name: "created_by" })
+  createdBy: UserEntity;
 
   @ManyToOne(() => CountryEntity, (country) => country.countryId)
   @JoinColumn({ name: "country" })

@@ -29,7 +29,7 @@ export class ReviewService {
     const country = await this.getCountry(reviewDetails.countryId);
     this.logger.info("arrived here");
     const newReview = new ReviewEntity();
-    newReview.reviewCreatedBy = user;
+    newReview.createdBy = user;
     newReview.country = country;
     newReview.rating = reviewDetails.rating;
     newReview.title = reviewDetails.title;
