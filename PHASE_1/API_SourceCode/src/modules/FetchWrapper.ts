@@ -5,6 +5,7 @@ import {
   AmadeusResponse,
 } from "../interfaces/IFetchResponses";
 import { SimpleConsoleLogger } from "typeorm";
+import { getMockCountryDiseases } from "../utils/testData";
 
 export enum RequestPaths {
   AMADEUS,
@@ -39,8 +40,8 @@ export class FetchWrapper {
   private accessToken: string;
 
   constructor() {
-    this.apiKey = `VDPSvlYDu2GGea9xzRGUGEe0DDorBywd`;
-    this.apiSecret = `JX9GXGrL2a3BoBKv`;
+    this.apiKey = `AOHTSX8TY5Yx1oe9Cv185PtS7wn1S1mk`;
+    this.apiSecret = `7m2lelmlOGBI4PRI`;
   }
 
   async getToken(): Promise<any> {
@@ -66,26 +67,28 @@ export class FetchWrapper {
 
   async getCountryDiseases(countryCode: string): Promise<any> {
     try {
-      await this.getToken();
-      const path = getRequestPath(RequestPaths.AMADEUS, countryCode);
-      const request = {
-        options: {
-          headers: {
-            Authorization: `Bearer ${this.accessToken}`,
-          },
-        },
-      };
+      // protect key while in development
+      return getMockCountryDiseases();
+      // await this.getToken();
+      // const path = getRequestPath(RequestPaths.AMADEUS, countryCode);
+      // const request = {
+      //   options: {
+      //     headers: {
+      //       Authorization: `Bearer ${this.accessToken}`,
+      //     },
+      //   },
+      // };
 
-      const res = await got.get(path, {
-        ...request.options,
-        retry: {
-          methods: ["GET"],
-          limit: 3,
-        },
-      });
+      // const res = await got.get(path, {
+      //   ...request.options,
+      //   retry: {
+      //     methods: ["GET"],
+      //     limit: 3,
+      //   },
+      // });
 
-      const diseaseResponse: AmadeusResponse = JSON.parse(res.body);
-      return diseaseResponse;
+      // const diseaseResponse: AmadeusResponse = JSON.parse(res.body);
+      // return diseaseResponse;
     } catch (err: any) {
       this.logger.error(
         `An error occurred when getting diseases for country ${countryCode}: ${formatError(

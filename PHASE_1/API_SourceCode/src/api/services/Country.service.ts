@@ -4,7 +4,6 @@ import { HTTPError } from "../../utils/Errors";
 import { internalServerError, notFoundError } from "../../utils/Constants";
 import { FetchWrapper } from "../../modules/FetchWrapper";
 import { CountryRepository } from "../../repositories/Country.repository";
-import { AdviceRepository } from "../../repositories/Advice.repository";
 import { string } from "@hapi/joi";
 import { IAdviceAllSuccessResponse } from "IApiResponses";
 
