@@ -81,7 +81,7 @@ CREATE TABLE public.comment (
 
 CREATE TABLE public.review (
     review_id uuid NOT NULL DEFAULT gen_random_uuid(),
-    review_created_by uuid NOT NULL,
+    created_by uuid NOT NULL,
     country uuid NOT NULL,
     rating decimal NOT NULL,
     title text NOT NULL,
