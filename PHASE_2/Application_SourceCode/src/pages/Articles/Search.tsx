@@ -13,6 +13,7 @@ import {
 import ArticleResult from "src/components/ArticleResult/ArticleResult";
 import ArticleDialog from "./ArticleDialog/ArticleDialog";
 import { Container, GenericInput, GenericLabel, GenericSelect, SearchButton } from "./style";
+import MenuBar from "src/components/MenuBar/MenuBar";
 
 const Articles = () => {
   const dispatch = useDispatch();
@@ -36,6 +37,8 @@ const Articles = () => {
     dispatch(getSearchDispatch(req));
   };
   return (
+    <>
+    
     <FlexLayout>
       <Container>
         <Text bold fontSize="2rem">
@@ -97,6 +100,8 @@ const Articles = () => {
         />
       )}
     </FlexLayout>
+    </>
+    
   );
 };
 

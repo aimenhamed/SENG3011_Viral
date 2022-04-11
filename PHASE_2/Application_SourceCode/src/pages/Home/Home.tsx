@@ -3,7 +3,7 @@ import { useHistory } from "react-router-dom";
 import MenuBar from "src/components/MenuBar/MenuBar";
 import { useAppSelector } from "src/logic/redux/hooks";
 import { selectUser } from "src/logic/redux/reducers/userSlice/userSlice";
-import Articles from "../Articles/Articles";
+import Articles from "../Articles/Search";
 import BookmarkedArticles from "../BookmarkedArticles/BookmarkedArticles";
 import BookmarkedCountries from "../BookmarkedCountries/BookmarkedCountries";
 import Country from "../Country/Country";
@@ -36,7 +36,7 @@ const Home = () => {
   };
   return (
     <div style={{ display: "flex", flexDirection: "row" }}>
-      <MenuBar navigate={navigate} />
+      
       {viralPage === ViralPage.MAP && <Map countryClick={goToCountry} />}
       {viralPage === ViralPage.SETTINGS && <SettingsPage />}
       {viralPage === ViralPage.COUNTRY && (
