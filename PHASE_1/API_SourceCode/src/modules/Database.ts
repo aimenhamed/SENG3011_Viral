@@ -8,6 +8,7 @@ import { UserEntity } from "../entity/User.entity";
 import { AdviceEntity } from "../entity/Advice.entity";
 import { CountryEntity } from "../entity/Country.entity";
 import { CommentEntity } from "../entity/Comment.entity";
+import { ReviewEntity } from "../entity/Review.entity";
 
 export default class Database {
   private logger = getLogger();
@@ -41,6 +42,7 @@ export default class Database {
         AdviceEntity,
         CountryEntity,
         CommentEntity,
+        ReviewEntity,
       ],
     });
     this.logger.info(

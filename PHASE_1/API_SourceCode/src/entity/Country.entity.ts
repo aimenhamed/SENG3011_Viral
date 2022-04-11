@@ -7,13 +7,14 @@ import {
 } from "typeorm";
 import { AdviceEntity } from "./Advice.entity";
 import { CommentEntity } from "./Comment.entity";
+import { ReviewEntity } from "./Review.entity";
 
 @Entity({ name: "country", schema: "public" })
 export class CountryEntity {
   @PrimaryGeneratedColumn("uuid", { name: "country_id" })
   countryId: string;
 
-  @Column("text", { name: "name", nullable: false })
+  @Column("text", { name: "country_name", nullable: false })
   name: string;
 
   @Column("text", { name: "code", nullable: false })
@@ -32,4 +33,7 @@ export class CountryEntity {
 
   @OneToMany(() => CommentEntity, (comment) => comment.country)
   comments: CommentEntity[];
+
+  @OneToMany(() => ReviewEntity, (review) => review.country)
+  reviews: ReviewEntity[];
 }

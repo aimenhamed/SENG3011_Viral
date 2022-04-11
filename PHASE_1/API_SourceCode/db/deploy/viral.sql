@@ -54,7 +54,7 @@ CREATE TABLE public.user_articles (
 
 CREATE TABLE public.country (
     country_id uuid NOT NULL DEFAULT gen_random_uuid(),
-    name text NOT NULL,
+    country_name text NOT NULL,
     code text NOT NULL,
     coords int[],
     CONSTRAINT pk_country_id PRIMARY KEY (country_id)
@@ -78,4 +78,19 @@ CREATE TABLE public.comment (
     CONSTRAINT fk_user_id FOREIGN KEY (created_by) references public.user(user_id),
     CONSTRAINT fk_country FOREIGN KEY (country) references public.country(country_id)
 )
+
+CREATE TABLE public.review (
+    review_id uuid NOT NULL DEFAULT gen_random_uuid(),
+    review_created_by uuid NOT NULL,
+    country uuid NOT NULL,
+    rating decimal NOT NULL,
+    title text NOT NULL,
+    main_text text NOT NULL,
+    created_date timestamp NOT NULL,
+    CONSTRAINT pk_review_id PRIMARY KEY (review_id),
+    CONSTRAINT fk_review_created_by FOREIGN KEY (created_by) references public.user(user_id),
+    CONSTRAINT fk_review_country FOREIGN KEY (country) references public.country(country_id),
+    CONSTRAINT unique_user_country UNIQUE (created_by, country)
+)
+
 COMMIT;

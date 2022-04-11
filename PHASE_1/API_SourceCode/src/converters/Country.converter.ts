@@ -2,6 +2,7 @@ import { Country, SimpleCountry } from "ICountry";
 import { CountryEntity } from "../entity/Country.entity";
 import { convertAdviceEntityToInterface } from "./Advice.converter";
 import { convertCommentEntityToSimpleInterface } from "./Comment.converter";
+import { convertReviewEntityToSimpleInterface } from "./Review.converter";
 
 export const convertCountryEntityToInterface = (
   entity: CountryEntity
@@ -15,6 +16,7 @@ export const convertCountryEntityToInterface = (
     comments: entity.comments.map((c) =>
       convertCommentEntityToSimpleInterface(c)
     ),
+    reviews: entity.reviews.map((r) => convertReviewEntityToSimpleInterface(r)),
   };
 };
 

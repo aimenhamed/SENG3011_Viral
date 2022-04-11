@@ -1,5 +1,6 @@
 import { Advice } from "IAdvice";
 import { CommentNoCountry } from "IComment";
+import { ReviewNoCountry } from "IReview";
 
 export interface Country {
   countryId: string;
@@ -8,6 +9,7 @@ export interface Country {
   coords: number[];
   advice: Advice;
   comments: CommentNoCountry[];
+  reviews: ReviewNoCountry[];
 }
 
 export interface SimpleCountry {
