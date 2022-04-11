@@ -11,11 +11,16 @@ import {
   selectArticles,
 } from "src/logic/redux/reducers/articleSlice/articleSlice";
 import ArticleResult from "src/components/ArticleResult/ArticleResult";
+import { selectUser } from "src/logic/redux/reducers/userSlice/userSlice";
+import { useHistory } from "react-router-dom";
 import ArticleDialog from "./ArticleDialog/ArticleDialog";
 import { Container, GenericInput, GenericLabel, GenericSelect, SearchButton } from "./style";
-import MenuBar from "src/components/MenuBar/MenuBar";
 
 const Articles = () => {
+  const history = useHistory();
+  const { user } = useAppSelector(selectUser);
+  if (!user) history.push("/");
+  
   const dispatch = useDispatch();
   const { articles } = useAppSelector(selectArticles);
 

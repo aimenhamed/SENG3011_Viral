@@ -1,18 +1,14 @@
 import * as AllIcons from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useDispatch } from "react-redux";
-import { Link, NavLink, Route, Router } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { useAppSelector } from "src/logic/redux/hooks";
+import { Logo } from "src/components/common/image/imageIndex";
 import {
   selectUser,
   clearUser,
 } from "src/logic/redux/reducers/userSlice/userSlice";
-import { ViralPage } from "src/pages/Home/Home";
-import { Icon } from "../common/icon/Icon";
-import {Bar, Iconalign, LogoutButton, MenuButtons, MenuHeight, MenuIcon, MenuSize, MenuStyle, MenuText, MenuWidth, Name, UserIcon, ViralIcon} from "./style";
-import { IconSize } from "./style";
-import { Logo } from "src/components/common/image/imageIndex";
-import { LogoLanding } from "src/pages/Articles/style";
+import {Bar, LogoutButton, MenuButtons, MenuHeight, MenuIcon, MenuSize, MenuStyle, Name, UserIcon, ViralIcon} from "./style";
 
 
 const MenuBar = () => {
@@ -47,7 +43,7 @@ const MenuBar = () => {
     <Bar>
       <MenuHeight>
         <MenuStyle>
-          <UserIcon><FontAwesomeIcon icon={AllIcons.faUser}/></UserIcon>
+          <UserIcon> <FontAwesomeIcon icon={AllIcons.faUser} /> </UserIcon>
           <Name>{user?.user.name}</Name>
         </MenuStyle>
           
@@ -55,32 +51,10 @@ const MenuBar = () => {
           <div style={{ height: "100px" }} />
           <NavLink to="/home">Home</NavLink>
           <NavLink to="/search">Search Known Outbreaks</NavLink>
+          <NavLink to="/favourites/articles">Favourite Articles</NavLink>
+          <NavLink to="/favourites/countries">Favourite Countries</NavLink>
+          <NavLink to="/settings">Settings</NavLink>
         
-          {/*{menuItems.map((menuItem) => (
-            <MenuSize
-              key={menuItem.itemID}
-              role="button"
-              tabIndex={0} 
-              onKeyDown={() => navigate(menuItem.page)}
-              onClick={() => navigate(menuItem.page)}
-              
-                
-              
-              id={menuItem.itemID}
-              onMouseOver={() => highlightOnHover(menuItem.itemID)}
-              onMouseLeave={() => unHighlight(menuItem.itemID)}
-          onFocus={() => highlightOnHover(menuItem.itemID)}
-            >
-              <Iconalign>
-              <FontAwesomeIcon icon={menuItem.itemIcon} size="sm"
-              />
-              </Iconalign>
-              <MenuText>{menuItem.itemName}</MenuText>
-              
-            </MenuSize>
-          ))}*/}
-        
-      
         <MenuButtons
           id="signOutBtn"
           type="button"

@@ -1,39 +1,29 @@
-import { Switch, Route, Link } from "react-router-dom";
+import { Switch, Route } from "react-router-dom";
 import MenuBar from "./components/MenuBar/MenuBar";
-import * as MenuSelection from "./components/MenuBar/MenuBarItems";
 import Search from "./pages/Articles/Search";
-import Articles from "./pages/Articles/Search";
+import BookmarkedArticles from "./pages/BookmarkedArticles/BookmarkedArticles";
+import BookmarkedCountries from "./pages/BookmarkedCountries/BookmarkedCountries";
 import Home from "./pages/Home/Home";
 import LandingPage from "./pages/Landing/Landing";
-import Landing from "./pages/Landing/Landing";
+import SettingsPage from "./pages/Settings/Settings";
 
 const Routes = () => {
-  {/*<Switch>
-    <Route path="/home">
-      
-      <Home />
-    </Route>
-    <Route path="/search">
-      
-      <Articles />
-      </Route>
-    <Route path="/">
-      <Landing />
-    </Route>
-
-   
-</Switch>*/}
+  
 const DefaultRoutes = () => {
   return (
     <>
-      <MenuBar />
-      <Switch>
-        
-        <Route path="/home" component={Home} />
-        <Route path="/search" component={Search} />
-        
-      </Switch>
-     
+      <div style={{display: "flex"}}>
+        <MenuBar />
+        <div style={{width: "calc(100vw - 150px)"}}>
+          <Switch>
+            <Route path="/home" component={Home} />
+            <Route path="/search" component={Search} />
+            <Route path="/favourites/articles" component={BookmarkedArticles} />
+            <Route path="/favourites/countries" component={BookmarkedCountries} />
+            <Route path="/settings" component={SettingsPage} />
+          </Switch>
+        </div>
+      </div>
     </>
   );
 };

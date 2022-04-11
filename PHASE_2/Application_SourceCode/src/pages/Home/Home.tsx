@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useHistory } from "react-router-dom";
-import MenuBar from "src/components/MenuBar/MenuBar";
 import { useAppSelector } from "src/logic/redux/hooks";
 import { selectUser } from "src/logic/redux/reducers/userSlice/userSlice";
 import Articles from "../Articles/Search";
@@ -27,9 +26,7 @@ const Home = () => {
   const [viralPage, setViralPage] = useState<ViralPage>(ViralPage.MAP);
   const [country, setCountry] = useState<string>("");
 
-  const navigate = (page: ViralPage) => {
-    setViralPage(page);
-  };
+  
   const goToCountry = (countryName: string) => {
     setCountry(countryName);
     setViralPage(ViralPage.COUNTRY);
@@ -42,7 +39,6 @@ const Home = () => {
       {viralPage === ViralPage.COUNTRY && (
         <Country
           countryName={country}
-          backToMap={() => setViralPage(ViralPage.MAP)}
         />
       )}
       {viralPage === ViralPage.ARTICLES && <Articles />}
