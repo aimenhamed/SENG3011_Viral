@@ -1,11 +1,11 @@
 import { Article } from "./IArticle";
-import { Country } from "./ICountry";
+import { SimpleCountry } from "./ICountry";
 
 export interface User {
   userId: string;
   name: string;
   email: string;
-  bookmarkedCountries: Country[];
+  bookmarkedCountries: SimpleCountry[];
   bookmarkedArticles: Article[];
 }
 

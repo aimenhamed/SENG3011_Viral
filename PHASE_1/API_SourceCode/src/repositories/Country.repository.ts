@@ -39,7 +39,10 @@ export class CountryRepository {
       .createQueryBuilder("country")
       .leftJoinAndSelect("country.advice", "advice")
       .leftJoinAndSelect("country.comments", "comment")
-      .where("name LIKE :countryName", { countryName })
+      .leftJoinAndSelect("comment.createdBy", "user")
+      .leftJoinAndSelect("country.reviews", "review")
+      .leftJoinAndSelect("review.createdBy", "user2")
+      .where("country_name LIKE :countryName", { countryName })
       .getOne();
   }
 }

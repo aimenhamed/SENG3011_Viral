@@ -22,6 +22,9 @@ import { CommentService } from "./api/services/Comment.service";
 import { FetchWrapper } from "./modules/FetchWrapper";
 import { CountryRouter } from "./api/routes/Country.router";
 import { CountryService } from "./api/services/Country.service";
+import { ReviewRepository } from "./repositories/Review.repository";
+import { ReviewRouter } from "./api/routes/Review.router";
+import { ReviewService } from "./api/services/Review.service";
 export default class App {
   readonly logger = getLogger();
   private ex = new ExpressWrapper();
@@ -35,6 +38,7 @@ export default class App {
   private readonly adviceRepository = new AdviceRepository();
   private readonly countryRepository = new CountryRepository();
   private readonly commentRepository = new CommentRepository();
+  private readonly reviewRepository = new ReviewRepository();
   // add services here
   private readonly articleService = new ArticleService(this.articleRepository);
   private readonly searchService = new SearchService(
@@ -56,6 +60,11 @@ export default class App {
     this.fetchWrapper,
     this.countryRepository
   );
+  private readonly reviewService = new ReviewService(
+    this.reviewRepository,
+    this.countryRepository,
+    this.userRepository
+  );
   constructor() {
     // add routers here .. e.g.
     const articleRouter = new ArticleRouter(this.articleService);
@@ -65,6 +74,7 @@ export default class App {
     const adviceRouter = new AdviceRouter(this.countryService);
     const commentRouter = new CommentRouter(this.commentService);
     const countryRouter = new CountryRouter(this.countryService);
+    const reviewRouter = new ReviewRouter(this.reviewService);
     this.ex.addRouters(
       // ... add routers here
       articleRouter,
@@ -73,7 +83,8 @@ export default class App {
       userRouter,
       adviceRouter,
       commentRouter,
-      countryRouter
+      countryRouter,
+      reviewRouter
     );
   }
 
