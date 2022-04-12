@@ -172,6 +172,7 @@ export const getMockCountries = (): Country[] => {
       coords: [30, 30],
       advice: getMockAdviceEntities()[0],
       comments: [],
+      reviews: [],
     },
     {
       countryId: "country2",
@@ -180,6 +181,7 @@ export const getMockCountries = (): Country[] => {
       coords: [31, 31],
       advice: getMockAdviceEntities()[1],
       comments: [],
+      reviews: [],
     },
     {
       countryId: "country3",
@@ -188,6 +190,7 @@ export const getMockCountries = (): Country[] => {
       coords: [32, 32],
       advice: getMockAdviceEntities()[2],
       comments: [],
+      reviews: [],
     },
   ];
 };
