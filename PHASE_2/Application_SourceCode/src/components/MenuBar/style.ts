@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const Bar = styled.div`
-    width: 150px;
+    width: 180px;
     box-shadow: -10px 0px 50px;
     padding-left: 0px;
     box-sizing: border-box;
@@ -16,9 +16,10 @@ export const IconSize = styled.div`
 `;
 
 export const MenuHeight = styled.div`
-  height: 80px;
-  display: flex;
+  height: 90px;
+  //display: flex;
   flex-direction: row;
+  width: 100px;
 `;
 
 export const MenuWidth = styled.div`
@@ -28,7 +29,7 @@ export const MenuWidth = styled.div`
 
 export const MenuButtons = styled.button`
   position: absolute;
-  bottom: 95px;
+  bottom: 115px;
   padding-left: 10px;
   padding-right: 10px;
   width: 100px;
@@ -41,9 +42,10 @@ export const MenuButtons = styled.button`
   flex-direction: row;
   align-items: center;
   margin-left: 17px;
+  left: 15px;
+  
 
 `;
-
 
 export const MenuSize = styled.div`
   display: flex;
@@ -72,26 +74,25 @@ export const Iconalign = styled.div`
 export const MenuStyle = styled.div`
   position: absolute;
   top: 40px;
-  left: 50px;
+  left: 60px;
   background-color: #b6b6b6;
   border-radius: 50%;
-  width: 50px;
-  height: 50px;
+  width: 60px;
+  height: 60px;
   outline: auto;
   outline-color: #b6b6b6;
   margin: auto;
 `;
 
 export const LogoutButton = styled.div`
-  paddingLeft: 10px;
-  padding-right: 10px;
+  padding-right: 20px;
   border: none;
   border-radius: 20px;
   background-color: #d1d1d1;
   cursor: pointer;
   width: 20px;
   top:20px;
-  padding-left: 10px;
+  
 `;
 
 export const ViralIcon = styled.img`
@@ -99,14 +100,15 @@ export const ViralIcon = styled.img`
   align-items: center;
   height: 30px;
   width: 30px;
+
   bottom: 30vh;
   background-color: #fff;
   padding: 0rem;
-  right: 80px;
+  right: 60px;
   bottom: 5px;
   border-radius: 50%;
   flex-direction: row;
-  padding-left: 25px;
+  padding-left: 100px;
 `;
 
 export const MenuIcon = styled.div`
@@ -123,12 +125,13 @@ export const MenuIcon = styled.div`
 
 export const UserIcon = styled.div`
   position: absolute;
-  top: -6px;
+  top: -2px;
   color: white;
   font-size: 40px;
   width: 10px;
   height: 40px;
-  padding-left: 7px;
+  padding-left: 12px;
+  
 `;
 
 export const MenuText = styled.div`
@@ -141,20 +144,90 @@ export const MenuText = styled.div`
   padding-left: 1px;
   padding-top: 25px;
   align-items: center;
+  height: 90px;
 `;
 
 export const Name = styled.div`
   position: absolute;
-  top: 60px;
-  left: -15px;
-  font-family: "Calibri";
+  top: 80px;
+  left: -5px;
+  font-family: Calibri;
   font-style: normal;
-  font-weight: 300;
-  font-size: 36px;
-  line-height: 43px;
+  font-weight: bold;
+  font-size: 24px;
+  line-height: 25px;
   text-align: center;
   color: black;
+
+`;
+
+export const Highlight = styled.div`
+  a:link {
+    text-decoration: none;
+    color: black;
+  }
+  :hover {
+    background-color: #52c489;
+    border-radius: 5px;
+    filter = brightness(1.1);
+  }
+  text-decoration: none;
+  a:visited {
+    color: black;
+  }
 `;
 
 
+export const MenuBarIcon = styled.div`
+  margin-left: 1rem;
+  color: black;
+  font-size: 20px;
+  height: 20px;
+  margin-bottom: 19px;
+`;
 
+export const MenuOptionText = styled.div`
+  font-weight: bold;
+  color: black;
+  margin-left: 35px;
+  width: 45px;
+  margin-top: -26px;
+  font-size: 20px;
+  text-decoration: none;
+  height: 70px;
+
+`;
+
+export const LogoutStyle = styled.div`
+  a:visited {
+    color: black;
+  }
+  a:link {
+    text-decoration: none;
+    color: black;
+  }
+  margin-left: 5px;
+`;
+
+export const Author = styled.div`
+  padding-top: 90px;
+  font-size: 24px;
+  font-weight: bold;
+  margin-left: 30px;
+  margin-top: 5px;
+`;
+
+export const LogoutIcon = styled.div`
+  margin-left: 0px;
+  margin-bottom: -5px; 
+  padding-bottom: -101px;
+`;
+
+export const LogoutText = styled.div`
+  padding-left: 25px;
+  padding-top: 100px;
+  position: absolute;
+  bottom: 15px;
+  left: 10px;
+  font-weight: bold;
+`;
