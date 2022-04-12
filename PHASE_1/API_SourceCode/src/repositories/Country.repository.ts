@@ -4,11 +4,13 @@ import { IAdviceOnly } from "IAdvice";
 
 export class CountryRepository {
   async getCountry(countryId: string): Promise<CountryEntity | undefined> {
-    return await getRepository(CountryEntity).findOne({
-      where: {
-        countryId,
-      },
-    });
+    return await getRepository(CountryEntity)
+      .createQueryBuilder("country")
+      .leftJoinAndSelect("country.advice", "advice")
+      .leftJoinAndSelect("country.comments", "comment")
+      .leftJoinAndSelect("country.reviews", "review")
+      .where("country.countryId = :countryId", { countryId })
+      .getOne();
   }
 
   async getCountryByName(
