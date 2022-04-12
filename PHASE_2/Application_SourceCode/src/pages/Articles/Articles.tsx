@@ -12,7 +12,13 @@ import {
 } from "src/logic/redux/reducers/articleSlice/articleSlice";
 import ArticleResult from "src/components/ArticleResult/ArticleResult";
 import ArticleDialog from "./ArticleDialog/ArticleDialog";
-import { Container, GenericInput, GenericLabel, GenericSelect, SearchButton } from "./style";
+import {
+  Container,
+  GenericInput,
+  GenericLabel,
+  GenericSelect,
+  SearchButton,
+} from "./style";
 
 const Articles = () => {
   const dispatch = useDispatch();
@@ -59,7 +65,10 @@ const Articles = () => {
             onChange={(e) => setEndDate(e.target.value)}
           />
           <GenericLabel>Diseases</GenericLabel>
-          <GenericSelect name="diseases" onChange={(e) => setTerm(e.target.value)}>
+          <GenericSelect
+            name="diseases"
+            onChange={(e) => setTerm(e.target.value)}
+          >
             {keyTerms.map((keyTerm) => (
               <option key={keyTerm} value={keyTerm}>
                 {keyTerm}
@@ -79,6 +88,7 @@ const Articles = () => {
           ) : (
             results.map((article) => (
               <ArticleResult
+                key={article.articleId}
                 article={article}
                 click={() => {
                   setSelectedArticle(article);
