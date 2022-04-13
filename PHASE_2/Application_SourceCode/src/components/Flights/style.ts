@@ -34,6 +34,7 @@ export const Results = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-evenly;
+  overflow-x: scroll;
 `;
 
 export const ButtonLockup = styled.div`

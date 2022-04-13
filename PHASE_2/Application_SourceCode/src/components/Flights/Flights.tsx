@@ -7,6 +7,8 @@ import {
   selectFlights,
   LoadingStatusTypes,
 } from "src/logic/redux/reducers/flightsSlice/flightsSlice";
+import { sha256 } from "js-sha256";
+import { AirportCodes } from "src/constants/AirportCodes";
 import Text from "../common/text/Text";
 import FlightItem from "./FlightItem/FlightItem";
 import { Image } from "../common/image/Image";
@@ -21,11 +23,20 @@ import {
   ButtonLockup,
 } from "./style";
 
-const Flights = () => {
+type FlightsProps = {
+  country: string;
+};
+
+const Flights = ({ country }: FlightsProps) => {
   const dispatch = useDispatch();
 
+  const getDestCode = () => {
+    const airport = AirportCodes.find((code) => code.country === country);
+    return airport ? airport.iata : "MEL";
+  };
+
   const [originCode, setOriginCode] = useState<string>("SYD");
-  const [destCode, setDestCode] = useState<string>("BKK");
+  const [destCode, setDestCode] = useState<string>(getDestCode());
   const [departDate, setDepartDate] = useState<string>("2022-11-01");
   const [numAdults, setNumAdults] = useState<string>("1");
 
@@ -110,9 +121,18 @@ const Flights = () => {
         {loadingStatus === LoadingStatusTypes.GET_FLIGHTS_LOADING && (
           <Image src={LoadingAnimation} width="600px" />
         )}
+        {loadingStatus === LoadingStatusTypes.GET_FLIGHTS_FAILED && (
+          <Text>No flights found.</Text>
+        )}
         {loadingStatus === LoadingStatusTypes.GET_FLIGHTS_COMPLETED &&
           flights.map((flight) => (
-            <FlightItem key={flight.duration + flight.price} flight={flight} />
+            <FlightItem
+              key={
+                sha256(flight.duration + flight.arrivalTime) +
+                Math.floor(Math.random() * 100 + 1)
+              }
+              flight={flight}
+            />
           ))}
       </Results>
     </>

@@ -7,6 +7,7 @@ export const Item = styled.div`
   border: 2px solid #1aa562;
   border-radius: 0.5rem;
   width: fit-content;
+  margin: 0 0.5rem;
 `;
 
 export const Row = styled.div`

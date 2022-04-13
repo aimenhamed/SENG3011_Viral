@@ -21,6 +21,7 @@ import {
 import { useHistory } from "react-router-dom";
 import ArticleDialog from "src/pages/Articles/ArticleDialog/ArticleDialog";
 import ArticleResult from "../ArticleResult/ArticleResult";
+import Flights from "../Flights/Flights";
 import Text from "../common/text/Text";
 import Map from "../Map/Map";
 import { FlexLayout } from "../common/layouts/screenLayout";
@@ -35,7 +36,6 @@ import {
 } from "./style";
 import CommentCard from "../Comment/Comment";
 import AddCommentDialog from "../AddCommentDialog/AddCommentDialog";
-import Flights from "../Flights/Flights";
 
 type CountryReportProps = {
   advice: IAdviceSpecificSuccessResponse;
@@ -242,7 +242,7 @@ const CountryReport = ({ advice, country }: CountryReportProps) => {
                 </>
               )}
             </TileLockup>
-            <Flights />
+            <Flights country={country} />
           </Section>
           <AddCommentDialog
             countryId={advice.country.countryId}
