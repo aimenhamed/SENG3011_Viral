@@ -1,11 +1,6 @@
 import { useEffect, useState } from "react";
 import { useAppSelector } from "src/logic/redux/hooks";
 import { useDispatch } from "react-redux";
-import {
-  getFlightsDispatch,
-  LoadingStatusTypes,
-  selectFlights,
-} from "src/logic/redux/reducers/flightsSlice/flightsSlice";
 import { keyTerms } from "src/constants/KeyTerms";
 import {
   putBookmarkCountryDispatch,
@@ -22,11 +17,11 @@ import {
   IAdviceSpecificSuccessResponse,
   ISearchRequestHeaders,
   IUserBookmarkCountryRequestBody,
-  IFlightQuery,
 } from "src/interfaces/ResponseInterface";
 import { useHistory } from "react-router-dom";
 import ArticleDialog from "src/pages/Articles/ArticleDialog/ArticleDialog";
 import ArticleResult from "../ArticleResult/ArticleResult";
+import Flights from "../Flights/Flights";
 import Text from "../common/text/Text";
 import Map from "../Map/Map";
 import { FlexLayout } from "../common/layouts/screenLayout";
@@ -39,7 +34,6 @@ import {
   Tile,
   SubText,
 } from "./style";
-import FlightInfo from "../FlightInfo/FlightInfo";
 import CommentCard from "../Comment/Comment";
 import AddCommentDialog from "../AddCommentDialog/AddCommentDialog";
 
@@ -53,13 +47,8 @@ const CountryReport = ({ advice, country }: CountryReportProps) => {
   const history = useHistory();
 
   const { user } = useAppSelector(selectUser);
-
-  const { flights, loadingStatus } = useAppSelector(selectFlights);
   const { articles, articleloadingStatus } = useAppSelector(selectArticles);
-  const [originCode, setOriginCode] = useState<string>("SYD");
-  const [destCode, setDestCode] = useState<string>("BKK");
-  const [departDate, setDepartDate] = useState<string>("2022-11-01");
-  const [numAdults, setNumAdults] = useState<string>("1");
+
   const [commentDialog, setCommentDialog] = useState<boolean>(false);
   const bookmarked = user?.user.bookmarkedCountries.filter(
     (c) => advice.country.countryId === c.countryId
@@ -92,16 +81,6 @@ const CountryReport = ({ advice, country }: CountryReportProps) => {
     };
 
     dispatch(putBookmarkCountryDispatch(req));
-  };
-
-  const getFlightInfo = () => {
-    const req: IFlightQuery = {
-      originLocationCode: originCode,
-      destinationLocationCode: destCode,
-      departureDate: departDate,
-      adults: numAdults,
-    };
-    dispatch(getFlightsDispatch(req));
   };
   const showArticles = () => {
     if (articleloadingStatus === ArticleLoadingStatusTypes.GET_SEARCH_LOADING) {
@@ -263,47 +242,7 @@ const CountryReport = ({ advice, country }: CountryReportProps) => {
                 </>
               )}
             </TileLockup>
-            <TileLockup>
-              <Text bold fontSize="1.125rem" align="center">
-                Available flights to {advice.country.name}
-              </Text>
-              <Tile>
-                <input
-                  type="text"
-                  placeholder="Start location code"
-                  onChange={(e) => setOriginCode(e.target.value)}
-                  value="SYD"
-                />
-                <input
-                  type="text"
-                  placeholder="Destination location code"
-                  onChange={(e) => setDestCode(e.target.value)}
-                  value="BKK"
-                />
-                <input
-                  type="date"
-                  placeholder={new Date().toLocaleString()}
-                  onChange={(e) => setDepartDate(e.target.value)}
-                  value="2022-11-01"
-                />
-                <input
-                  type="number"
-                  placeholder="Number of adults"
-                  onChange={(e) => setNumAdults(e.target.value as string)}
-                  value="1"
-                />
-                <button type="button" onClick={() => getFlightInfo()}>
-                  Submit
-                </button>
-                {loadingStatus === LoadingStatusTypes.GET_FLIGHTS_LOADING ? (
-                  <Text>Loading...</Text>
-                ) : (
-                  flights.map((flight) => (
-                    <FlightInfo flight={flight} key={flight.price} />
-                  ))
-                )}
-              </Tile>
-            </TileLockup>
+            <Flights country={country} />
           </Section>
           <AddCommentDialog
             countryId={advice.country.countryId}
