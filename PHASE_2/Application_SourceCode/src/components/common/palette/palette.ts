@@ -8,4 +8,5 @@ export const palette = {
   grayLily: "#E3E9EC",
   activeDotGray: "#8E8E8E",
   inactiveDotLightGray: "#C3C3C3",
+  lightGreen: "#5DD29A",
 };

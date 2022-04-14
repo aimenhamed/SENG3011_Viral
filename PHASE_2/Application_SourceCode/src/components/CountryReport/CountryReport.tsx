@@ -42,7 +42,7 @@ import {
 import FlightInfo from "../FlightInfo/FlightInfo";
 import CommentCard from "../Comment/Comment";
 import AddCommentDialog from "../AddCommentDialog/AddCommentDialog";
-
+import ReviewBox from "../ReviewBox/ReviewBox";
 
 type CountryReportProps = {
   advice: IAdviceSpecificSuccessResponse;
@@ -296,7 +296,7 @@ const CountryReport = ({ advice, country }: CountryReportProps) => {
 )
         : null
       }
-
+      <ReviewBox reviews={[]} averageRating={3.3} />
     </FlexLayout>
   );
 };
