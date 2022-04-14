@@ -48,16 +48,9 @@ const MenuBar = () => {
           </div>
 
           <div>
-            <Highlight onClick={()=> history.push("/favourites/articles")}>
-              <FontAwesomeIcon icon={AllIcons.faHeart} />
-              <MenuOptionText><NavLink to="/favourites/articles"> Favourite Articles</NavLink></MenuOptionText>
-            </Highlight>
-          </div>
-
-          <div>
             <Highlight onClick={()=> history.push("/favourites/countries")}>
-              <FontAwesomeIcon icon={AllIcons.faAddressBook} />
-              <MenuOptionText><NavLink to="/favourites/countries"> Favourite Countries </NavLink></MenuOptionText>
+              <FontAwesomeIcon icon={AllIcons.faHeart} />
+              <MenuOptionText><NavLink to="/favourites/countries">  Favourites </NavLink></MenuOptionText>
             </Highlight>
           </div>
 
