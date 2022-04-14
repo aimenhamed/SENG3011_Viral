@@ -1,3 +1,4 @@
+import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 
 export const Bar = styled.div`
@@ -5,7 +6,7 @@ export const Bar = styled.div`
     box-shadow: -10px 0px 50px;
     padding-left: 0px;
     box-sizing: border-box;
-    border-radius: 5px;
+    border-radius: 0 5px 5px 0;
     background-color: white;
 
 `;
@@ -42,8 +43,7 @@ export const MenuButtons = styled.button`
   display: flex;
   flex-direction: row;
   align-items: center;
-  margin-left: 17px;
-  left: 15px;
+  margin-left: 40px;
 `;
 
 export const MenuSize = styled.div`
@@ -124,7 +124,7 @@ export const UserIcon = styled.div`
 export const Name = styled.div`
   position: absolute;
   top: 80px;
-  left: 0px;
+  left: 0px;    
   font-family: Calibri;
   font-style: normal;
   font-weight: bold;
@@ -135,73 +135,51 @@ export const Name = styled.div`
 
 `;
 
-export const Highlight = styled.div`
+export const NavLinkBtn = styled(NavLink)`
+  height: 40px;
+  display: flex;
+  align-items: center;
+  padding-left: 15px;
+  margin: 15px 0px;
+  text-decoration: none;
+  color: black;
+  transition: 0.3s;
   a:link {
     text-decoration: none;
     color: black;
     font-size: 14px;
     font-weight: medium;
   }
-  
-  text-decoration: none;
   a:visited {
     color: black;
   }
-  //padding: 10px;
-  //grid-column-gap: 10px;
-  //position: relative;
-  margin-top: 30px;
-
   :hover {
-    //display: flex;
-    //position: absolute;
-    //right: 10px;
-    //padding-up: 50px;
-    //margin-left: -30px;
-    height: 40px;
-    //padding: 0px;
-    top: 100px;
     background-color: #52c489;
-    //max-width: 1100px;
-    //width: -500px;
-    //flex-direction: row-reverse;
-    //padding-right: 50px;
-    //border-radius: 5px;
-    //filter = brightness(1.1);
+    border-radius: 100px 0px 0px 100px;
+  }  
+
+  &.${props => props.activeClassName} {
+    background-color: #52c489;
     border-radius: 100px 0px 0px 100px;
   }
-
-`;
-
+`
 
 export const MenuBarIcon = styled.div`
-  //margin-left: 1rem;
-  display: flex;
-  flex-direction: column;
   color: black;
   font-size: 15px;
   height: 20px;
-  //padding-right: 100px;
   margin-left: 15px;
   white-space: nowrap;
   
 `;
 
 export const MenuOptionText = styled.text`
-//display: flex;
-position: relative;  
-font-weight: bold;
+  font-weight: bold;
   color: black;
-  //padding-right: 60px;
-  padding-top: 45px;
-  //margin-left: 35px;
-  //width: 45px;
-  //margin-top: -26px;
-  font-size: 18px;
+  font-size: 15px;
   text-decoration: none;
-  height: 40px;
   white-space: nowrap;
-
+  padding-left: 5px;
 `;
 
 export const LogoutStyle = styled.div`
@@ -249,7 +227,6 @@ export const MenuItemsFlexBox = styled.div`
 diplay: flex;
 align-items: right;
 border-radius: 100px 0px 0px 100px;
-//padding-right: 50px;
 height: 130px;
 
 `;

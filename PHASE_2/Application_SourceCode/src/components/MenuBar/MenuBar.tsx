@@ -1,18 +1,17 @@
 import * as AllIcons from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useDispatch } from "react-redux";
-import { NavLink, useHistory } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { useAppSelector } from "src/logic/redux/hooks";
 import { Logo } from "src/components/common/image/imageIndex";
 import {
   selectUser,
   clearUser,
 } from "src/logic/redux/reducers/userSlice/userSlice";
-import {Author, Bar, Highlight, LogoutButton, LogoutIcon, LogoutStyle, LogoutText, MenuBarIcon, MenuButtons, MenuHeight, MenuIcon, MenuItemsFlexBox, MenuOptionText, MenuStyle, Name, ProfileFlexBox, UserIcon, ViralIcon} from "./style";
+import {Author, Bar, LogoutButton, LogoutIcon, LogoutStyle, LogoutText, MenuBarIcon, MenuButtons, MenuHeight, MenuIcon, MenuItemsFlexBox, MenuOptionText, MenuStyle, Name, NavLinkBtn, ProfileFlexBox, UserIcon, ViralIcon} from "./style";
 
 
 const MenuBar = () => {
-  const history = useHistory();
   const dispatch = useDispatch();
   const { user } = useAppSelector(selectUser);
 
@@ -33,33 +32,25 @@ const MenuBar = () => {
       </MenuHeight>
       <MenuBarIcon>
         <MenuItemsFlexBox>
-          <div>
-            <Highlight onClick={()=> history.push("/home")}>
-              <FontAwesomeIcon icon={AllIcons.faHome} size="sm" />
-              <MenuOptionText><NavLink to="/home">  Home </NavLink></MenuOptionText>
-            </Highlight>
-          </div>
+          <NavLinkBtn to="/home" activeClassName="selected">
+            <FontAwesomeIcon icon={AllIcons.faHome} size="sm" />
+            <MenuOptionText>Home</MenuOptionText>
+          </NavLinkBtn>
 
-          <div>
-            <Highlight onClick={()=> history.push("/search")}>
-              <FontAwesomeIcon icon={AllIcons.faVirus} />
-              <MenuOptionText><NavLink to="/search"> Search Outbreaks</NavLink></MenuOptionText>
-            </Highlight>
-          </div>
+          <NavLinkBtn to="/search" activeClassName="selected">
+            <FontAwesomeIcon icon={AllIcons.faVirus} />
+            <MenuOptionText>Search Outbreaks</MenuOptionText>
+          </NavLinkBtn>
 
-          <div>
-            <Highlight onClick={()=> history.push("/favourites/countries")}>
-              <FontAwesomeIcon icon={AllIcons.faHeart} />
-              <MenuOptionText><NavLink to="/favourites/countries">  Favourites </NavLink></MenuOptionText>
-            </Highlight>
-          </div>
+          <NavLinkBtn to="/favourites/countries" activeClassName="selected">
+            <FontAwesomeIcon icon={AllIcons.faHeart} />
+            <MenuOptionText>Search Outbreaks</MenuOptionText>
+          </NavLinkBtn>
 
-          <div>
-            <Highlight onClick={()=> history.push("/settings")}>
-              <FontAwesomeIcon icon={AllIcons.faCog} />
-              <MenuOptionText><NavLink to="/settings"> Settings</NavLink></MenuOptionText>
-            </Highlight>
-          </div>
+          <NavLinkBtn to="/settings" activeClassName="selected">
+            <FontAwesomeIcon icon={AllIcons.faCog} />
+            <MenuOptionText>Settings</MenuOptionText>
+          </NavLinkBtn>
         </MenuItemsFlexBox>
       </MenuBarIcon>
 
