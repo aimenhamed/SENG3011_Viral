@@ -16,7 +16,8 @@ export const IconSize = styled.div`
 `;
 
 export const MenuHeight = styled.div`
-  height: 90px;
+  height: 200px;
+  padding: -50px;
   //display: flex;
   flex-direction: row;
   width: 100px;
@@ -43,8 +44,6 @@ export const MenuButtons = styled.button`
   align-items: center;
   margin-left: 17px;
   left: 15px;
-  
-
 `;
 
 export const MenuSize = styled.div`
@@ -55,19 +54,6 @@ export const MenuSize = styled.div`
   cursor: pointer;
   padding-right: 20px;
   height = 80px;
-
-`;
-
-export const Iconalign = styled.div`
-  position: flex;
-  top: 20px;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  cursor: pointer;
-  padding-left: 10px;
-  padding-right: 20px;
-  padding-bottom: 15px;
 
 `;
 
@@ -130,27 +116,15 @@ export const UserIcon = styled.div`
   font-size: 40px;
   width: 10px;
   height: 40px;
-  padding-left: 12px;
+  padding-right: 23px;
   
 `;
 
-export const MenuText = styled.div`
-  position: flex;
-  bottom: 200px;
-  width: 90px;
-  height: 60px;
-  font-size: small;
-  color: black;
-  padding-left: 1px;
-  padding-top: 25px;
-  align-items: center;
-  height: 90px;
-`;
 
 export const Name = styled.div`
   position: absolute;
   top: 80px;
-  left: -5px;
+  left: 0px;
   font-family: Calibri;
   font-style: normal;
   font-weight: bold;
@@ -165,36 +139,68 @@ export const Highlight = styled.div`
   a:link {
     text-decoration: none;
     color: black;
+    font-size: 14px;
+    font-weight: medium;
   }
-  :hover {
-    background-color: #52c489;
-    border-radius: 5px;
-    filter = brightness(1.1);
-  }
+  
   text-decoration: none;
   a:visited {
     color: black;
   }
+  //padding: 10px;
+  //grid-column-gap: 10px;
+  //position: relative;
+  margin-top: 30px;
+
+  :hover {
+    //display: flex;
+    //position: absolute;
+    //right: 10px;
+    //padding-up: 50px;
+    //margin-left: -30px;
+    height: 40px;
+    //padding: 0px;
+    top: 100px;
+    background-color: #52c489;
+    //max-width: 1100px;
+    //width: -500px;
+    //flex-direction: row-reverse;
+    //padding-right: 50px;
+    //border-radius: 5px;
+    //filter = brightness(1.1);
+    border-radius: 100px 0px 0px 100px;
+  }
+
 `;
 
 
 export const MenuBarIcon = styled.div`
-  margin-left: 1rem;
+  //margin-left: 1rem;
+  display: flex;
+  flex-direction: column;
   color: black;
-  font-size: 20px;
+  font-size: 15px;
   height: 20px;
-  margin-bottom: 19px;
+  //padding-right: 100px;
+  margin-left: 15px;
+  white-space: nowrap;
+  
 `;
 
-export const MenuOptionText = styled.div`
-  font-weight: bold;
+export const MenuOptionText = styled.text`
+//display: flex;
+position: relative;  
+font-weight: bold;
   color: black;
-  margin-left: 35px;
-  width: 45px;
-  margin-top: -26px;
-  font-size: 20px;
+  //padding-right: 60px;
+  padding-top: 45px;
+  //margin-left: 35px;
+  //width: 45px;
+  //margin-top: -26px;
+  font-size: 18px;
   text-decoration: none;
-  height: 70px;
+  height: 40px;
+  white-space: nowrap;
 
 `;
 
@@ -231,3 +237,21 @@ export const LogoutText = styled.div`
   left: 10px;
   font-weight: bold;
 `;
+
+export const ProfileFlexBox = styled.div`
+display: flex;
+text-align: center;
+flex-direction: column;
+align-items: center;
+`;
+
+export const MenuItemsFlexBox = styled.div`
+diplay: flex;
+align-items: right;
+border-radius: 100px 0px 0px 100px;
+//padding-right: 50px;
+height: 130px;
+
+`;
+
+

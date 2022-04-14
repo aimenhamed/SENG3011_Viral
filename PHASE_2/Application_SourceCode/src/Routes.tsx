@@ -13,7 +13,7 @@ const DefaultRoutes = () => {
     <>
       <div style={{display: "flex"}}>
         <MenuBar />
-        <div style={{width: "calc(100vw - 150px)"}}>
+        <div style={{width: "calc(100vw - 180px)"}}>
           <Switch>
             <Route path="/home" component={Home} />
             <Route path="/search" component={Search} />
