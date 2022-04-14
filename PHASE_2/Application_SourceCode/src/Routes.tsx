@@ -8,7 +8,6 @@ import LandingPage from "./pages/Landing/Landing";
 import SettingsPage from "./pages/Settings/Settings";
 
 const Routes = () => {
-  
 const DefaultRoutes = () => {
   return (
     <>
@@ -29,13 +28,13 @@ const DefaultRoutes = () => {
 };
 
 return (
-  
-    <Switch>
+
+  <Switch>
     <Route exact path="/" component={LandingPage} />
-     
-      <Route component={DefaultRoutes} />
-    </Switch>
-  
+
+    <Route component={DefaultRoutes} />
+  </Switch>
+
 );
 };
 

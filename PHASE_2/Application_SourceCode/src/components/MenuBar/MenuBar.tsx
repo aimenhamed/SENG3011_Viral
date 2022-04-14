@@ -14,7 +14,7 @@ import {Author, Bar, Highlight, LogoutButton, LogoutIcon, LogoutStyle, LogoutTex
 const MenuBar = () => {
   const dispatch = useDispatch();
   const { user } = useAppSelector(selectUser);
-  
+
   const Logout = () => {
     dispatch(clearUser());
   }
@@ -27,57 +27,57 @@ const MenuBar = () => {
           <Name>{user?.user.name}</Name>
         </MenuStyle>
 
-        </MenuHeight>
-            <MenuBarIcon>
-              <div>
-              <div style={{ height: "130px" }} />
-                <Highlight>
-                  <FontAwesomeIcon icon={AllIcons.faHome} />
-                  <MenuOptionText><NavLink to="/home"> Home </NavLink></MenuOptionText>
-                </Highlight>
-              </div>
+      </MenuHeight>
+      <MenuBarIcon>
+        <div>
+          <div style={{ height: "130px" }} />
+          <Highlight>
+            <FontAwesomeIcon icon={AllIcons.faHome} />
+            <MenuOptionText><NavLink to="/home"> Home </NavLink></MenuOptionText>
+          </Highlight>
+        </div>
 
-              <div>
-                <Highlight>
-                  <FontAwesomeIcon icon={AllIcons.faVirus} />
-                  <MenuOptionText><NavLink to="/search"> Search Outbreaks </NavLink></MenuOptionText>
-                </Highlight>
-              </div>
-              
-              <div>
-                <Highlight>
-                  <FontAwesomeIcon icon={AllIcons.faHeart} />
-                  <MenuOptionText><NavLink to="/favourites/articles"> Favourite Articles </NavLink></MenuOptionText>
-                </Highlight>
-              </div>
+        <div>
+          <Highlight>
+            <FontAwesomeIcon icon={AllIcons.faVirus} />
+            <MenuOptionText><NavLink to="/search"> Search Outbreaks </NavLink></MenuOptionText>
+          </Highlight>
+        </div>
 
-              <div>
-                <Highlight>
-                  <FontAwesomeIcon icon={AllIcons.faAddressBook} />
-                  <MenuOptionText><NavLink to="/favourites/countries"> Favourite Countries </NavLink></MenuOptionText>
-                </Highlight>
-              </div>
+        <div>
+          <Highlight>
+            <FontAwesomeIcon icon={AllIcons.faHeart} />
+            <MenuOptionText><NavLink to="/favourites/articles"> Favourite Articles </NavLink></MenuOptionText>
+          </Highlight>
+        </div>
 
-              <div>
-                <Highlight>
-                  <FontAwesomeIcon icon={AllIcons.faCog} />
-                  <MenuOptionText><NavLink to="/settings"> Settings</NavLink></MenuOptionText>
-                </Highlight>
-              </div>
+        <div>
+          <Highlight>
+            <FontAwesomeIcon icon={AllIcons.faAddressBook} />
+            <MenuOptionText><NavLink to="/favourites/countries"> Favourite Countries </NavLink></MenuOptionText>
+          </Highlight>
+        </div>
 
-            </MenuBarIcon>
+        <div>
+          <Highlight>
+            <FontAwesomeIcon icon={AllIcons.faCog} />
+            <MenuOptionText><NavLink to="/settings"> Settings</NavLink></MenuOptionText>
+          </Highlight>
+        </div>
 
-        <MenuButtons>
-          <LogoutStyle>
-            <LogoutIcon><FontAwesomeIcon icon={AllIcons.faSignOut} /></LogoutIcon>
-            <LogoutText><LogoutButton><NavLink to="/"> Logout</NavLink></LogoutButton></LogoutText>
-            {Logout}
-          </LogoutStyle>
+      </MenuBarIcon>
 
-        </MenuButtons>
-        <MenuIcon>
-          <ViralIcon src={Logo} /> <Author>Viral</Author>  
-        </MenuIcon>
+      <MenuButtons>
+        <LogoutStyle>
+          <LogoutIcon><FontAwesomeIcon icon={AllIcons.faSignOut} /></LogoutIcon>
+          <LogoutText><LogoutButton><NavLink to="/"> Logout</NavLink></LogoutButton></LogoutText>
+          {Logout}
+        </LogoutStyle>
+
+      </MenuButtons>
+      <MenuIcon>
+        <ViralIcon src={Logo} /> <Author>Viral</Author>
+      </MenuIcon>
     </Bar>
   );
 };

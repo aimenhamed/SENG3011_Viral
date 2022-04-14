@@ -13,7 +13,7 @@ const BookmarkedArticles = () => {
   const history = useHistory();
   const { user } = useAppSelector(selectUser);
   if (!user) history.push("/");
-  
+
   const [articleDialog, setArticleDialog] = useState<boolean>(false);
   const [selectedArticle, setSelectedArticle] = useState<Article | undefined>();
 

@@ -20,7 +20,7 @@ const Articles = () => {
   const history = useHistory();
   const { user } = useAppSelector(selectUser);
   if (!user) history.push("/");
-  
+
   const dispatch = useDispatch();
   const { articles } = useAppSelector(selectArticles);
 
@@ -43,47 +43,47 @@ const Articles = () => {
   };
   return (
     <>
-    
-    <FlexLayout>
-      <Container>
-        <Text bold fontSize="2rem">
-          Search for known outbreaks
-        </Text>
-        <div style={{ display: "flex", flexDirection: "column", width: "50%" }}>
-          <GenericLabel>Location</GenericLabel>
-          <GenericInput
-            placeholder="Location"
-            type="text"
-            onChange={(e) => setLocation(e.target.value)}
-          />
-          <GenericLabel>Start date</GenericLabel>
-          <GenericInput
-            type="date"
-            onChange={(e) => setStartDate(e.target.value)}
-          />
-          <GenericLabel>End date</GenericLabel>
-          <GenericInput
-            type="date"
-            onChange={(e) => setEndDate(e.target.value)}
-          />
-          <GenericLabel>Diseases</GenericLabel>
-          <GenericSelect name="diseases" onChange={(e) => setTerm(e.target.value)}>
-            {keyTerms.map((keyTerm) => (
-              <option key={keyTerm} value={keyTerm}>
-                {keyTerm}
-              </option>
-            ))}
-          </GenericSelect>
-          <SearchButton type="button" onClick={search}>
-            Search
-          </SearchButton>
-        </div>
-        <div style={{ display: "flex", flexDirection: "column", width: "50%" }}>
-          <Text bold fontSize="1.5rem">
-            Results
+
+      <FlexLayout>
+        <Container>
+          <Text bold fontSize="2rem">
+            Search for known outbreaks
           </Text>
-          {results.length === 0 ? (
-            <Text>No results found.</Text>
+          <div style={{ display: "flex", flexDirection: "column", width: "50%" }}>
+            <GenericLabel>Location</GenericLabel>
+            <GenericInput
+              placeholder="Location"
+              type="text"
+              onChange={(e) => setLocation(e.target.value)}
+            />
+            <GenericLabel>Start date</GenericLabel>
+            <GenericInput
+              type="date"
+              onChange={(e) => setStartDate(e.target.value)}
+            />
+            <GenericLabel>End date</GenericLabel>
+            <GenericInput
+              type="date"
+              onChange={(e) => setEndDate(e.target.value)}
+            />
+            <GenericLabel>Diseases</GenericLabel>
+            <GenericSelect name="diseases" onChange={(e) => setTerm(e.target.value)}>
+              {keyTerms.map((keyTerm) => (
+                <option key={keyTerm} value={keyTerm}>
+                  {keyTerm}
+                </option>
+            ))}
+            </GenericSelect>
+            <SearchButton type="button" onClick={search}>
+              Search
+            </SearchButton>
+          </div>
+          <div style={{ display: "flex", flexDirection: "column", width: "50%" }}>
+            <Text bold fontSize="1.5rem">
+              Results
+            </Text>
+            {results.length === 0 ? (
+              <Text>No results found.</Text>
           ) : (
             results.map((article) => (
               <ArticleResult
@@ -95,18 +95,18 @@ const Articles = () => {
               />
             ))
           )}
-        </div>
-      </Container>
-      {selectedArticle && (
+          </div>
+        </Container>
+        {selectedArticle && (
         <ArticleDialog
           article={selectedArticle}
           isOpen={articleDialog}
           toggleOpen={() => setArticleDialog(false)}
         />
       )}
-    </FlexLayout>
+      </FlexLayout>
     </>
-    
+
   );
 };
 

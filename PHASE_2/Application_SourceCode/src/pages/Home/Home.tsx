@@ -26,14 +26,14 @@ const Home = () => {
   const [viralPage, setViralPage] = useState<ViralPage>(ViralPage.MAP);
   const [country, setCountry] = useState<string>("");
 
-  
+
   const goToCountry = (countryName: string) => {
     setCountry(countryName);
     setViralPage(ViralPage.COUNTRY);
   };
   return (
     <div style={{ display: "flex", flexDirection: "row" }}>
-      
+
       {viralPage === ViralPage.MAP && <Map countryClick={goToCountry} />}
       {viralPage === ViralPage.SETTINGS && <SettingsPage />}
       {viralPage === ViralPage.COUNTRY && (
