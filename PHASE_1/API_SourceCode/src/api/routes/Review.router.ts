@@ -56,7 +56,6 @@ export class ReviewRouter implements IRouter {
 
           try {
             const result = await this.reviewService.upvoteReview(reviewDetails);
-            console.log("check5\n");
             return res.status(200).json(result);
           } catch (err: any) {
             this.logger.warn(

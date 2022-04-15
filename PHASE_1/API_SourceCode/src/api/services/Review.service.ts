@@ -39,7 +39,7 @@ export class ReviewService {
   ): Promise<IReviewPostSuccessResponse | undefined> {
     const user = await this.getUser(reviewDetails.userId);
     const country = await this.getCountry(reviewDetails.countryId);
-    this.logger.info("arrived here");
+
     const newReview = new ReviewEntity();
     newReview.createdBy = user;
     newReview.country = country;
@@ -47,7 +47,7 @@ export class ReviewService {
     newReview.title = reviewDetails.title;
     newReview.mainText = reviewDetails.mainText;
     newReview.date = new Date();
-    console.log(newReview);
+
     const reviewEntity: ReviewEntity = await this.reviewRepository.saveReview(
       newReview
     );
@@ -116,19 +116,18 @@ export class ReviewService {
       upvotedReview.upvotedBy = [...upvotedReview.upvotedBy, user];
     }
 
-    console.log(upvotedReview);
     upvotedReview = await this.reviewRepository.saveReview(upvotedReview);
-    console.log("check2\n");
     if (upvotedReview === undefined) {
-      console.log("check3\n");
       this.logger.info(
         `Failed to change status for user ${user} on review ${upvotedReview}`
       );
       throw new HTTPError(internalServerError);
     }
 
-    console.log(user);
-    console.log(upvotedReview);
+    this.logger.info(
+      `Successfully changed upvote status for review ${reviewDetails.reviewId} for user ${reviewDetails.userId}`
+    );
+
     return {
       user: convertUserEntityToInterface(user),
       review: convertReviewEntityToInterface(upvotedReview),
@@ -155,6 +154,10 @@ export class ReviewService {
     }
 
     await this.reviewRepository.deleteReview(review);
+
+    this.logger.info(
+      `Successfully deleted review ${reviewDetails.reviewId} for user ${reviewDetails.userId}`
+    );
 
     return {
       log: getLog(new Date()),
