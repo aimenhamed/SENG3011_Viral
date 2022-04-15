@@ -9,7 +9,7 @@ class AppConfig {
   public readonly env: AppEnv;
 
   constructor() {
-    this.apiUrl = "http://localhost:3030/api";
+    this.apiUrl = "https://teamviral-api.herokuapp.com/api";
     this.env = AppEnv.DEV;
   }
 }

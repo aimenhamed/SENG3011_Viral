@@ -42,8 +42,6 @@ import {
 import FlightInfo from "../FlightInfo/FlightInfo";
 import CommentCard from "../Comment/Comment";
 import AddCommentDialog from "../AddCommentDialog/AddCommentDialog";
-import ReviewBox from "../ReviewBox/ReviewBox";
-import ReviewItem from "../ReviewItem/ReviewItem";
 
 type CountryReportProps = {
   advice: IAdviceSpecificSuccessResponse;
@@ -297,23 +295,7 @@ const CountryReport = ({ advice, country }: CountryReportProps) => {
 )
         : null
       }
-      <ReviewBox reviews={[]} averageRating={3.3} />
-      <ReviewItem review={{
-        reviewId: 'abba',
-        createdBy: {
-          userId: 'basdad',
-          name: 'based',
-          email: 'lit'
-        },
-        rating: 4,
-        title: 'Super Hot',
-        mainText: 'hgjdhgsjdhgufhuhdgufhdshfjldh jgh gusdhuhv uhgush ughushgufheduxghushulighld grghurhuh ',
-        date: new Date()
-      }
 
-
-      }
-      />
     </FlexLayout>
   );
 };

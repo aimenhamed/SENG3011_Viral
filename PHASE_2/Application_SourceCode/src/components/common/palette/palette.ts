@@ -9,4 +9,7 @@ export const palette = {
   activeDotGray: "#8E8E8E",
   inactiveDotLightGray: "#C3C3C3",
   lightGreen: "#5DD29A",
+  selectedGreen: "#3EBB7F",
+  purple: "#555CB8",
+  darkPurple: '#5C4EB1',
 };
