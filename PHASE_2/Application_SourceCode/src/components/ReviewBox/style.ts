@@ -7,4 +7,5 @@ export const GreenBox = styled.div`
   border: 1px solid #5DD29A;
   box-sizing: border-box;
   padding: 20px;
+  width: 50%;
 `

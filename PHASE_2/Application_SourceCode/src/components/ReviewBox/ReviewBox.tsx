@@ -27,11 +27,11 @@ const ReviewBox = ({reviews, averageRating}: ReviewProps) => {
     <>
       <GreenBox>
         <div>
-            <Text>Average Rating</Text>
-            <StarRating rating={rating} changeRating={(r) =>{setRating(r)}} starRatedColor="#faaf00" starHoverColor="#faaf00" />
+          <Text>Average Rating</Text>
+          <StarRating rating={rating} changeRating={(r) =>{setRating(r)}} starRatedColor="#faaf00" starHoverColor="#faaf00" />
         </div>
         <div>
-          <Image src={Filter} height="24px" width="24px"></Image>
+          <Image src={Filter} height="24px" width="24px" />
           <button type="button">Filter</button>
           <Text>Reviews: <b>{0}</b></Text>
         </div>
