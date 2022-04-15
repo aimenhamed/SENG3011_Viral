@@ -30,12 +30,12 @@ export class CountryService {
       throw new HTTPError(internalServerError);
     }
 
-    let total: number = 0;
+    let total = 0;
     country.reviews.forEach((element: ReviewEntity) => {
       total = +total + +element.rating;
-    })
+    });
 
-    let countryRating: number = total/country.reviews.length;
+    let countryRating: number = total / country.reviews.length;
 
     if (country.reviews.length == 0) {
       countryRating = 0;

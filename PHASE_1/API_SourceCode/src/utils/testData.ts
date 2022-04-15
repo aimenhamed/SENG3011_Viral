@@ -624,7 +624,6 @@ export const getMockReviews = (): any[] => {
       mainText: "I enjoyed my trip to country 1",
       date: Date.now(),
       upvotedBy: getMockUsers()[1],
-    }
-  ]
-}
-
+    },
+  ];
+};

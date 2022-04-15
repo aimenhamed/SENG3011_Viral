@@ -8,10 +8,12 @@ export class ReviewRepository {
 
   async getReview(reviewId: string): Promise<ReviewEntity | undefined> {
     return await getRepository(ReviewEntity)
-    .createQueryBuilder("review")
-    .leftJoinAndSelect("review.upvotedBy", "user")
-    .where("review.reviewId = :reviewId", { reviewId })
-    .getOne();
+      .createQueryBuilder("review")
+      .leftJoinAndSelect("review.createdBy", "user")
+      .leftJoinAndSelect("review.country", "country")
+      .leftJoinAndSelect("review.upvotedBy", "user2")
+      .where("review.reviewId = :reviewId", { reviewId })
+      .getOne();
 
     //return await getRepository(ReviewEntity).findOne({ reviewId });
   }

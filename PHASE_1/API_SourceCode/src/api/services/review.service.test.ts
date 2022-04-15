@@ -33,35 +33,33 @@ describe("ReviewServie", () => {
   const reviewService = () =>
     new ReviewService(reviewRepository, countryRepository, userRepository);
 
-    describe("upvoteReview", () => {
-      it("should resolve with 200 if review is successfully upvoted", () => {
-        const service = reviewService();
-        const user = getMockUsers()[2];
-        const review = getMockReviews()[0];
+  describe("upvoteReview", () => {
+    it("should resolve with 200 if review is successfully upvoted", () => {
+      const service = reviewService();
+      const user = getMockUsers()[2];
+      const review = getMockReviews()[0];
 
-        const updatedReview = { ... review, upvotedBy: [user] };
+      const updatedReview = { ...review, upvotedBy: [user] };
 
-        reviewRepository.getReview = jest.fn().mockReturnValue(review);
-        userRepository.getUser = jest.fn().mockReturnValue(user);
+      reviewRepository.getReview = jest.fn().mockReturnValue(review);
+      userRepository.getUser = jest.fn().mockReturnValue(user);
 
-        reviewRepository.saveReview = jest.fn().mockReturnValue(updatedReview);
+      reviewRepository.saveReview = jest.fn().mockReturnValue(updatedReview);
 
-        expect(
-          service.upvoteReview({
-            userId: user.userId,
-            reviewId: review.reviewId,
-            status: true,
-          })
-        ).resolves.toEqual({
-          review: updatedReview,
-          user: user,
-          log: {
-            ...baseLog,
-            accessTime: expect.any(String),
-          },
-        });
+      expect(
+        service.upvoteReview({
+          userId: user.userId,
+          reviewId: review.reviewId,
+          status: true,
+        })
+      ).resolves.toEqual({
+        review: updatedReview,
+        user: user,
+        log: {
+          ...baseLog,
+          accessTime: expect.any(String),
+        },
       });
-
-    })
-
-})
+    });
+  });
+});

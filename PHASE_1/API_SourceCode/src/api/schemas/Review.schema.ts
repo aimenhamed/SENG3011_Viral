@@ -16,7 +16,7 @@ export const ReviewUpvoteSchema = Joi.object({
     .uuid({ version: ["uuidv4"] })
     .required(),
   status: Joi.boolean().required(),
-})
+});
 
 export const ReviewDeleteSchema = Joi.object({
   userId: Joi.string()
@@ -25,4 +25,4 @@ export const ReviewDeleteSchema = Joi.object({
   reviewId: Joi.string()
     .uuid({ version: ["uuidv4"] })
     .required(),
-})
+});

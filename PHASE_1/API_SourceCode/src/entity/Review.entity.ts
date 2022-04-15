@@ -19,7 +19,9 @@ export class ReviewEntity {
   @JoinColumn({ name: "created_by" })
   createdBy: UserEntity;
 
-  @ManyToOne(() => CountryEntity, (country) => country.countryId)
+  @ManyToOne(() => CountryEntity, (country) => country.countryId, {
+    eager: true,
+  })
   @JoinColumn({ name: "country" })
   country: CountryEntity;
 
@@ -35,7 +37,7 @@ export class ReviewEntity {
   @Column("timestamp", { name: "created_date" })
   date: Date;
 
-  @ManyToMany(() => UserEntity, {eager: true})
+  @ManyToMany(() => UserEntity, { eager: true })
   @JoinTable({
     name: "review_users",
     joinColumn: {

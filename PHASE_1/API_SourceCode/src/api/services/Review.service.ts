@@ -14,9 +14,16 @@ import { ReviewEntity } from "../../entity/Review.entity";
 import { CountryEntity } from "../../entity/Country.entity";
 import { UserEntity } from "../../entity/User.entity";
 import { HTTPError } from "../../utils/Errors";
-import { badRequest, internalServerError, notFoundError } from "../../utils/Constants";
-import { convertReviewEntityToInterface, convertReviewEntityToSimpleInterface } from "../../converters/Review.converter";
-import { getLog } from "../../utils/Helpers"; 
+import {
+  badRequest,
+  internalServerError,
+  notFoundError,
+} from "../../utils/Constants";
+import {
+  convertReviewEntityToInterface,
+  convertReviewEntityToSimpleInterface,
+} from "../../converters/Review.converter";
+import { getLog } from "../../utils/Helpers";
 import { convertUserEntityToInterface } from "../../converters/User.converter";
 
 export class ReviewService {
@@ -126,14 +133,14 @@ export class ReviewService {
       user: convertUserEntityToInterface(user),
       review: convertReviewEntityToInterface(upvotedReview),
       log: getLog(new Date()),
-    }
+    };
   }
 
   async deleteReview(
     reviewDetails: IReviewDeleteRequestBody
   ): Promise<IReviewDeleteSuccessResponse | undefined> {
     const user = await this.getUser(reviewDetails.userId);
-    let review = await this.getReview(reviewDetails.reviewId);
+    const review = await this.getReview(reviewDetails.reviewId);
 
     if (user.userId != review.createdBy.userId) {
       this.logger.info(`User does not have permissions to delete this review`);
@@ -141,7 +148,9 @@ export class ReviewService {
     }
 
     if (!review) {
-      this.logger.info(`Failed to delete review ${review} as it does not exist`);
+      this.logger.info(
+        `Failed to delete review ${review} as it does not exist`
+      );
       throw new HTTPError(badRequest);
     }
 
@@ -149,8 +158,6 @@ export class ReviewService {
 
     return {
       log: getLog(new Date()),
-    }
-
+    };
   }
-
 }

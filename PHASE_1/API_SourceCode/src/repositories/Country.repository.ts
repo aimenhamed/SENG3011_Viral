@@ -44,6 +44,7 @@ export class CountryRepository {
       .leftJoinAndSelect("comment.createdBy", "user")
       .leftJoinAndSelect("country.reviews", "review")
       .leftJoinAndSelect("review.createdBy", "user2")
+      .leftJoinAndSelect("review.upvotedBy", "user3")
       .where("country_name LIKE :countryName", { countryName })
       .getOne();
   }
