@@ -32,9 +32,7 @@ const ReviewBox = ({reviews, averageRating}: ReviewProps) => {
         </div>
         <div>
           <Image src={Filter} height="24px" width="24px"></Image>
-          <button type="button">
-            
-            Filter</button>
+          <button type="button">Filter</button>
           <Text>Reviews: <b>{0}</b></Text>
         </div>
         <div>
