@@ -44,7 +44,7 @@ const MenuBar = () => {
 
           <NavLinkBtn to="/favourites/countries" activeClassName="selected">
             <FontAwesomeIcon icon={AllIcons.faHeart} />
-            <MenuOptionText>Search Outbreaks</MenuOptionText>
+            <MenuOptionText>Favourites</MenuOptionText>
           </NavLinkBtn>
 
           <NavLinkBtn to="/settings" activeClassName="selected">
