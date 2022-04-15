@@ -161,3 +161,24 @@ export interface IReviewPostSuccessResponse {
   review: Review;
   log: Log;
 }
+
+export interface IReviewUpvoteRequestBody {
+  userId: string;
+  reviewId: string;
+  status: boolean;
+}
+
+export interface IReviewUpvoteSuccessResponse {
+  review: Review;
+  user: User;
+  log: Log;
+}
+
+export interface IReviewDeleteRequestBody {
+  userId: string;
+  reviewId: string;
+}
+
+export interface IReviewDeleteSuccessResponse {
+  log: Log;
+}

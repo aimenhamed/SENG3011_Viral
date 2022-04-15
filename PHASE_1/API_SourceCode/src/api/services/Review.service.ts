@@ -1,7 +1,11 @@
 import { getLogger } from "../../utils/Logger";
 import {
+  IReviewDeleteRequestBody,
   IReviewPostRequestBody,
   IReviewPostSuccessResponse,
+  IReviewUpvoteRequestBody,
+  IReviewUpvoteSuccessResponse,
+  IReviewDeleteSuccessResponse,
 } from "IApiResponses";
 import { ReviewRepository } from "../../repositories/Review.repository";
 import { CountryRepository } from "../../repositories/Country.repository";
@@ -10,9 +14,10 @@ import { ReviewEntity } from "../../entity/Review.entity";
 import { CountryEntity } from "../../entity/Country.entity";
 import { UserEntity } from "../../entity/User.entity";
 import { HTTPError } from "../../utils/Errors";
-import { badRequest, internalServerError } from "../../utils/Constants";
-import { convertReviewEntityToInterface } from "../../converters/Review.converter";
-import { getLog } from "../../utils/Helpers";
+import { badRequest, internalServerError, notFoundError } from "../../utils/Constants";
+import { convertReviewEntityToInterface, convertReviewEntityToSimpleInterface } from "../../converters/Review.converter";
+import { getLog } from "../../utils/Helpers"; 
+import { convertUserEntityToInterface } from "../../converters/User.converter";
 
 export class ReviewService {
   private logger = getLogger();
@@ -77,4 +82,75 @@ export class ReviewService {
 
     return country;
   }
+
+  async getReview(reviewId: string): Promise<ReviewEntity> {
+    const review = await this.reviewRepository.getReview(reviewId);
+
+    if (review === undefined) {
+      this.logger.error(`Failed to find review with reviewId ${reviewId}`);
+      throw new HTTPError(notFoundError);
+    }
+
+    return review;
+  }
+
+  async upvoteReview(
+    reviewDetails: IReviewUpvoteRequestBody
+  ): Promise<IReviewUpvoteSuccessResponse | undefined> {
+    const user = await this.getUser(reviewDetails.userId);
+    let upvotedReview = await this.getReview(reviewDetails.reviewId);
+    const status = reviewDetails.status;
+
+    upvotedReview.upvotedBy = upvotedReview.upvotedBy.filter(
+      (a) => a.userId !== user.userId
+    );
+
+    if (status) {
+      upvotedReview.upvotedBy = [...upvotedReview.upvotedBy, user];
+    }
+
+    console.log(upvotedReview);
+    upvotedReview = await this.reviewRepository.saveReview(upvotedReview);
+    console.log("check2\n");
+    if (upvotedReview === undefined) {
+      console.log("check3\n");
+      this.logger.info(
+        `Failed to change status for user ${user} on review ${upvotedReview}`
+      );
+      throw new HTTPError(internalServerError);
+    }
+
+    console.log(user);
+    console.log(upvotedReview);
+    return {
+      user: convertUserEntityToInterface(user),
+      review: convertReviewEntityToInterface(upvotedReview),
+      log: getLog(new Date()),
+    }
+  }
+
+  async deleteReview(
+    reviewDetails: IReviewDeleteRequestBody
+  ): Promise<IReviewDeleteSuccessResponse | undefined> {
+    const user = await this.getUser(reviewDetails.userId);
+    let review = await this.getReview(reviewDetails.reviewId);
+
+    if (user.userId != review.createdBy.userId) {
+      this.logger.info(`User does not have permissions to delete this review`);
+      throw new HTTPError(badRequest);
+    }
+
+    if (!review) {
+      this.logger.info(`Failed to delete review ${review} as it does not exist`);
+      throw new HTTPError(badRequest);
+    }
+
+    await this.reviewRepository.deleteReview(review);
+
+    return {
+      log: getLog(new Date()),
+    }
+
+  }
+
 }

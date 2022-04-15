@@ -612,3 +612,19 @@ export const getMockCountryDiseases = () => {
     },
   };
 };
+
+export const getMockReviews = (): any[] => {
+  return [
+    {
+      reviewId: "review1",
+      createdBy: getMockUsers()[0],
+      country: getMockCountries()[0],
+      rating: 4,
+      title: "Trip to country 1",
+      mainText: "I enjoyed my trip to country 1",
+      date: Date.now(),
+      upvotedBy: getMockUsers()[1],
+    }
+  ]
+}
+
