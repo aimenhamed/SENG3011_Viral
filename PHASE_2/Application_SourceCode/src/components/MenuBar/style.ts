@@ -122,8 +122,9 @@ export const UserIcon = styled.div`
 
 
 export const Name = styled.div`
-  position: absolute;
-  top: 80px;
+  padding-top: 70px;
+  width: 150px;
+  overflow-wrap: break-word;
   left: 0px;    
   font-family: Calibri;
   font-style: normal;
