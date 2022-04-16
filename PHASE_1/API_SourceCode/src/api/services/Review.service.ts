@@ -47,6 +47,7 @@ export class ReviewService {
     newReview.title = reviewDetails.title;
     newReview.mainText = reviewDetails.mainText;
     newReview.date = new Date();
+    newReview.upvotedBy = [];
 
     const reviewEntity: ReviewEntity = await this.reviewRepository.saveReview(
       newReview
