@@ -20,10 +20,13 @@ import {
 } from "src/interfaces/ResponseInterface";
 import { useHistory } from "react-router-dom";
 import ArticleDialog from "src/pages/Articles/ArticleDialog/ArticleDialog";
+import { VectorMap } from "@react-jvectormap/core";
+import { worldMill } from "@react-jvectormap/world";
+import { IFocus, ISeries, ISVGElementStyleAttributes } from "@react-jvectormap/core/dist/types";
+import { selectAdvice } from "src/logic/redux/reducers/adviceSlice/adviceSlice";
 import ArticleResult from "../ArticleResult/ArticleResult";
 import Flights from "../Flights/Flights";
 import Text from "../common/text/Text";
-import Map from "../Map/Map";
 import { FlexLayout } from "../common/layouts/screenLayout";
 import {
   Container,
@@ -36,17 +39,22 @@ import {
 } from "./style";
 import CommentCard from "../Comment/Comment";
 import AddCommentDialog from "../AddCommentDialog/AddCommentDialog";
+import jvmCountries from "../SearchBar/countries";
 
 type CountryReportProps = {
   advice: IAdviceSpecificSuccessResponse;
   country: string;
 };
 
-const CountryReport = ({ advice, country }: CountryReportProps) => {
+const CountryReport = ({ advice, country }: CountryReportProps) => {  
+  let countryCode: string | undefined;
+  let adviceLvl: string | undefined;
+  
   const dispatch = useDispatch();
   const history = useHistory();
 
   const { user } = useAppSelector(selectUser);
+  const { all } = useAppSelector(selectAdvice);
   const { articles, articleloadingStatus } = useAppSelector(selectArticles);
 
   const [commentDialog, setCommentDialog] = useState<boolean>(false);
@@ -111,6 +119,57 @@ const CountryReport = ({ advice, country }: CountryReportProps) => {
       return <Text>Loading</Text>;
     }
   };
+
+  const regionStyle: ISVGElementStyleAttributes = {
+    initial: {
+      fill: "#8b8b8b",
+    },
+  };
+
+  Object.entries(jvmCountries).forEach((entry) => {
+    const currCountry = entry[1]['name']
+
+    if (currCountry === country) {
+      const [countryName] = entry
+      countryCode = countryName 
+    }
+  });
+
+  const AdviceLevel: {
+    [key: string]: string;
+  } = {
+    null : "#5dbc60",
+    "Do not travel": "#e95757",
+    "Exercise a high degree of caution": "#f6d34e",
+    "Reconsider your need to travel": "#f1902c",
+  };
+
+  const values: {
+    [key: string]: number;
+  } = {};
+  all?.countries.forEach((curr) => {
+    if (countryCode === curr['country']) {
+      adviceLvl = curr['adviceLevel']
+      values[countryCode] = AdviceLevel[adviceLvl] as unknown as number;
+    }
+  });
+
+  const seriesStyle: ISeries = {
+    regions: [
+      {
+        values,
+        attribute: "fill",
+      },
+    ],
+  };
+
+  const selectedRegion: IFocus = {
+    scale: 500,
+    x: 100,
+    y: 100,
+    region: countryCode,
+  };
+
   return (
     <FlexLayout>
       <Container>
@@ -137,7 +196,15 @@ const CountryReport = ({ advice, country }: CountryReportProps) => {
                     onClick={bookmarkCountry}
                   />
                 )}
-                <Map />
+                <div style={{width: "300px", height: "300px"}}>
+                  <VectorMap
+                    map={worldMill}
+                    focusOn={selectedRegion}
+                    backgroundColor="white"
+                    regionStyle={regionStyle}
+                    series={seriesStyle}
+                  />
+                </div>
               </TileLockup>
               <TileLockup>
                 <Text bold fontSize="1.125rem" align="center">
