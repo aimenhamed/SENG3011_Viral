@@ -14,6 +14,7 @@ import {
   selectAdvice,
 } from "src/logic/redux/reducers/adviceSlice/adviceSlice";
 import { useAppSelector } from "src/logic/redux/hooks";
+import { MapContainer, MapPageHeader, MapPagePaddedContainer, MapPageParentContainer } from "./style";
 
 type MapProps = {
   countryClick: (countryName: string) => void;
@@ -51,7 +52,7 @@ const Map = ({ countryClick }: MapProps) => {
   const seriesStyle: ISeries = {
     regions: [
       {
-        values,
+        // values,
         attribute: "fill",
       },
     ],
@@ -73,30 +74,15 @@ const Map = ({ countryClick }: MapProps) => {
   };
 
   return (
-    <div style={{ display: "flex", width: "100%" }}>
-      <div
-        style={{
-          width: "100%",
-          height: "100vh",
-          paddingRight: "50px",
-          paddingLeft: "50px",
-          boxSizing: "border-box",
-        }}
-      >
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            alignItems: "baseline",
-            justifyContent: "space-between",
-          }}
-        >
+    <MapPageParentContainer>
+      <MapPagePaddedContainer>
+        <MapPageHeader>
           <div>
             <h1>{heading}</h1>
           </div>
           <SearchBar setHeading={setHeading} />
-        </div>
-        <div id="mapDiv" style={{ height: "80vh", paddingTop: "20px" }}>
+        </MapPageHeader>
+        <MapContainer>
           <VectorMap
             map={worldMill}
             onRegionClick={(e, c) => regionClick(e, c)}
@@ -105,9 +91,9 @@ const Map = ({ countryClick }: MapProps) => {
             series={seriesStyle}
           />
           <Legend />
-        </div>
-      </div>
-    </div>
+        </MapContainer>
+      </MapPagePaddedContainer>
+    </MapPageParentContainer>
   );
 };
 
