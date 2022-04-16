@@ -4,26 +4,28 @@ import {
   faPlus,
   faMinus
 } from "@fortawesome/free-solid-svg-icons";
-import {CollapsibleButton } from "./style";
+import { CollapsibleButton1 } from "./style";
 
  type IProps = {
+   // open?: boolean;
+//    title: string;
    children: any;
  }
 
-const Collapsible = ({ children }: IProps) => {
+const CollapsibleTwo = ({ children }: IProps) => {
 const [isOpen, setIsOpen] = useState(false);
 
   return (
     <>
       <div className="card">
         <div>
-          <CollapsibleButton type="button" className="collapsible" onClick={() => setIsOpen((prev) => !prev)}>
+          <CollapsibleButton1 type="button" className="collapsible" onClick={() => setIsOpen((prev) => !prev)}>
             {!isOpen ? (
               <FontAwesomeIcon icon={faPlus} />
               ) : (
                 <FontAwesomeIcon icon={faMinus} />
               )}
-          </CollapsibleButton>
+          </CollapsibleButton1>
         </div>
         <div>{isOpen && <div>{children}</div>}</div>
       </div>
@@ -31,5 +33,4 @@ const [isOpen, setIsOpen] = useState(false);
   );
 };
 
-export default Collapsible;
-
+export default CollapsibleTwo;

@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import { keyTerms } from "src/constants/KeyTerms";
 import * as AllIcons from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Advice } from "src/components/common/image/imageIndex";
 import {
   putBookmarkCountryDispatch,
   selectUser,
@@ -37,10 +38,20 @@ import {
   SubText,
   InjectionIcon,
   HorizontalTile,
+  VirusIcon,
+  DropFlexBox,
+  DropFlexBox1,
+  TitleText,
+  Tile1,
+  DropFlexBox2,
+  Tile2,
+  TitleText1,
+  AdviceIcon,
 } from "./style";
 import CommentCard from "../Comment/Comment";
 import AddCommentDialog from "../AddCommentDialog/AddCommentDialog";
 import Collapsible from "./Collapsible";
+import CollapsibleTwo from "./CollapsibleTwo";
 
 type CountryReportProps = {
   advice: IAdviceSpecificSuccessResponse;
@@ -96,8 +107,8 @@ const CountryReport = ({ advice, country }: CountryReportProps) => {
           style={{
             display: "flex",
             justifyContent: "center",
-            width: "500px",
-            whiteSpace: "pre",
+            width: "800px",
+            whiteSpace: "nowrap",
             // marginLeft: "500px",
             // paddingLeft: "50px",
             maxHeight: "200px",
@@ -150,12 +161,18 @@ const CountryReport = ({ advice, country }: CountryReportProps) => {
                 )}
                 <Map />
               </TileLockup>
+
               <TileLockup>
                 <InjectionIcon><FontAwesomeIcon icon={AllIcons.faSyringe} /></InjectionIcon>
                 <div style={{position: "relative", textAlign: "left", display: "flex"}} />
-                 <Collapsible title="Vaccine Requirements"> 
-                   <Tile>
-                    {advice.data.data.areaAccessRestriction.diseaseVaccination
+                <TitleText>
+                  Vaccine Requirements
+                </TitleText>
+                <DropFlexBox>
+                  <Collapsible>
+                    <DropFlexBox1>
+                      <Tile1>
+                        {advice.data.data.areaAccessRestriction.diseaseVaccination
                       .qualifiedVaccines ? (
                       renderText(
                         advice.data.data.areaAccessRestriction.diseaseVaccination
@@ -164,18 +181,19 @@ const CountryReport = ({ advice, country }: CountryReportProps) => {
                     ) : (
                       <Text>No required vaccines to travel.</Text>
                   )}
-                  </Tile>
-                 </Collapsible>
+                      </Tile1>
+                    </DropFlexBox1>
+                  </Collapsible>
+                </DropFlexBox>
               </TileLockup>
             </SubSection>
             <SubSection>
               <TileLockup>
-                <Text bold fontSize="1.125rem" align="center">
+                <Text bold fontSize="1.125rem" position="relative" align="center">
+                  <VirusIcon><FontAwesomeIcon icon={AllIcons.faVirus} /></VirusIcon>
                   Articles
                 </Text>
-                
                 <HorizontalTile>{showArticles()}</HorizontalTile>
-                
               </TileLockup>
               <TileLockup>
                 <Text bold fontSize="1.125rem" align="center">
@@ -235,20 +253,29 @@ const CountryReport = ({ advice, country }: CountryReportProps) => {
           </Section>
           <Section id="right">
             <TileLockup style={{ width: "50%" }}>
-              <Text bold fontSize="1.125rem" align="center">
+              {/* <Text bold fontSize="1.125rem" align="center"> */}
+              <AdviceIcon src={Advice} />
+              <TitleText1>
                 Travel Advice
                 {advice.country.advice && (
                   <SubText>{` - Last updated: ${advice.country.advice.lastUpdate}`}</SubText>
                 )}
-              </Text>
+              </TitleText1>
               {advice.country.advice ? (
                 <>
-                  <Tile style={{ marginBottom: "1rem" }}>
+                  <Tile style={{ marginBottom: "1rem", background: "#FFF2AB" }}>
                     {advice.country.advice.adviceLevel}
                   </Tile>
-                  <Tile style={{ textAlign: "left" }}>
-                    {advice.country.advice.latestAdvice}
-                  </Tile>
+
+                  <DropFlexBox>
+                    <CollapsibleTwo>
+                      <DropFlexBox2>
+                        <Tile2 style={{ textAlign: "left" }}>
+                          {advice.country.advice.latestAdvice}
+                        </Tile2>
+                      </DropFlexBox2>
+                    </CollapsibleTwo>
+                  </DropFlexBox>
                 </>
               ) : (
                 <>
