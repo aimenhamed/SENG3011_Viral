@@ -53,7 +53,7 @@ const ArticleDialog = ({ article, isOpen, toggleOpen }: ArticleDialogProps) => {
               )}
             </div>
             <Text><b>Date of Publication:</b> {article.dateOfPublication}</Text>
-            <div style={{overflowY: "scroll", height: "50vh",}}>
+            <div style={{overflowY: "scroll", height: "50vh"}}>
               <Text style={{whiteSpace: 'pre-wrap' }}>{article.mainText}</Text>
               <Text><b>Source:</b> <a href={article.url}>{article.url}</a></Text>
               <Text bold>Reports:</Text>

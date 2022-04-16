@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { useAppSelector } from "src/logic/redux/hooks";
 import { useDispatch } from "react-redux";
 import { keyTerms } from "src/constants/KeyTerms";
+import * as AllIcons from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   putBookmarkCountryDispatch,
   selectUser,
@@ -33,9 +35,12 @@ import {
   TileLockup,
   Tile,
   SubText,
+  InjectionIcon,
+  HorizontalTile,
 } from "./style";
 import CommentCard from "../Comment/Comment";
 import AddCommentDialog from "../AddCommentDialog/AddCommentDialog";
+import Collapsible from "./Collapsible";
 
 type CountryReportProps = {
   advice: IAdviceSpecificSuccessResponse;
@@ -89,9 +94,15 @@ const CountryReport = ({ advice, country }: CountryReportProps) => {
       return (
         <div
           style={{
-            width: "300px",
+            display: "flex",
+            justifyContent: "center",
+            width: "500px",
+            whiteSpace: "pre",
+            // marginLeft: "500px",
+            // paddingLeft: "50px",
             maxHeight: "200px",
-            overflowY: "scroll",
+            overflowX: "scroll",
+            overflowY: "hidden",
             padding: "5px",
           }}
         >
@@ -140,20 +151,21 @@ const CountryReport = ({ advice, country }: CountryReportProps) => {
                 <Map />
               </TileLockup>
               <TileLockup>
-                <Text bold fontSize="1.125rem" align="center">
-                  Vaccine Requirements
-                </Text>
-                <Tile>
-                  {advice.data.data.areaAccessRestriction.diseaseVaccination
-                    .qualifiedVaccines ? (
-                    renderText(
-                      advice.data.data.areaAccessRestriction.diseaseVaccination
-                        .qualifiedVaccines
-                    )
-                  ) : (
-                    <Text>No required vaccines to travel.</Text>
+                <InjectionIcon><FontAwesomeIcon icon={AllIcons.faSyringe} /></InjectionIcon>
+                <div style={{position: "relative", textAlign: "left", display: "flex"}} />
+                 <Collapsible title="Vaccine Requirements"> 
+                   <Tile>
+                    {advice.data.data.areaAccessRestriction.diseaseVaccination
+                      .qualifiedVaccines ? (
+                      renderText(
+                        advice.data.data.areaAccessRestriction.diseaseVaccination
+                          .qualifiedVaccines
+                      )
+                    ) : (
+                      <Text>No required vaccines to travel.</Text>
                   )}
-                </Tile>
+                  </Tile>
+                 </Collapsible>
               </TileLockup>
             </SubSection>
             <SubSection>
@@ -161,7 +173,9 @@ const CountryReport = ({ advice, country }: CountryReportProps) => {
                 <Text bold fontSize="1.125rem" align="center">
                   Articles
                 </Text>
-                <Tile>{showArticles()}</Tile>
+                
+                <HorizontalTile>{showArticles()}</HorizontalTile>
+                
               </TileLockup>
               <TileLockup>
                 <Text bold fontSize="1.125rem" align="center">

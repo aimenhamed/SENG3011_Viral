@@ -15,6 +15,7 @@ const ArticleResult = ({ article, click }: ArticleResultProps) => {
           display: "flex",
           justifyContent: "space-between",
           flexWrap: "wrap",
+          // overflowX: "auto",
           width: "100%",
           height: "100%",
         }}

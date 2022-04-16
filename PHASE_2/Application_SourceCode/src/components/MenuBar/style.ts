@@ -110,13 +110,14 @@ export const MenuIcon = styled.div`
 `;
 
 export const UserIcon = styled.div`
-  position: absolute;
+  position: relative;
   top: -2px;
   color: white;
   font-size: 40px;
   width: 10px;
   height: 40px;
   padding-right: 23px;
+  border: none;
   
 `;
 
