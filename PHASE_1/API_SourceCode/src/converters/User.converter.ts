@@ -1,6 +1,7 @@
 import { User, UserOnly } from "IUser";
 import { UserEntity } from "../entity/User.entity";
 import { convertArticleEntityToInterface } from "./Article.converter";
+import { convertCountryEntityToSimpleInterface } from "./Country.converter";
 
 export const convertUserEntityToInterface = (entity: UserEntity): User => {
   return {
@@ -11,7 +12,9 @@ export const convertUserEntityToInterface = (entity: UserEntity): User => {
     bookmarkedArticles: entity.bookmarkedArticles.map((article) =>
       convertArticleEntityToInterface(article)
     ),
-    bookmarkedCountries: entity.bookmarkedCountries,
+    bookmarkedCountries: entity.bookmarkedCountries.map((country) =>
+      convertCountryEntityToSimpleInterface(country)
+    ),
   };
 };
 

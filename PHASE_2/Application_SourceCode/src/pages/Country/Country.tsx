@@ -8,15 +8,14 @@ import {
 } from "src/logic/redux/reducers/adviceSlice/adviceSlice";
 import LoadingPage from "src/components/LoadingPage/LoadingPage";
 import CountryReport from "src/components/CountryReport/CountryReport";
-import { VectorMap } from "@react-jvectormap/core";
-import { worldMill } from "@react-jvectormap/world";
+import { useHistory } from "react-router-dom";
 
 type CountryProps = {
   countryName: string;
-  backToMap: () => void;
 };
 
-const Country = ({ countryName, backToMap }: CountryProps) => {
+const Country = ({countryName}: CountryProps) => {
+  const history = useHistory();
   const dispatch = useDispatch();
   const { advice, adviceloadingStatus } = useAppSelector(selectAdvice);
 
@@ -29,15 +28,13 @@ const Country = ({ countryName, backToMap }: CountryProps) => {
   }
 
   if (adviceloadingStatus === AdviceLoadingStatusTypes.GET_ADVICE_FAILED) {
-    backToMap();
+    history.push("/home");
   }
 
   if (advice) {
     return <CountryReport advice={advice!} country={countryName} />;
   }
-  return (
-    <VectorMap map={worldMill} />
-  );
+  return <></>;
 };
 
 export default Country;

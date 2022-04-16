@@ -1,14 +1,14 @@
 import { Router, Request, Response, NextFunction } from "express";
 import { formatError, getLogger } from "../../utils/Logger";
 import { IRouter } from "../../interfaces/IRouter";
-import { AdviceService } from "../services/Advice.service";
+import { CountryService } from "../services/Country.service";
 
 export class AdviceRouter implements IRouter {
   private readonly logger = getLogger();
   private readonly router: Router;
   private readonly prefix = "/api/v1";
 
-  constructor(private readonly adviceService: AdviceService) {
+  constructor(private readonly countryService: CountryService) {
     this.router = this.setupRoutes();
   }
 
@@ -20,7 +20,7 @@ export class AdviceRouter implements IRouter {
           this.logger.info(`Received /advice request`);
           try {
             const country: string = req.query.country as string;
-            const result = await this.adviceService.getAdvice(country);
+            const result = await this.countryService.getCountryInfo(country);
             this.logger.info(`Responding to client in GET /advice`);
             return res.status(200).json(result);
           } catch (err: any) {
@@ -36,7 +36,7 @@ export class AdviceRouter implements IRouter {
         async (req: Request, res: Response, next: NextFunction) => {
           this.logger.info(`Received /advice/all request`);
           try {
-            const result = await this.adviceService.getAllAdvice();
+            const result = await this.countryService.getAllAdvice();
             this.logger.info(`Responding to client in GET /advice/all`);
             return res.status(200).json(result);
           } catch (err: any) {

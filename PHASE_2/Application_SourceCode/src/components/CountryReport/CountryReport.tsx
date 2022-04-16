@@ -1,11 +1,6 @@
 import { useEffect, useState } from "react";
 import { useAppSelector } from "src/logic/redux/hooks";
 import { useDispatch } from "react-redux";
-import {
-  getFlightsDispatch,
-  LoadingStatusTypes,
-  selectFlights,
-} from "src/logic/redux/reducers/flightsSlice/flightsSlice";
 import { keyTerms } from "src/constants/KeyTerms";
 import {
   putBookmarkCountryDispatch,
@@ -22,11 +17,11 @@ import {
   IAdviceSpecificSuccessResponse,
   ISearchRequestHeaders,
   IUserBookmarkCountryRequestBody,
-  IFlightQuery,
 } from "src/interfaces/ResponseInterface";
 import { useHistory } from "react-router-dom";
 import ArticleDialog from "src/pages/Articles/ArticleDialog/ArticleDialog";
 import ArticleResult from "../ArticleResult/ArticleResult";
+import Flights from "../Flights/Flights";
 import Text from "../common/text/Text";
 import Map from "../Map/Map";
 import { FlexLayout } from "../common/layouts/screenLayout";
@@ -39,10 +34,8 @@ import {
   Tile,
   SubText,
 } from "./style";
-import FlightInfo from "../FlightInfo/FlightInfo";
 import CommentCard from "../Comment/Comment";
 import AddCommentDialog from "../AddCommentDialog/AddCommentDialog";
-
 
 type CountryReportProps = {
   advice: IAdviceSpecificSuccessResponse;
@@ -54,20 +47,18 @@ const CountryReport = ({ advice, country }: CountryReportProps) => {
   const history = useHistory();
 
   const { user } = useAppSelector(selectUser);
-
-  const { flights, loadingStatus } = useAppSelector(selectFlights);
   const { articles, articleloadingStatus } = useAppSelector(selectArticles);
-  const [ originCode, setOriginCode ] = useState<string>("SYD");
-  const [ destCode, setDestCode ]  = useState<string>("BKK");
-  const [ departDate,  setDepartDate ] = useState<string>("2022-11-01");
-  const [ numAdults, setNumAdults ] = useState<string>("1");
+
   const [commentDialog, setCommentDialog] = useState<boolean>(false);
   const bookmarked = user?.user.bookmarkedCountries.filter(
-    (c) => advice.advice.country.countryId === c.countryId
+    (c) => advice.country.countryId === c.countryId
   ) as Country[];
 
-  const [ selectedArticle,  setSelectedArticle ] = useState<Article | undefined>()
-  const [ isArticleDialogOpen, setIsArticleDialogOpen ] = useState<boolean>(false);
+  const isBookmarked = bookmarked.length > 0;
+
+  const [selectedArticle, setSelectedArticle] = useState<Article | undefined>();
+  const [isArticleDialogOpen, setIsArticleDialogOpen] =
+    useState<boolean>(false);
 
   const renderText = (text: string[]) =>
     text.map((req) => <Text key={req}>{req}</Text>);
@@ -85,57 +76,55 @@ const CountryReport = ({ advice, country }: CountryReportProps) => {
   const bookmarkCountry = () => {
     const req: IUserBookmarkCountryRequestBody = {
       userId: user?.user.userId!,
-      countryId: advice.advice.country.countryId,
-      status: !bookmarked,
+      countryId: advice.country.countryId,
+      status: !isBookmarked,
     };
+
     dispatch(putBookmarkCountryDispatch(req));
   };
-
-  const getFlightInfo = () => {
-    const req: IFlightQuery = {
-      originLocationCode: originCode,
-      destinationLocationCode: destCode,
-      departureDate: departDate,
-      adults: numAdults,
-    }
-    dispatch(getFlightsDispatch(req));
-  }
   const showArticles = () => {
     if (articleloadingStatus === ArticleLoadingStatusTypes.GET_SEARCH_LOADING) {
-      return (<Text>Loading...</Text>)
-    } else if (articles.length > 0 ) {
-        return (
-          <div style={{width:'300px', maxHeight: '200px', overflowY: "scroll", padding: "5px"}}>
-            {articles.map((article) => (
-              <ArticleResult
-                article={article}
-                click={()=>{
+      return <Text>Loading...</Text>;
+    } else if (articles.length > 0) {
+      return (
+        <div
+          style={{
+            width: "300px",
+            maxHeight: "200px",
+            overflowY: "scroll",
+            padding: "5px",
+          }}
+        >
+          {articles.map((article) => (
+            <ArticleResult
+              key={article.articleId}
+              article={article}
+              click={() => {
                 setSelectedArticle(article);
-                setIsArticleDialogOpen(true)
+                setIsArticleDialogOpen(true);
               }}
-              />
-))}
-          </div>
-        )
+            />
+          ))}
+        </div>
+      );
     } else {
-      return <Text>Loading</Text>
+      return <Text>Loading</Text>;
     }
-  }
+  };
   return (
     <FlexLayout>
       <Container>
         <Text bold fontSize="2rem" align="center">
-          {advice.advice.country.name}
+          {advice.country.name}
         </Text>
         <Content>
           <Section id="left" style={{ marginRight: "2.5rem" }}>
             <SubSection>
               <TileLockup style={{ width: "50%" }}>
                 <Text bold fontSize="1.125rem" align="center">
-                  {advice.advice.country.name} Map - Continent{" "}
-                  {advice.advice.continent}
+                  {advice.country.name} Map
                 </Text>
-                {bookmarked.length > 0 ? (
+                {isBookmarked ? (
                   <BsHeartFill
                     color="ff5c5c"
                     size="2rem"
@@ -172,9 +161,7 @@ const CountryReport = ({ advice, country }: CountryReportProps) => {
                 <Text bold fontSize="1.125rem" align="center">
                   Articles
                 </Text>
-                <Tile>
-                  {showArticles()}
-                </Tile>
+                <Tile>{showArticles()}</Tile>
               </TileLockup>
               <TileLockup>
                 <Text bold fontSize="1.125rem" align="center">
@@ -221,10 +208,10 @@ const CountryReport = ({ advice, country }: CountryReportProps) => {
                   </div>
                 </div>
                 <Tile>
-                  {advice.comments.length === 0 ? (
+                  {advice.country.comments.length === 0 ? (
                     <Text>No comments posted yet.</Text>
                   ) : (
-                    advice.comments.map((comment) => (
+                    advice.country.comments.map((comment) => (
                       <CommentCard key={comment.commentId} comment={comment} />
                     ))
                   )}
@@ -236,54 +223,41 @@ const CountryReport = ({ advice, country }: CountryReportProps) => {
             <TileLockup style={{ width: "50%" }}>
               <Text bold fontSize="1.125rem" align="center">
                 Travel Advice
-                <SubText>{` - Last updated: ${advice.advice.lastUpdate}`}</SubText>
-              </Text>
-              <Tile style={{ marginBottom: "1rem" }}>
-                {advice.advice.adviceLevel}
-              </Tile>
-              <Tile style={{ textAlign: "left" }}>
-                {advice.advice.latestAdvice}
-              </Tile>
-            </TileLockup>
-            <TileLockup>
-              <Text bold fontSize="1.125rem" align="center">
-                Available flights to {advice.advice.country.name}
-              </Text>
-              <Tile>
-                <input type="text" placeholder="Start location code" onChange={(e)=>setOriginCode(e.target.value)} value="SYD" />
-                <input type="text" placeholder="Destination location code" onChange={(e)=>setDestCode(e.target.value)} value="BKK" />
-                <input type="date" placeholder={new Date().toLocaleString()} onChange={(e)=>setDepartDate(e.target.value)} value="2022-11-01" />
-                <input type="number" placeholder="Number of adults" onChange={(e)=>setNumAdults(e.target.value as string)} value="1" />
-                <button type="button" onClick={()=>getFlightInfo()}>Submit</button>
-                {loadingStatus === LoadingStatusTypes.GET_FLIGHTS_LOADING ? (
-                  <Text>Loading...</Text>
-                ) : (
-                  flights.map((flight) => (
-                    <FlightInfo flight={flight} key={flight.price} />
-                  ))
+                {advice.country.advice && (
+                  <SubText>{` - Last updated: ${advice.country.advice.lastUpdate}`}</SubText>
                 )}
-              </Tile>
+              </Text>
+              {advice.country.advice ? (
+                <>
+                  <Tile style={{ marginBottom: "1rem" }}>
+                    {advice.country.advice.adviceLevel}
+                  </Tile>
+                  <Tile style={{ textAlign: "left" }}>
+                    {advice.country.advice.latestAdvice}
+                  </Tile>
+                </>
+              ) : (
+                <>
+                  <Tile style={{ textAlign: "left" }}>No advice found.</Tile>
+                </>
+              )}
             </TileLockup>
+            <Flights country={country} />
           </Section>
           <AddCommentDialog
-            countryId={advice.advice.country.countryId}
+            countryId={advice.country.countryId}
             isOpen={commentDialog}
             toggleOpen={() => setCommentDialog(false)}
           />
         </Content>
       </Container>
-      {
-        selectedArticle
-        ? (
-          <ArticleDialog
-            article={selectedArticle}
-            isOpen={isArticleDialogOpen}
-            toggleOpen={() => setIsArticleDialogOpen(false)}
-          />
-)
-        : null
-      }
-
+      {selectedArticle ? (
+        <ArticleDialog
+          article={selectedArticle}
+          isOpen={isArticleDialogOpen}
+          toggleOpen={() => setIsArticleDialogOpen(false)}
+        />
+      ) : null}
     </FlexLayout>
   );
 };

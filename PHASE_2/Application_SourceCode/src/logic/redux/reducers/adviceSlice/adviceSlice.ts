@@ -115,7 +115,7 @@ export const adviceSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(getSpecificAdviceDispatch.fulfilled, (state, action) => {
-      const comments = [...action.payload.comments];
+      const comments = [...action.payload.country.comments];
       comments.sort((a, b) => {
         return new Date(b.date).getTime() - new Date(a.date).getTime();
       });
@@ -137,14 +137,14 @@ export const adviceSlice = createSlice({
         AdviceLoadingStatusTypes.POST_COMMENT_COMPLETED;
       if (state.advice) {
         const newComment = action.payload.comment;
-        const newComments = state.advice.comments.filter(
+        const newComments = state.advice.country.comments.filter(
           (comment) => comment.commentId !== newComment.commentId
         );
         newComments.push(newComment);
         newComments.sort((a, b) => {
           return new Date(b.date).getTime() - new Date(a.date).getTime();
         });
-        state.advice.comments = newComments;
+        state.advice.country.comments = newComments;
       }
     });
     builder.addCase(postCommentDispatch.pending, (state) => {

@@ -5,11 +5,15 @@ import { Article } from "src/interfaces/ViralInterface";
 import { useAppSelector } from "src/logic/redux/hooks";
 import { selectUser } from "src/logic/redux/reducers/userSlice/userSlice";
 import ArticleResult from "src/components/ArticleResult/ArticleResult";
+import { useHistory } from "react-router-dom";
 import ArticleDialog from "../Articles/ArticleDialog/ArticleDialog";
 import { Container } from "./style";
 
 const BookmarkedArticles = () => {
+  const history = useHistory();
   const { user } = useAppSelector(selectUser);
+  if (!user) history.push("/");
+
   const [articleDialog, setArticleDialog] = useState<boolean>(false);
   const [selectedArticle, setSelectedArticle] = useState<Article | undefined>();
 

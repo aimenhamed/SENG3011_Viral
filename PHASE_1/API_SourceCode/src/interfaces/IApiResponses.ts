@@ -6,6 +6,7 @@ import { Comment, CommentNoCountry } from "IComment";
 import { IAdviceOnly } from "IAdvice";
 import { AmadeusData } from "IFetchResponses";
 import { Country } from "ICountry";
+import { Review } from "IReview";
 
 export interface IHttpError {
   errorCode: number;
@@ -146,4 +147,17 @@ export interface IFlightQuery {
   destinationLocationCode: string;
   departureDate: string;
   adults: string;
+}
+
+export interface IReviewPostRequestBody {
+  userId: string;
+  countryId: string;
+  rating: number;
+  title: string;
+  mainText: string;
+}
+
+export interface IReviewPostSuccessResponse {
+  review: Review;
+  log: Log;
 }

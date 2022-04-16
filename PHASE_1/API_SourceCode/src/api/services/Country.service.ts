@@ -1,13 +1,60 @@
 import { getLogger } from "../../utils/Logger";
 import { getLog } from "../../utils/Helpers";
 import { HTTPError } from "../../utils/Errors";
-import { notFoundError } from "../../utils/Constants";
+import { internalServerError, notFoundError } from "../../utils/Constants";
 import { FetchWrapper } from "../../modules/FetchWrapper";
+import { CountryRepository } from "../../repositories/Country.repository";
 import { string } from "@hapi/joi";
+import { IAdviceAllSuccessResponse } from "IApiResponses";
 
 export class CountryService {
   private logger = getLogger();
-  constructor(readonly fetchWrapper: FetchWrapper) {}
+  constructor(
+    readonly fetchWrapper: FetchWrapper,
+    readonly countryRepository: CountryRepository
+  ) {}
+
+  async getCountryInfo(countryName: string) {
+    const country = await this.countryRepository.getAllCountryInfoByName(
+      countryName
+    );
+
+    if (country === undefined) {
+      this.logger.error(`No country ${countryName} found in db`);
+      throw new HTTPError(notFoundError);
+    }
+
+    const data = await this.fetchWrapper.getCountryDiseases(country.code);
+    if (data === undefined) {
+      throw new HTTPError(internalServerError);
+    }
+
+    this.logger.info(
+      `Successfully retrieved info for country ${countryName}, responding to client`
+    );
+
+    return {
+      country,
+      data,
+      log: getLog(new Date()),
+    };
+  }
+
+  async getAllAdvice(): Promise<IAdviceAllSuccessResponse> {
+    const advices = await this.countryRepository.getAllAdviceLevels();
+    if (advices === undefined) {
+      this.logger.error(`Received no advice from the db`);
+      throw new HTTPError(internalServerError);
+    }
+
+    this.logger.info(
+      `Successfully retrieved all country advice, responding to client`
+    );
+    return {
+      countries: advices,
+      log: getLog(new Date()),
+    };
+  }
 
   async getFlights(flightDetails: {
     originLocationCode: string;

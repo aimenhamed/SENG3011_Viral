@@ -1,10 +1,10 @@
-import { Country } from "ICountry";
+import { SimpleCountry } from "ICountry";
 import { UserOnly } from "IUser";
 
 export interface Comment {
   commentId: string;
   createdBy: UserOnly;
-  country: Country;
+  country: SimpleCountry;
   message: string;
   date: Date;
 }

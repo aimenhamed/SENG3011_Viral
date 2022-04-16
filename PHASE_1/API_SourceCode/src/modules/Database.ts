@@ -8,11 +8,12 @@ import { UserEntity } from "../entity/User.entity";
 import { AdviceEntity } from "../entity/Advice.entity";
 import { CountryEntity } from "../entity/Country.entity";
 import { CommentEntity } from "../entity/Comment.entity";
+import { ReviewEntity } from "../entity/Review.entity";
 
 export default class Database {
   private logger = getLogger();
   constructor(readonly connectionName: string) {}
-  // testing new db: API_KEY=VDPSvlYDu2GGea9xzRGUGEe0DDorBywd API_SECRET=JX9GXGrL2a3BoBKv POSTGRESQL_USER=fsggrwwrbsxbkk POSTGRESQL_PASSWORD=0bbabdc7704f4a9cc4b6fbf80a2acc5c8f5f0c70e6a9bcc5238a0e31b5191f56 POSTGRESQL_HOST=ec2-18-210-191-5.compute-1.amazonaws.com POSTGRESQL_DATABASE=dd4u9qmc5pk0gv
+  // testing new db: API_KEY=AOHTSX8TY5Yx1oe9Cv185PtS7wn1S1mk API_SECRET=7m2lelmlOGBI4PRI POSTGRESQL_USER=fsggrwwrbsxbkk POSTGRESQL_PASSWORD=0bbabdc7704f4a9cc4b6fbf80a2acc5c8f5f0c70e6a9bcc5238a0e31b5191f56 POSTGRESQL_HOST=ec2-18-210-191-5.compute-1.amazonaws.com POSTGRESQL_DATABASE=dd4u9qmc5pk0gv
   // testing locally: POSTGRESQL_USER=postgres POSTGRESQL_PASSWORD=mysecretpassword POSTGRESQL_HOST=0.0.0.0 POSTGRESQL_DATABASE=mydb
 
   async start(): Promise<void> {
@@ -41,6 +42,7 @@ export default class Database {
         AdviceEntity,
         CountryEntity,
         CommentEntity,
+        ReviewEntity,
       ],
     });
     this.logger.info(
