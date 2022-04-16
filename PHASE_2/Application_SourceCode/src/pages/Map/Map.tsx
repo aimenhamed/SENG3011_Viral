@@ -53,7 +53,7 @@ const Map = ({ countryClick }: MapProps) => {
   const seriesStyle: ISeries = {
     regions: [
       {
-        // values,
+        values,
         attribute: "fill",
       },
     ],
