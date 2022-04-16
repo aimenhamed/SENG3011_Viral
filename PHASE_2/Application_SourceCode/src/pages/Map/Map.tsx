@@ -1,6 +1,7 @@
 import { VectorMap } from "@react-jvectormap/core";
 import { worldMill } from "@react-jvectormap/world";
 import {
+  // IFocus,
   ISeries,
   ISVGElementStyleAttributes,
 } from "@react-jvectormap/core/dist/types";
@@ -58,6 +59,13 @@ const Map = ({ countryClick }: MapProps) => {
     ],
   };
 
+  // const test: IFocus = {
+  //   scale: 100,
+  //   x: 1,
+  //   y: 1,
+  //   region: "CA",
+  // }
+
   useEffect(() => {
     dispatch(getAdviceAllDispatch());
   }, []);
@@ -89,6 +97,7 @@ const Map = ({ countryClick }: MapProps) => {
             backgroundColor="white"
             regionStyle={regionStyle}
             series={seriesStyle}
+            // focusOn={test}
           />
           <Legend />
         </MapContainer>

@@ -8,6 +8,8 @@ import {
 } from "src/logic/redux/reducers/adviceSlice/adviceSlice";
 import LoadingPage from "src/components/LoadingPage/LoadingPage";
 import CountryReport from "src/components/CountryReport/CountryReport";
+import { VectorMap } from "@react-jvectormap/core";
+import { worldMill } from "@react-jvectormap/world";
 
 type CountryProps = {
   countryName: string;
@@ -33,7 +35,9 @@ const Country = ({ countryName, backToMap }: CountryProps) => {
   if (advice) {
     return <CountryReport advice={advice!} country={countryName} />;
   }
-  return <></>;
+  return (
+    <VectorMap map={worldMill} />
+  );
 };
 
 export default Country;
