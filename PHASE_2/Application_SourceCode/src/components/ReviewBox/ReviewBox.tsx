@@ -48,7 +48,7 @@ const ReviewBox = ({reviews, averageRating}: ReviewProps) => {
         </FilterReviews>
         <ReviewHolder height={ownReview ? '200px' : '300px'}>
           {otherReviews && otherReviews.map((r) =>
-            <ReviewItem review={r} />
+            <ReviewItem key={r.reviewId} review={r} />
         )}
         </ReviewHolder>
         { ownReview

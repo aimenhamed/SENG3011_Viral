@@ -1,8 +1,8 @@
 import { useState } from "react";
 import StarRatings from "react-star-ratings";
-import { GenericInput } from "src/pages/Landing/style";
+import { GenericInput, GenericLabel } from "src/pages/Landing/style";
 import Text from "../common/text/Text";
-import { CreateReviewCard } from "./style";
+import { CreateReviewCard, SubmitButton, CancelButton,  Description } from "./style";
 
 interface CreateReviewProps {
   toggle: ()=>void;
@@ -10,21 +10,38 @@ interface CreateReviewProps {
 
 const CreateReview = ({toggle}: CreateReviewProps ) => {
   const [rating,  setRating]= useState<number>(0);
+  const [title, setTitle] = useState<string>("");
+  const [details, setDetails] = useState<string>("");
+
+  const submitReview = () => {
+    console.log(title);
+    console.log(rating);
+    console.log(details);
+  }
+
 
   return (
     <>
       <CreateReviewCard>
-        <Text>Create a New Review</Text>
-        <GenericInput type="text" />
+        <Text bold fontSize="2rem">Create a New Review</Text>
+        <GenericLabel>Title</GenericLabel>
+        <GenericInput type="text" placeholder="Title" onChange={(e) => setTitle(e.target.value)} />
+        <GenericLabel>Rating</GenericLabel>
         <StarRatings
           rating={rating}
           changeRating={(newRating)=>setRating(newRating)}
           starRatedColor="#faaf00"
           starHoverColor="#faaf00"
+          starDimension="30px"
+          starSpacing="3px"
         />
-        <textarea />
-        <button type="button">Submit Review</button>
-        <button type="button" onClick={toggle}>Cancel</button>
+        <GenericLabel>Details</GenericLabel>
+        <Description placeholder="Details" onChange={(e)=>setDetails(e.target.value)} />
+        <div>
+          <SubmitButton onClick={submitReview}>Post Review</SubmitButton>
+          <CancelButton onClick={toggle}>Cancel</CancelButton>
+        </div>
+
       </CreateReviewCard>
     </>
 )

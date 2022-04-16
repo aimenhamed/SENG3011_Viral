@@ -81,12 +81,12 @@ borderRadius: 10px 10px 50px 10px;
 
 export const CreateReviewBtn = styled.button`
 border: none;
-font-size: 2rem;
+font-size: 1.5rem;
 font-weight: 500;
 width: 100%;
-padding: 1rem;
+padding: 10px;
 color: ${palette.white};
 background-color: ${palette.purple};
-border-radius: 20px;
+border-radius: 10px;
 drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
 `
