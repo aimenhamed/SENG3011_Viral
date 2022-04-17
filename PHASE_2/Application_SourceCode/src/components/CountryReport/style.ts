@@ -112,7 +112,7 @@ export const TitleText1 = styled.text`
   position: fixed;
   right: 550px;
   top : 600px;
-  padding-left: 100px;
+  //padding-left: 100px;
 `;
 
 export const CollapsibleButton = styled.button`

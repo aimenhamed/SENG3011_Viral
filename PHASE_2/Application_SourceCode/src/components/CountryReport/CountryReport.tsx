@@ -255,6 +255,7 @@ const CountryReport = ({ advice, country }: CountryReportProps) => {
             <TileLockup style={{ width: "50%" }}>
               {/* <Text bold fontSize="1.125rem" align="center"> */}
               <AdviceIcon src={Advice} />
+              <div style={{position: "relative", textAlign: "left", display: "flex"}} />
               <TitleText1>
                 Travel Advice
                 {advice.country.advice && (
