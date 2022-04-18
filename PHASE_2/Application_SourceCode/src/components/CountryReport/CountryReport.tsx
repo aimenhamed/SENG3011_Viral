@@ -2,6 +2,9 @@ import { useEffect, useState } from "react";
 import { useAppSelector } from "src/logic/redux/hooks";
 import { useDispatch } from "react-redux";
 import { keyTerms } from "src/constants/KeyTerms";
+import * as AllIcons from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Advice } from "src/components/common/image/imageIndex";
 import {
   putBookmarkCountryDispatch,
   selectUser,
@@ -20,16 +23,11 @@ import {
 } from "src/interfaces/ResponseInterface";
 import { useHistory } from "react-router-dom";
 import ArticleDialog from "src/pages/Articles/ArticleDialog/ArticleDialog";
-import { VectorMap } from "@react-jvectormap/core";
-import { worldMill } from "@react-jvectormap/world";
-import {
-  ISeries,
-  ISVGElementStyleAttributes,
-} from "@react-jvectormap/core/dist/types";
-import { selectAdvice } from "src/logic/redux/reducers/adviceSlice/adviceSlice";
 import ArticleResult from "../ArticleResult/ArticleResult";
 import Flights from "../Flights/Flights";
 import Text from "../common/text/Text";
+import { VectorMap } from "@react-jvectormap/core";
+import { worldMill } from "@react-jvectormap/world";
 import { FlexLayout } from "../common/layouts/screenLayout";
 import {
   Container,
@@ -39,9 +37,27 @@ import {
   TileLockup,
   Tile,
   SubText,
+  InjectionIcon,
+  HorizontalTile,
+  VirusIcon,
+  DropFlexBox,
+  DropFlexBox1,
+  TitleText,
+  Tile1,
+  DropFlexBox2,
+  Tile2,
+  TitleText1,
+  AdviceIcon,
 } from "./style";
 import CommentCard from "../Comment/Comment";
 import AddCommentDialog from "../AddCommentDialog/AddCommentDialog";
+import Collapsible from "./Collapsible";
+import CollapsibleTwo from "./CollapsibleTwo";
+import { selectAdvice } from "src/logic/redux/reducers/adviceSlice/adviceSlice";
+import {
+  ISeries,
+  ISVGElementStyleAttributes,
+} from "@react-jvectormap/core/dist/types";
 import jvmCountries from "../SearchBar/countries";
 
 interface IFocus {
@@ -110,9 +126,13 @@ const CountryReport = ({ advice, country }: CountryReportProps) => {
       return (
         <div
           style={{
-            width: "300px",
+            display: "flex",
+            justifyContent: "center",
+            width: "800px",
+            whiteSpace: "nowrap",
             maxHeight: "200px",
-            overflowY: "scroll",
+            overflowX: "scroll",
+            overflowY: "hidden",
             padding: "5px",
           }}
         >
@@ -219,29 +239,52 @@ const CountryReport = ({ advice, country }: CountryReportProps) => {
                   />
                 </div>
               </TileLockup>
+
               <TileLockup>
-                <Text bold fontSize="1.125rem" align="center">
-                  Vaccine Requirements
-                </Text>
-                <Tile>
-                  {advice.data.data.areaAccessRestriction.diseaseVaccination
-                    .qualifiedVaccines ? (
-                    renderText(
-                      advice.data.data.areaAccessRestriction.diseaseVaccination
-                        .qualifiedVaccines
-                    )
-                  ) : (
-                    <Text>No required vaccines to travel.</Text>
-                  )}
-                </Tile>
+                <InjectionIcon>
+                  <FontAwesomeIcon icon={AllIcons.faSyringe} />
+                </InjectionIcon>
+                <div
+                  style={{
+                    position: "relative",
+                    textAlign: "left",
+                    display: "flex",
+                  }}
+                />
+                <TitleText>Vaccine Requirements</TitleText>
+                <DropFlexBox>
+                  <Collapsible>
+                    <DropFlexBox1>
+                      <Tile1>
+                        {advice.data.data.areaAccessRestriction
+                          .diseaseVaccination.qualifiedVaccines ? (
+                          renderText(
+                            advice.data.data.areaAccessRestriction
+                              .diseaseVaccination.qualifiedVaccines
+                          )
+                        ) : (
+                          <Text>No required vaccines to travel.</Text>
+                        )}
+                      </Tile1>
+                    </DropFlexBox1>
+                  </Collapsible>
+                </DropFlexBox>
               </TileLockup>
             </SubSection>
             <SubSection>
               <TileLockup>
-                <Text bold fontSize="1.125rem" align="center">
+                <Text
+                  bold
+                  fontSize="1.125rem"
+                  position="relative"
+                  align="center"
+                >
+                  <VirusIcon>
+                    <FontAwesomeIcon icon={AllIcons.faVirus} />
+                  </VirusIcon>
                   Articles
                 </Text>
-                <Tile>{showArticles()}</Tile>
+                <HorizontalTile>{showArticles()}</HorizontalTile>
               </TileLockup>
               <TileLockup>
                 <Text bold fontSize="1.125rem" align="center">
@@ -301,20 +344,35 @@ const CountryReport = ({ advice, country }: CountryReportProps) => {
           </Section>
           <Section id="right">
             <TileLockup style={{ width: "50%" }}>
-              <Text bold fontSize="1.125rem" align="center">
+              <AdviceIcon src={Advice} />
+              <div
+                style={{
+                  position: "relative",
+                  textAlign: "left",
+                  display: "flex",
+                }}
+              />
+              <TitleText1>
                 Travel Advice
                 {advice.country.advice && (
                   <SubText>{` - Last updated: ${advice.country.advice.lastUpdate}`}</SubText>
                 )}
-              </Text>
+              </TitleText1>
               {advice.country.advice ? (
                 <>
-                  <Tile style={{ marginBottom: "1rem" }}>
+                  <Tile style={{ marginBottom: "1rem", background: "#FFF2AB" }}>
                     {advice.country.advice.adviceLevel}
                   </Tile>
-                  <Tile style={{ textAlign: "left" }}>
-                    {advice.country.advice.latestAdvice}
-                  </Tile>
+
+                  <DropFlexBox>
+                    <CollapsibleTwo>
+                      <DropFlexBox2>
+                        <Tile2 style={{ textAlign: "left" }}>
+                          {advice.country.advice.latestAdvice}
+                        </Tile2>
+                      </DropFlexBox2>
+                    </CollapsibleTwo>
+                  </DropFlexBox>
                 </>
               ) : (
                 <>
