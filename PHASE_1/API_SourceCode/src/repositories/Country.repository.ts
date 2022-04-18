@@ -8,7 +8,10 @@ export class CountryRepository {
       .createQueryBuilder("country")
       .leftJoinAndSelect("country.advice", "advice")
       .leftJoinAndSelect("country.comments", "comment")
+      .leftJoinAndSelect("comment.createdBy", "user")
       .leftJoinAndSelect("country.reviews", "review")
+      .leftJoinAndSelect("review.createdBy", "user2")
+      .leftJoinAndSelect("review.upvotedBy", "user3")
       .where("country.countryId = :countryId", { countryId })
       .getOne();
   }

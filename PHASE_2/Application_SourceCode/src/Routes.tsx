@@ -1,6 +1,7 @@
 import { Switch, Route } from "react-router-dom";
 import MenuBar from "./components/MenuBar/MenuBar";
 import Search from "./pages/Articles/Search";
+import Country from "./pages/Country/Country";
 import Favourites from "./pages/Favourites/Favourites";
 import Home from "./pages/Home/Home";
 import LandingPage from "./pages/Landing/Landing";
@@ -16,6 +17,7 @@ const Routes = () => {
           <div style={{width: "calc(100vw - 200px)"}}>
             <Switch>
               <Route path="/home" component={Home} />
+              <Route path="/country/:countryName" component={Country} />
               <Route path="/search" component={Search} />
               <Route path="/favourites/" component={Favourites} />
               <Route path="/settings" component={SettingsPage} />

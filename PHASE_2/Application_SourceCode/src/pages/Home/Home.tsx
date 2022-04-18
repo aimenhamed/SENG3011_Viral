@@ -23,29 +23,12 @@ const Home = () => {
   const { user } = useAppSelector(selectUser);
   if (!user) history.push("/");
 
-  const [viralPage, setViralPage] = useState<ViralPage>(ViralPage.MAP);
-  const [country, setCountry] = useState<string>("");
-
-
   const goToCountry = (countryName: string) => {
-    setCountry(countryName);
-    setViralPage(ViralPage.COUNTRY);
+    history.push(`/country/${encodeURIComponent(countryName)}`);
   };
   return (
     <div style={{ display: "flex", flexDirection: "row" }}>
-
-      {viralPage === ViralPage.MAP && <Map countryClick={goToCountry} />}
-      {viralPage === ViralPage.SETTINGS && <SettingsPage />}
-      {viralPage === ViralPage.COUNTRY && (
-        <Country
-          countryName={country}
-        />
-      )}
-      {viralPage === ViralPage.ARTICLES && <Articles />}
-      {viralPage === ViralPage.BOOKMARKED_ARTICLES && <BookmarkedArticles />}
-      {viralPage === ViralPage.BOOKMARKED_COUNTRIES && (
-        <BookmarkedCountries countryClick={goToCountry} />
-      )}
+      <Map countryClick={goToCountry} />
     </div>
   );
 };

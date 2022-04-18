@@ -8,16 +8,14 @@ import {
 } from "src/logic/redux/reducers/adviceSlice/adviceSlice";
 import LoadingPage from "src/components/LoadingPage/LoadingPage";
 import CountryReport from "src/components/CountryReport/CountryReport";
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 
-type CountryProps = {
-  countryName: string;
-};
-
-const Country = ({countryName}: CountryProps) => {
+const Country = () => {
   const history = useHistory();
+  const params = useParams<{countryName: string}>();
   const dispatch = useDispatch();
   const { advice, adviceloadingStatus } = useAppSelector(selectAdvice);
+  const { countryName } = params;
 
   useEffect(() => {
     dispatch(getSpecificAdviceDispatch(countryName));

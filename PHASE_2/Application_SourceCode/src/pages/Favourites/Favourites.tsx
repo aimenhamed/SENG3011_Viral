@@ -6,12 +6,13 @@ import { useAppSelector } from "src/logic/redux/hooks";
 import { selectAdvice } from "src/logic/redux/reducers/adviceSlice/adviceSlice";
 import { selectUser } from "src/logic/redux/reducers/userSlice/userSlice";
 import ArticleResult from "src/components/ArticleResult/ArticleResult";
+import { AdviceLevelColors } from "src/constants/adviceLevelColors";
 import ArticleDialog from "../Articles/ArticleDialog/ArticleDialog";
-import { FavouritesContent, ArticleResultWrapper, ArticlesHolder, Divider } from "./style";
+import { FavouritesContent, ArticleResultWrapper, ArticlesHolder, Divider, CountryTile, CountryHolder } from "./style";
 
 const Favourites = () => {
   const history  = useHistory()
-  const { advice } = useAppSelector(selectAdvice);
+  const { all } = useAppSelector(selectAdvice);
   const { user }  = useAppSelector(selectUser);
   if (!user) history.push("/");
 
@@ -26,28 +27,31 @@ const Favourites = () => {
     ? [...user.user.bookmarkedArticles]
     : [];
 
-  useEffect(() => {
-    console.log(articleDialog, selectedArticle,advice);
-  })
-
   return  (
     <>
       <FavouritesContent>
-        <h1>Favourites</h1>
+        <h1 style={{ paddingLeft: '20px' }}>Favourites</h1>
         <div>
-          <h2>Countries</h2>
+          <h2 style={{ paddingLeft: '20px' }}>Countries</h2>
           <Divider />
         </div>
+        <CountryHolder>
+          {countries.map((country) => {
+            console.log(all);
+            console.log(country);
+            const adviceLevel = all?.countries.find(c  => c.country===country.code)!.adviceLevel;
+            const bgColor = AdviceLevelColors[adviceLevel || 'Safe to travel'];
+            return (
+              <>
+                <CountryTile key={country.countryId} color={bgColor} onClick={()=>history.push(`/country/${country.name}`)}>
+                  <Text bold>{country.name}</Text>
+                </CountryTile>
+              </>
+)
+          })}
+        </CountryHolder>
         <div>
-          {countries.map((country) => (
-            <button type="button" onClick={()=>console.log(`clicked ${country.name}`)}>
-              {country.name}
-            </button>
-        )
-        )}
-        </div>
-        <div>
-          <h2>Articles</h2>
+          <h2 style={{ paddingLeft: '20px' }}>Articles</h2>
           <Divider />
         </div>
         <ArticlesHolder>

@@ -1,3 +1,4 @@
+import { palette } from 'src/components/common/palette/palette';
 import styled from 'styled-components';
 
 export const FavouritesContent = styled.div`
@@ -9,25 +10,41 @@ export const FavouritesContent = styled.div`
   padding: 0 40px;
 `
 
+export const CountryHolder = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+`
 
 type CountryTileProps = {
   color?: string;
 }
 
-export const countryTile = styled.button < CountryTileProps > `
+export const CountryTile = styled.button < CountryTileProps > `
   display: flex;
   justify-content: center;
   align-items: center;
-  color: #ffffff;
+  border: none;
+  box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
+  background-color: ${props => props.color ? props.color : palette.white};
+  height: 100px;
+  border-radius: 10px;
+  width: 200x;
+  padding: 2rem 4rem;
+  margin-left: 20px;
+  transition: 0.3s;   
+  :hover {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.05) 0 0);
+  }
 `
 
 export const ArticleResultWrapper = styled.div`
-  width: 400px;
+
 `
 
 export const ArticlesHolder = styled.div`
   display: flex;
-  gap: 10px;
+  flex-wrap: wrap;
 `
 
 export const Divider = styled.hr`

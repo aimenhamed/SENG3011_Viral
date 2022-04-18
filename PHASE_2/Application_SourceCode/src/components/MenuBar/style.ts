@@ -8,7 +8,7 @@ export const Bar = styled.div`
   box-sizing: border-box;
   border-radius: 0 5px 5px 0;
   background-color: white;
-  min-height: 100vw;
+  min-height: 100vh;
   overflow: hidden;
   position: relative;
 `;
@@ -21,11 +21,9 @@ export const IconSize = styled.div`
 export const MenuHeight = styled.div`
   height: 200px;
   padding: -50px;
-  //display: flex;
   flex-direction: column;
   width: 100px;
   display: flex;
-  //height: 100%;
 `;
 
 export const MenuWidth = styled.div`
@@ -82,7 +80,6 @@ export const LogoutButton = styled.div`
   cursor: pointer;
   width: 20px;
   top: 20px;
-  //height: calc(100% - 20px);
 `;
 
 export const ViralIcon = styled.img`
@@ -123,7 +120,6 @@ export const UserIcon = styled.div`
   height: 30px;
   padding-right: 23px;
   border: none;
-  //border-radius
 `;
 
 export const Name = styled.div`
@@ -198,16 +194,10 @@ export const LogoutStyle = styled.div`
 `;
 
 export const Author = styled.div`
-  //padding-top: 90px;
   font-size: 24px;
   font-weight: bold;
-  //position: relative;
-  //bottom: -2600px;
-  //right: -45px;
   margin-left: 30px;
   margin-top: 5px;
-  //margin-bottom: -1000px;
-  //min-height: 80vw;
 `;
 
 export const LogoutIcon = styled.div`
