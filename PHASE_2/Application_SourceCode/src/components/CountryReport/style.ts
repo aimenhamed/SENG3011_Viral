@@ -32,9 +32,7 @@ export const MockMap = styled.div`
   padding: 6rem;
 `;
 
-export const TileLockup = styled.div`
-
-`;
+export const TileLockup = styled.div``;
 
 export const Tile = styled.div`
   display: flex;
@@ -44,6 +42,56 @@ export const Tile = styled.div`
   background: #eeee;
 `;
 
-export const SubText = styled.span`
-  font-weight: normal;
+export const Tile1 = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  border-radius: 1.5rem;
+  background: #eeee;
+  align-items: center;
+  position: fixed;
+  left: 550px;
+  top: 150px;
+  justify-content: space-between;
+`;
+
+export const HorizontalTile = styled.div`
+  display: flex;
+  flex-direction: column;
+  white-space: nowrap;
+  flex-wrap: nowrap;
+  flex: 0 0 auto;
+  justify-content: space-between;
+  padding: 10px;
+  border-radius: 1.5rem;
+  background: #eeee;
+`;
+
+export const TitleText = styled.text`
+  font-weight: bold;
+  font-size: 1.125rem;
+  position: fixed;
+  left: 550px;
+  top: 100px;
+  padding-left: 100px;
+`;
+export const CollapsibleButton = styled.button`
+  border: none;
+  display: flex;
+  justify-content: center;
+  width: fit-content;
+  background: none;
+  flex-direction: column;
+  align-items: flex-end;
+`;
+
+export const AdviceIcon = styled.img`
+  height: 60px;
+  width: 60px;
+`;
+
+export const Divider = styled.hr`
+  border-top: 0.1rem solid;
+  color: black;
+  width: 100%;
 `;

@@ -14,7 +14,6 @@ export const Title = styled.div`
   display: flex;
 
   min-width: 800px;
-  font-family: "Calibri";
   font-style: normal;
   font-weight: 700;
   font-size: 4em;
@@ -26,7 +25,6 @@ export const Title = styled.div`
 
 export const WelcomeMessage = styled.div`
   position: flex;
-  font-family: "Calibri";
   font-style: normal;
   font-weight: 300;
   font-size: 36px;
@@ -54,7 +52,6 @@ export const Button = styled.button`
   border: none;
   font-size: 24px;
   font-weight: 600;
-  font-family: Calibri;
   transition: background 0.3s ease;
   :hover {
     background-color: #d0d0d0;

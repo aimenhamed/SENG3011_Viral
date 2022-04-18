@@ -8,33 +8,31 @@ import SettingsPage from "./pages/Settings/Settings";
 import TestPage from "./pages/TestPage/TestPage";
 
 const Routes = () => {
-const DefaultRoutes = () => {
-  return (
-    <>
-      <div style={{display: "flex"}}>
-        <MenuBar />
-        <div style={{width: "calc(100vw - 180px)"}}>
-          <Switch>
-            <Route path="/home" component={Home} />
-            <Route path="/search" component={Search} />
-            <Route path="/favourites/" component={Favourites} />
-            <Route path="/settings" component={SettingsPage} />
-          </Switch>
+  const DefaultRoutes = () => {
+    return (
+      <>
+        <div style={{display: "flex"}}>
+          <MenuBar />
+          <div style={{width: "calc(100vw - 200px)"}}>
+            <Switch>
+              <Route path="/home" component={Home} />
+              <Route path="/search" component={Search} />
+              <Route path="/favourites/" component={Favourites} />
+              <Route path="/settings" component={SettingsPage} />
+            </Switch>
+          </div>
         </div>
-      </div>
-    </>
+      </>
+    );
+  };
+
+  return (
+    <Switch>
+      <Route exact path="/" component={LandingPage} />
+      <Route path="/test" component={TestPage} />
+      <Route component={DefaultRoutes} />
+    </Switch>
   );
-};
-
-return (
-
-  <Switch>
-    <Route exact path="/" component={LandingPage} />
-    <Route path="/test" component={TestPage} />
-    <Route component={DefaultRoutes} />
-  </Switch>
-
-);
 };
 
 export default Routes;
