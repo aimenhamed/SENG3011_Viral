@@ -1,39 +1,24 @@
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
-// import { ViralPage } from "src/pages/Home/Home";
+import { useAppSelector } from "src/logic/redux/hooks";
+import { selectAdvice } from "src/logic/redux/reducers/adviceSlice/adviceSlice";
 import * as stringSimilarity from "string-similarity";
 import { BestMatch } from "string-similarity";
 import jvmCountries from "./countries";
+import { SearchInputBar, ResultsParentDiv, SearchResultDiv, SearchResultTxt } from "./style";
 
-interface SearchProps {
-  setHeading: React.Dispatch<React.SetStateAction<string>>;
+type SearchBarProps = {
+  countryClick: (countryName: string) => void;
 }
 
-const SearchBar: React.FC<SearchProps> = ({ setHeading }) => {
+const SearchBar = ({ countryClick }: SearchBarProps) => {
   const [search, setSearch] = useState(false);
   const [searchResults, setSearchResults] = useState<stringSimilarity.Rating[]>(
     []
   );
-  // const [viralPage, setViralPage] = useState<ViralPage>(ViralPage.MAP);
-  // const [country, setCountry] = useState<string>("");
 
-
-  const searchResultTxtStyle = {
-    color: "white",
-    textDecoration: "none",
-    fontSize: "small",
-  };
-
-  const searchResultDivStyle = {
-    backgroundColor: "#2a9763",
-    padding: "1px",
-    paddingLeft: "15px",
-    borderBottom: "1px solid #e8e8e8",
-    borderLeft: "1px solid #e8e8e8",
-    borderRight: "1px solid #e8e8e8",
-    cursor: "pointer",
-  };
+  const { all } = useAppSelector(selectAdvice);
 
   const regionNames: string[] = [];
   Object.entries(jvmCountries).forEach((entry) => {
@@ -58,14 +43,49 @@ const SearchBar: React.FC<SearchProps> = ({ setHeading }) => {
     setSearchResults(topFiveResults);
   };
 
-  const adjustHomePage = (newCountry: string) => {
-    setHeading(newCountry);
+  const AdviceLevel: {
+    [key: string]: string;
+  } = {
+    null : "#5dbc60",
+    "Do not travel": "#e95757",
+    "Exercise a high degree of caution": "#f6d34e",
+    "Reconsider your need to travel": "#f1902c",
   };
+  const values: {
+    [key: string]: number;
+  } = {};
+  all?.countries.forEach((country) => {
+    const countryCode = country.country;
+    const advLvl = country.adviceLevel;
+    values[countryCode] = AdviceLevel[advLvl] as unknown as number;
+  });
 
-  // const goToCountry = (countryName: string) => {
-  //   setCountry(countryName);
-  //   setViralPage(ViralPage.COUNTRY);
-  // };
+  const findColour = (country: string) => {
+    let countryCode;
+    let color;
+
+    Object.entries(jvmCountries).forEach((entry) => {
+      const currCountry = entry[1]['name']
+      const currCountryCode = entry[0]
+  
+      if (currCountry === country) {
+        countryCode = currCountryCode;
+      }
+    });
+
+    if (all !== undefined) {
+      for (let i = 0; i < all?.countries?.length; i++) {
+        if (all.countries[i].country === countryCode) {
+          color = AdviceLevel[all.countries[i].adviceLevel]
+          break;
+        }
+      }
+    }
+
+    return {
+      backgroundColor: color,
+    }
+  }
 
   return (
     <div>
@@ -74,43 +94,33 @@ const SearchBar: React.FC<SearchProps> = ({ setHeading }) => {
           icon={faMagnifyingGlass}
           style={{ position: "relative", right: "-25px" }}
         />
-        <input
+        <SearchInputBar
           type="text"
-          style={{
-            borderRadius: "5px",
-            backgroundColor: "#e8e8e8",
-            border: "0px",
-            height: "25px",
-            paddingLeft: "35px",
-          }}
           placeholder="Search a country"
           onChange={(e) => searchRegion(e.target.value)}
         />
       </div>
 
-      {search ? (
-        <div
+      { search && (
+        <ResultsParentDiv
           id="resultsDiv"
-          style={{ position: "absolute", zIndex: "1", width: "210px" }}
           onMouseLeave={() => setSearch(false)}
         >
-          {searchResults.map((result) => (
-            <div
-              key={result.target}
-              tabIndex={0}
-              role="button"
-              onKeyDown={() => adjustHomePage(result.target)}
-              id={result.target}
-              style={searchResultDivStyle}
-              onClick={() => searchRegion(result.target)}
-            >
-              <p style={searchResultTxtStyle}>{result.target}</p>
-            </div>
-          ))}
-        </div>
-      ) : (
-        <div style={{ display: "none" }} />
+        {searchResults.map((result) => (
+          <SearchResultDiv
+            key={result.target}
+            tabIndex={0}
+            role="button"
+            style={findColour(result.target)}
+            id={result.target}
+            onClick={() => countryClick(result.target)}
+          >
+            <SearchResultTxt>{result.target}</SearchResultTxt>
+          </SearchResultDiv>
+        ))}
+      </ResultsParentDiv>
       )}
+
     </div>
   );
 };
