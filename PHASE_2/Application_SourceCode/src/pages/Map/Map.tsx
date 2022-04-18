@@ -87,31 +87,32 @@ const Map = ({ countryClick }: MapProps) => {
   return (
     <MapPageParentContainer>
       {viralPage === ViralPage.COUNTRY && (
-                <Country
-                  countryName={country}
-                />
+      <Country
+        countryName={country}
+      />
               )}
-        {viralPage !== ViralPage.COUNTRY && (
-      
+      {viralPage !== ViralPage.COUNTRY && (
 
-      <MapPagePaddedContainer>
-        <MapPageHeader>
-          <div>
-            <h1>Select a destination</h1>
-          </div>
-          <SearchBar countryClick={goToCountry} />
-        </MapPageHeader>
-        <MapContainer>
-          <VectorMap
-            map={worldMill}
-            onRegionClick={(e, c) => regionClick(e, c)}
-            backgroundColor="white"
-            regionStyle={regionStyle}
-            series={seriesStyle}
-          />
-          <Legend />
-        </MapContainer>
-      </MapPagePaddedContainer>)}
+
+        <MapPagePaddedContainer>
+          <MapPageHeader>
+            <div>
+              <h1>Select a destination</h1>
+            </div>
+            <SearchBar countryClick={goToCountry} />
+          </MapPageHeader>
+          <MapContainer>
+            <VectorMap
+              map={worldMill}
+              onRegionClick={(e, c) => regionClick(e, c)}
+              backgroundColor="white"
+              regionStyle={regionStyle}
+              series={seriesStyle}
+            />
+            <Legend />
+          </MapContainer>
+        </MapPagePaddedContainer>
+)}
     </MapPageParentContainer>
   );
 };

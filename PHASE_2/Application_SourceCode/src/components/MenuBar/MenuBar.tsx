@@ -8,8 +8,26 @@ import {
   selectUser,
   clearUser,
 } from "src/logic/redux/reducers/userSlice/userSlice";
-import {Author, Bar, LogoutButton, LogoutIcon, LogoutStyle, LogoutText, MenuBarIcon, MenuButtons, MenuHeight, MenuIcon, MenuItemsFlexBox, MenuOptionText, MenuStyle, Name, NavLinkBtn, ProfileFlexBox, UserIcon, ViralIcon} from "./style";
-
+import {
+  Author,
+  Bar,
+  LogoutButton,
+  LogoutIcon,
+  LogoutStyle,
+  LogoutText,
+  MenuBarIcon,
+  MenuButtons,
+  MenuHeight,
+  MenuIcon,
+  MenuItemsFlexBox,
+  MenuOptionText,
+  MenuStyle,
+  Name,
+  NavLinkBtn,
+  ProfileFlexBox,
+  UserIcon,
+  ViralIcon,
+} from "./style";
 
 const MenuBar = () => {
   const dispatch = useDispatch();
@@ -17,18 +35,19 @@ const MenuBar = () => {
 
   const Logout = () => {
     dispatch(clearUser());
-  }
+  };
 
   return (
     <Bar>
       <MenuHeight>
         <MenuStyle>
           <ProfileFlexBox>
-            <UserIcon> <FontAwesomeIcon icon={AllIcons.faUser} /> </UserIcon>
+            <UserIcon>
+              <FontAwesomeIcon icon={AllIcons.faUser} />
+            </UserIcon>
             <Name>{user?.user.name}</Name>
           </ProfileFlexBox>
         </MenuStyle>
-
       </MenuHeight>
       <MenuBarIcon>
         <MenuItemsFlexBox>
@@ -56,11 +75,16 @@ const MenuBar = () => {
 
       <MenuButtons>
         <LogoutStyle>
-          <LogoutIcon><FontAwesomeIcon icon={AllIcons.faSignOut} /></LogoutIcon>
-          <LogoutText><LogoutButton><NavLink to="/"> Logout</NavLink></LogoutButton></LogoutText>
+          <LogoutIcon>
+            <FontAwesomeIcon icon={AllIcons.faSignOut} />
+          </LogoutIcon>
+          <LogoutText>
+            <LogoutButton>
+              <NavLink to="/"> Logout</NavLink>
+            </LogoutButton>
+          </LogoutText>
           {Logout}
         </LogoutStyle>
-
       </MenuButtons>
       <MenuIcon>
         <ViralIcon src={Logo} /> <Author>Viral</Author>

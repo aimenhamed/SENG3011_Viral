@@ -3,8 +3,6 @@ import { useAppSelector } from "src/logic/redux/hooks";
 import { useDispatch } from "react-redux";
 import { keyTerms } from "src/constants/KeyTerms";
 import * as AllIcons from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Advice } from "src/components/common/image/imageIndex";
 import {
   putBookmarkCountryDispatch,
   selectUser,
@@ -23,11 +21,16 @@ import {
 } from "src/interfaces/ResponseInterface";
 import { useHistory } from "react-router-dom";
 import ArticleDialog from "src/pages/Articles/ArticleDialog/ArticleDialog";
+import { VectorMap } from "@react-jvectormap/core";
+import { worldMill } from "@react-jvectormap/world";
+import { selectAdvice } from "src/logic/redux/reducers/adviceSlice/adviceSlice";
+import {
+  ISeries,
+  ISVGElementStyleAttributes,
+} from "@react-jvectormap/core/dist/types";
 import ArticleResult from "../ArticleResult/ArticleResult";
 import Flights from "../Flights/Flights";
 import Text from "../common/text/Text";
-import { VectorMap } from "@react-jvectormap/core";
-import { worldMill } from "@react-jvectormap/world";
 import { FlexLayout } from "../common/layouts/screenLayout";
 import {
   Container,
@@ -36,29 +39,13 @@ import {
   SubSection,
   TileLockup,
   Tile,
-  SubText,
-  InjectionIcon,
   HorizontalTile,
-  VirusIcon,
-  DropFlexBox,
-  DropFlexBox1,
-  TitleText,
-  Tile1,
-  DropFlexBox2,
-  Tile2,
-  TitleText1,
-  AdviceIcon,
+  Divider,
 } from "./style";
-import CommentCard from "../Comment/Comment";
 import AddCommentDialog from "../AddCommentDialog/AddCommentDialog";
 import Collapsible from "./Collapsible";
-import CollapsibleTwo from "./CollapsibleTwo";
-import { selectAdvice } from "src/logic/redux/reducers/adviceSlice/adviceSlice";
-import {
-  ISeries,
-  ISVGElementStyleAttributes,
-} from "@react-jvectormap/core/dist/types";
 import jvmCountries from "../SearchBar/countries";
+import ReviewBox from "../ReviewBox/ReviewBox";
 
 interface IFocus {
   scale: number;
@@ -98,7 +85,11 @@ const CountryReport = ({ advice, country }: CountryReportProps) => {
     useState<boolean>(false);
 
   const renderText = (text: string[]) =>
-    text.map((req) => <Text key={req}>{req}</Text>);
+    text.map((req) => (
+      <Text key={req} fontSize="1.25rem" lineHeight="2rem" align="left">
+        {req}
+      </Text>
+    ));
 
   useEffect(() => {
     if (!user) history.push("/");
@@ -128,7 +119,6 @@ const CountryReport = ({ advice, country }: CountryReportProps) => {
           style={{
             display: "flex",
             justifyContent: "center",
-            width: "800px",
             whiteSpace: "nowrap",
             maxHeight: "200px",
             overflowX: "scroll",
@@ -206,16 +196,25 @@ const CountryReport = ({ advice, country }: CountryReportProps) => {
   return (
     <FlexLayout>
       <Container>
-        <Text bold fontSize="2rem" align="center">
+        <Text bold fontSize="2rem" align="left">
           {advice.country.name}
         </Text>
+        {advice.country.advice ? (
+          <Tile
+            style={{
+              marginBottom: "1rem",
+              background: AdviceLevel[advice.country.advice.adviceLevel],
+            }}
+          >
+            {advice.country.advice.adviceLevel}
+          </Tile>
+        ) : (
+          <Tile style={{ textAlign: "left" }}>No advice found.</Tile>
+        )}
         <Content>
           <Section id="left" style={{ marginRight: "2.5rem" }}>
-            <SubSection>
-              <TileLockup style={{ width: "50%" }}>
-                <Text bold fontSize="1.125rem" align="center">
-                  {advice.country.name} Map
-                </Text>
+            <SubSection style={{ justifyContent: "center" }}>
+              <TileLockup>
                 {isBookmarked ? (
                   <BsHeartFill
                     color="ff5c5c"
@@ -229,7 +228,7 @@ const CountryReport = ({ advice, country }: CountryReportProps) => {
                     onClick={bookmarkCountry}
                   />
                 )}
-                <div style={{ width: "300px", height: "300px" }}>
+                <div style={{ width: "600px", height: "600px" }}>
                   <VectorMap
                     map={worldMill}
                     focusOn={selectedRegion}
@@ -239,148 +238,13 @@ const CountryReport = ({ advice, country }: CountryReportProps) => {
                   />
                 </div>
               </TileLockup>
-
-              <TileLockup>
-                <InjectionIcon>
-                  <FontAwesomeIcon icon={AllIcons.faSyringe} />
-                </InjectionIcon>
-                <div
-                  style={{
-                    position: "relative",
-                    textAlign: "left",
-                    display: "flex",
-                  }}
-                />
-                <TitleText>Vaccine Requirements</TitleText>
-                <DropFlexBox>
-                  <Collapsible>
-                    <DropFlexBox1>
-                      <Tile1>
-                        {advice.data.data.areaAccessRestriction
-                          .diseaseVaccination.qualifiedVaccines ? (
-                          renderText(
-                            advice.data.data.areaAccessRestriction
-                              .diseaseVaccination.qualifiedVaccines
-                          )
-                        ) : (
-                          <Text>No required vaccines to travel.</Text>
-                        )}
-                      </Tile1>
-                    </DropFlexBox1>
-                  </Collapsible>
-                </DropFlexBox>
-              </TileLockup>
-            </SubSection>
-            <SubSection>
-              <TileLockup>
-                <Text
-                  bold
-                  fontSize="1.125rem"
-                  position="relative"
-                  align="center"
-                >
-                  <VirusIcon>
-                    <FontAwesomeIcon icon={AllIcons.faVirus} />
-                  </VirusIcon>
-                  Articles
-                </Text>
-                <HorizontalTile>{showArticles()}</HorizontalTile>
-              </TileLockup>
-              <TileLockup>
-                <Text bold fontSize="1.125rem" align="center">
-                  Disease Report
-                </Text>
-                <Tile>
-                  <Text>{advice.data.data.diseaseCases.date}</Text>
-                  <Text>
-                    Deaths Reported: {advice.data.data.diseaseCases.deaths}
-                  </Text>
-                  <Text>
-                    Disease Cases: {advice.data.data.diseaseCases.confirmed}
-                  </Text>
-                </Tile>
-              </TileLockup>
-            </SubSection>
-            <SubSection style={{ width: "100%" }}>
-              <TileLockup style={{ width: "100%" }}>
-                <Text bold fontSize="1.125rem" align="center">
-                  Comments
-                </Text>
-                <div
-                  style={{
-                    marginBottom: "1rem",
-                    display: "flex",
-                    justifyContent: "right",
-                  }}
-                >
-                  <div
-                    style={{
-                      borderRadius: "0.5rem",
-                      padding: "0.5rem",
-                      width: "fit-content",
-                      background: "green",
-                    }}
-                    role="button"
-                    tabIndex={0}
-                    onClick={() => setCommentDialog(true)}
-                    onKeyDown={() => setCommentDialog(true)}
-                  >
-                    <Text noMargin color="white" bold>
-                      Add comment
-                    </Text>
-                  </div>
-                </div>
-                <Tile>
-                  {advice.country.comments.length === 0 ? (
-                    <Text>No comments posted yet.</Text>
-                  ) : (
-                    advice.country.comments.map((comment) => (
-                      <CommentCard key={comment.commentId} comment={comment} />
-                    ))
-                  )}
-                </Tile>
-              </TileLockup>
             </SubSection>
           </Section>
           <Section id="right">
-            <TileLockup style={{ width: "50%" }}>
-              <AdviceIcon src={Advice} />
-              <div
-                style={{
-                  position: "relative",
-                  textAlign: "left",
-                  display: "flex",
-                }}
-              />
-              <TitleText1>
-                Travel Advice
-                {advice.country.advice && (
-                  <SubText>{` - Last updated: ${advice.country.advice.lastUpdate}`}</SubText>
-                )}
-              </TitleText1>
-              {advice.country.advice ? (
-                <>
-                  <Tile style={{ marginBottom: "1rem", background: "#FFF2AB" }}>
-                    {advice.country.advice.adviceLevel}
-                  </Tile>
-
-                  <DropFlexBox>
-                    <CollapsibleTwo>
-                      <DropFlexBox2>
-                        <Tile2 style={{ textAlign: "left" }}>
-                          {advice.country.advice.latestAdvice}
-                        </Tile2>
-                      </DropFlexBox2>
-                    </CollapsibleTwo>
-                  </DropFlexBox>
-                </>
-              ) : (
-                <>
-                  <Tile style={{ textAlign: "left" }}>No advice found.</Tile>
-                </>
-              )}
-            </TileLockup>
-            <Flights country={country} />
+            <ReviewBox
+              reviews={advice.country.reviews}
+              averageRating={advice.countryRating}
+            />
           </Section>
           <AddCommentDialog
             countryId={advice.country.countryId}
@@ -388,6 +252,39 @@ const CountryReport = ({ advice, country }: CountryReportProps) => {
             toggleOpen={() => setCommentDialog(false)}
           />
         </Content>
+        <Collapsible
+          aIcon={AllIcons.faHand}
+          title={`Travel Advice  - Last updated: ${advice.country.advice.lastUpdate}`}
+        >
+          <Tile style={{ textAlign: "left" }}>
+            <Text fontSize="1.25rem" lineHeight="2rem">
+              {advice.country.advice.latestAdvice}
+            </Text>
+          </Tile>
+        </Collapsible>
+        <Divider />
+        <Collapsible aIcon={AllIcons.faSyringe} title="Vaccine Requirements">
+          <Tile style={{ textAlign: "left" }}>
+            {advice.data.data.areaAccessRestriction.diseaseVaccination
+              .qualifiedVaccines ? (
+              renderText(
+                advice.data.data.areaAccessRestriction.diseaseVaccination
+                  .qualifiedVaccines
+              )
+            ) : (
+              <Text>No required vaccines to travel.</Text>
+            )}
+          </Tile>
+        </Collapsible>
+        <Divider />
+        <Collapsible aIcon={AllIcons.faPlane} title="Flight Information">
+          <Flights country={country} />
+        </Collapsible>
+        <Divider />
+        <Collapsible aIcon={AllIcons.faDisease} title="Disease Outbreaks">
+          <HorizontalTile>{showArticles()}</HorizontalTile>
+        </Collapsible>
+        <Divider />
       </Container>
       {selectedArticle ? (
         <ArticleDialog

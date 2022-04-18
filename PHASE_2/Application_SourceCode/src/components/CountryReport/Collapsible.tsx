@@ -1,35 +1,48 @@
-import React, { useState } from "react";
+import { ReactNode, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faPlus,
-  faMinus
-} from "@fortawesome/free-solid-svg-icons";
-import {CollapsibleButton } from "./style";
+import { IconProp } from "@fortawesome/fontawesome-svg-core";
+import { faPlus, faMinus } from "@fortawesome/free-solid-svg-icons";
+import Text from "../common/text/Text";
+import { AdviceIcon, CollapsibleButton } from "./style";
 
- type IProps = {
-   children: any;
- }
+type IProps = {
+  icon?: string;
+  aIcon?: IconProp;
+  title: string;
+  children: ReactNode;
+};
 
-const Collapsible = ({ children }: IProps) => {
-const [isOpen, setIsOpen] = useState(false);
+const Collapsible = ({ children, icon, aIcon, title }: IProps) => {
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <>
-      <div className="card">
-        <div>
-          <CollapsibleButton type="button" className="collapsible" onClick={() => setIsOpen((prev) => !prev)}>
-            {!isOpen ? (
-              <FontAwesomeIcon icon={faPlus} />
-              ) : (
-                <FontAwesomeIcon icon={faMinus} />
-              )}
-          </CollapsibleButton>
+    <div style={{ display: "flex", flexDirection: "column" }}>
+      <div style={{ display: "flex", flexDirection: "row" }}>
+        {icon && <AdviceIcon src={icon} />}
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            paddingRight: "1rem",
+          }}
+        >
+          {aIcon && <FontAwesomeIcon icon={aIcon} size="3x" />}
         </div>
-        <div>{isOpen && <div>{children}</div>}</div>
+        <Text fontSize="1.75rem">{title}</Text>
+        <CollapsibleButton
+          type="button"
+          onClick={() => setIsOpen((prev) => !prev)}
+        >
+          {!isOpen ? (
+            <FontAwesomeIcon icon={faPlus} />
+          ) : (
+            <FontAwesomeIcon icon={faMinus} />
+          )}
+        </CollapsibleButton>
       </div>
-    </>
+      {isOpen && <>{children}</>}
+    </div>
   );
 };
 
 export default Collapsible;
-

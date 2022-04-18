@@ -67,7 +67,7 @@ const SearchBar = ({ countryClick }: SearchBarProps) => {
     Object.entries(jvmCountries).forEach((entry) => {
       const currCountry = entry[1]['name']
       const currCountryCode = entry[0]
-  
+
       if (currCountry === country) {
         countryCode = currCountryCode;
       }
@@ -106,19 +106,19 @@ const SearchBar = ({ countryClick }: SearchBarProps) => {
           id="resultsDiv"
           onMouseLeave={() => setSearch(false)}
         >
-        {searchResults.map((result) => (
-          <SearchResultDiv
-            key={result.target}
-            tabIndex={0}
-            role="button"
-            style={findColour(result.target)}
-            id={result.target}
-            onClick={() => countryClick(result.target)}
-          >
-            <SearchResultTxt>{result.target}</SearchResultTxt>
-          </SearchResultDiv>
+          {searchResults.map((result) => (
+            <SearchResultDiv
+              key={result.target}
+              tabIndex={0}
+              role="button"
+              style={findColour(result.target)}
+              id={result.target}
+              onClick={() => countryClick(result.target)}
+            >
+              <SearchResultTxt>{result.target}</SearchResultTxt>
+            </SearchResultDiv>
         ))}
-      </ResultsParentDiv>
+        </ResultsParentDiv>
       )}
 
     </div>

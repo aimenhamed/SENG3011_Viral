@@ -15,12 +15,13 @@ const ArticleResult = ({ article, click }: ArticleResultProps) => {
           display: "flex",
           justifyContent: "space-between",
           flexWrap: "wrap",
-          // overflowX: "auto",
           width: "100%",
           height: "100%",
         }}
       >
-        <Text bold>{article.headline}</Text>
+        <Text bold style={{ overflowX: "hidden", maxWidth: "60%" }}>
+          {article.headline}
+        </Text>
         <Text>{article.dateOfPublication}</Text>
       </div>
       <div style={{ height: "1.5rem" }}>
