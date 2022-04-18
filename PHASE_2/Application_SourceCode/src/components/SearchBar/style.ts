@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const SearchResultTxt = styled.p`
-  color: white;
+  color: black;
 	text-decoration: none;
 	font-size: small;
 `;

@@ -6,7 +6,7 @@ import {
 } from "@react-jvectormap/core/dist/types";
 import SearchBar from "src/components/SearchBar/SearchBar";
 import Legend from "src/components/Legend/Legend";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import jvmCountries from "src/components/SearchBar/countries";
 import { useDispatch } from "react-redux";
 import {
@@ -42,7 +42,6 @@ const Map = ({ countryClick }: MapProps) => {
     const advLvl = country.adviceLevel;
     values[countryCode] = AdviceLevel[advLvl] as unknown as number;
   });
-  const [heading, setHeading] = useState("Select a destination");
 
   const regionStyle: ISVGElementStyleAttributes = {
     initial: {
@@ -76,12 +75,14 @@ const Map = ({ countryClick }: MapProps) => {
 
   return (
     <MapPageParentContainer>
+
+
       <MapPagePaddedContainer>
         <MapPageHeader>
           <div>
-            <h1>{heading}</h1>
+            <h1>Select a destination</h1>
           </div>
-          <SearchBar setHeading={setHeading} />
+          <SearchBar />
         </MapPageHeader>
         <MapContainer>
           <VectorMap
