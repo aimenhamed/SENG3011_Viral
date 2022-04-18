@@ -26,7 +26,8 @@ import ArticleDialog from "src/pages/Articles/ArticleDialog/ArticleDialog";
 import ArticleResult from "../ArticleResult/ArticleResult";
 import Flights from "../Flights/Flights";
 import Text from "../common/text/Text";
-import Map from "../Map/Map";
+import { VectorMap } from "@react-jvectormap/core";
+import { worldMill } from "@react-jvectormap/world";
 import { FlexLayout } from "../common/layouts/screenLayout";
 import {
   Container,
@@ -52,6 +53,22 @@ import CommentCard from "../Comment/Comment";
 import AddCommentDialog from "../AddCommentDialog/AddCommentDialog";
 import Collapsible from "./Collapsible";
 import CollapsibleTwo from "./CollapsibleTwo";
+import { selectAdvice } from "src/logic/redux/reducers/adviceSlice/adviceSlice";
+import {
+  ISeries,
+  ISVGElementStyleAttributes,
+} from "@react-jvectormap/core/dist/types";
+import jvmCountries from "../SearchBar/countries";
+
+interface IFocus {
+  scale: number;
+  x: number;
+  y: number;
+  region?: string;
+  lat?: number;
+  lng?: number;
+  animate?: boolean;
+}
 
 type CountryReportProps = {
   advice: IAdviceSpecificSuccessResponse;
@@ -59,10 +76,14 @@ type CountryReportProps = {
 };
 
 const CountryReport = ({ advice, country }: CountryReportProps) => {
+  let countryCode: string | undefined;
+  let adviceLvl: string | undefined;
+
   const dispatch = useDispatch();
   const history = useHistory();
 
   const { user } = useAppSelector(selectUser);
+  const { all } = useAppSelector(selectAdvice);
   const { articles, articleloadingStatus } = useAppSelector(selectArticles);
 
   const [commentDialog, setCommentDialog] = useState<boolean>(false);
@@ -109,8 +130,6 @@ const CountryReport = ({ advice, country }: CountryReportProps) => {
             justifyContent: "center",
             width: "800px",
             whiteSpace: "nowrap",
-            // marginLeft: "500px",
-            // paddingLeft: "50px",
             maxHeight: "200px",
             overflowX: "scroll",
             overflowY: "hidden",
@@ -133,6 +152,57 @@ const CountryReport = ({ advice, country }: CountryReportProps) => {
       return <Text>Loading</Text>;
     }
   };
+
+  const regionStyle: ISVGElementStyleAttributes = {
+    initial: {
+      fill: "#8b8b8b",
+    },
+  };
+
+  Object.entries(jvmCountries).forEach((entry) => {
+    const currCountry = entry[1]["name"];
+
+    if (currCountry === country) {
+      const [countryName] = entry;
+      countryCode = countryName;
+    }
+  });
+
+  const AdviceLevel: {
+    [key: string]: string;
+  } = {
+    null: "#5dbc60",
+    "Do not travel": "#e95757",
+    "Exercise a high degree of caution": "#f6d34e",
+    "Reconsider your need to travel": "#f1902c",
+  };
+
+  const values: {
+    [key: string]: number;
+  } = {};
+  all?.countries.forEach((curr) => {
+    if (countryCode === curr["country"]) {
+      adviceLvl = curr["adviceLevel"];
+      values[countryCode] = AdviceLevel[adviceLvl] as unknown as number;
+    }
+  });
+
+  const seriesStyle: ISeries = {
+    regions: [
+      {
+        values,
+        attribute: "fill",
+      },
+    ],
+  };
+
+  const selectedRegion: IFocus = {
+    scale: 500,
+    x: 100,
+    y: 100,
+    region: countryCode,
+  };
+
   return (
     <FlexLayout>
       <Container>
@@ -159,7 +229,15 @@ const CountryReport = ({ advice, country }: CountryReportProps) => {
                     onClick={bookmarkCountry}
                   />
                 )}
-                <Map />
+                <div style={{ width: "300px", height: "300px" }}>
+                  <VectorMap
+                    map={worldMill}
+                    focusOn={selectedRegion}
+                    backgroundColor="white"
+                    regionStyle={regionStyle}
+                    series={seriesStyle}
+                  />
+                </div>
               </TileLockup>
 
               <TileLockup>
@@ -266,7 +344,6 @@ const CountryReport = ({ advice, country }: CountryReportProps) => {
           </Section>
           <Section id="right">
             <TileLockup style={{ width: "50%" }}>
-              {/* <Text bold fontSize="1.125rem" align="center"> */}
               <AdviceIcon src={Advice} />
               <div
                 style={{
