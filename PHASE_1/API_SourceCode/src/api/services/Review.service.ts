@@ -126,7 +126,7 @@ export class ReviewService {
     }
 
     this.logger.info(
-      `Successfully changed upvote status for review ${reviewDetails.reviewId} for user ${reviewDetails.userId}`
+      `Successfully changed upvote status for review ${reviewDetails.reviewId} for user ${reviewDetails.userId} to  ${reviewDetails.status}`
     );
 
     return {

@@ -1,6 +1,11 @@
 import { useEffect, useState } from "react";
 import { useAppSelector } from "src/logic/redux/hooks";
 import { useDispatch } from "react-redux";
+import {
+  getFlightsDispatch,
+  LoadingStatusTypes,
+  selectFlights,
+} from "src/logic/redux/reducers/flightsSlice/flightsSlice";
 import { keyTerms } from "src/constants/KeyTerms";
 import {
   putBookmarkCountryDispatch,
@@ -17,11 +22,11 @@ import {
   IAdviceSpecificSuccessResponse,
   ISearchRequestHeaders,
   IUserBookmarkCountryRequestBody,
+  IFlightQuery,
 } from "src/interfaces/ResponseInterface";
 import { useHistory } from "react-router-dom";
 import ArticleDialog from "src/pages/Articles/ArticleDialog/ArticleDialog";
 import ArticleResult from "../ArticleResult/ArticleResult";
-import Flights from "../Flights/Flights";
 import Text from "../common/text/Text";
 import Map from "../Map/Map";
 import { FlexLayout } from "../common/layouts/screenLayout";
@@ -34,8 +39,10 @@ import {
   Tile,
   SubText,
 } from "./style";
+import FlightInfo from "../FlightInfo/FlightInfo";
 import CommentCard from "../Comment/Comment";
 import AddCommentDialog from "../AddCommentDialog/AddCommentDialog";
+import ReviewBox from "../ReviewBox/ReviewBox";
 
 type CountryReportProps = {
   advice: IAdviceSpecificSuccessResponse;
@@ -47,18 +54,20 @@ const CountryReport = ({ advice, country }: CountryReportProps) => {
   const history = useHistory();
 
   const { user } = useAppSelector(selectUser);
-  const { articles, articleloadingStatus } = useAppSelector(selectArticles);
 
+  const { flights, loadingStatus } = useAppSelector(selectFlights);
+  const { articles, articleloadingStatus } = useAppSelector(selectArticles);
+  const [ originCode, setOriginCode ] = useState<string>("SYD");
+  const [ destCode, setDestCode ]  = useState<string>("BKK");
+  const [ departDate,  setDepartDate ] = useState<string>("2022-11-01");
+  const [ numAdults, setNumAdults ] = useState<string>("1");
   const [commentDialog, setCommentDialog] = useState<boolean>(false);
   const bookmarked = user?.user.bookmarkedCountries.filter(
     (c) => advice.country.countryId === c.countryId
   ) as Country[];
 
-  const isBookmarked = bookmarked.length > 0;
-
-  const [selectedArticle, setSelectedArticle] = useState<Article | undefined>();
-  const [isArticleDialogOpen, setIsArticleDialogOpen] =
-    useState<boolean>(false);
+  const [ selectedArticle,  setSelectedArticle ] = useState<Article | undefined>()
+  const [ isArticleDialogOpen, setIsArticleDialogOpen ] = useState<boolean>(false);
 
   const renderText = (text: string[]) =>
     text.map((req) => <Text key={req}>{req}</Text>);
@@ -77,40 +86,41 @@ const CountryReport = ({ advice, country }: CountryReportProps) => {
     const req: IUserBookmarkCountryRequestBody = {
       userId: user?.user.userId!,
       countryId: advice.country.countryId,
-      status: !isBookmarked,
+      status: !bookmarked,
     };
-
     dispatch(putBookmarkCountryDispatch(req));
   };
+
+  const getFlightInfo = () => {
+    const req: IFlightQuery = {
+      originLocationCode: originCode,
+      destinationLocationCode: destCode,
+      departureDate: departDate,
+      adults: numAdults,
+    }
+    dispatch(getFlightsDispatch(req));
+  }
   const showArticles = () => {
     if (articleloadingStatus === ArticleLoadingStatusTypes.GET_SEARCH_LOADING) {
-      return <Text>Loading...</Text>;
-    } else if (articles.length > 0) {
-      return (
-        <div
-          style={{
-            width: "300px",
-            maxHeight: "200px",
-            overflowY: "scroll",
-            padding: "5px",
-          }}
-        >
-          {articles.map((article) => (
-            <ArticleResult
-              key={article.articleId}
-              article={article}
-              click={() => {
+      return (<Text>Loading...</Text>)
+    } else if (articles.length > 0 ) {
+        return (
+          <div style={{width:'300px', maxHeight: '200px', overflowY: "scroll", padding: "5px"}}>
+            {articles.map((article) => (
+              <ArticleResult
+                article={article}
+                click={()=>{
                 setSelectedArticle(article);
-                setIsArticleDialogOpen(true);
+                setIsArticleDialogOpen(true)
               }}
-            />
-          ))}
-        </div>
-      );
+              />
+))}
+          </div>
+        )
     } else {
-      return <Text>Loading</Text>;
+      return <Text>Loading</Text>
     }
-  };
+  }
   return (
     <FlexLayout>
       <Container>
@@ -124,7 +134,7 @@ const CountryReport = ({ advice, country }: CountryReportProps) => {
                 <Text bold fontSize="1.125rem" align="center">
                   {advice.country.name} Map
                 </Text>
-                {isBookmarked ? (
+                {bookmarked.length > 0 ? (
                   <BsHeartFill
                     color="ff5c5c"
                     size="2rem"
@@ -161,7 +171,9 @@ const CountryReport = ({ advice, country }: CountryReportProps) => {
                 <Text bold fontSize="1.125rem" align="center">
                   Articles
                 </Text>
-                <Tile>{showArticles()}</Tile>
+                <Tile>
+                  {showArticles()}
+                </Tile>
               </TileLockup>
               <TileLockup>
                 <Text bold fontSize="1.125rem" align="center">
@@ -236,13 +248,35 @@ const CountryReport = ({ advice, country }: CountryReportProps) => {
                     {advice.country.advice.latestAdvice}
                   </Tile>
                 </>
-              ) : (
+              )
+              : (
                 <>
-                  <Tile style={{ textAlign: "left" }}>No advice found.</Tile>
+                  <Tile style={{ textAlign: "left" }}>
+                    No advice found.
+                  </Tile>
                 </>
               )}
+
             </TileLockup>
-            <Flights country={country} />
+            <TileLockup>
+              <Text bold fontSize="1.125rem" align="center">
+                Available flights to {advice.country.name}
+              </Text>
+              <Tile>
+                <input type="text" placeholder="Start location code" onChange={(e)=>setOriginCode(e.target.value)} value="SYD" />
+                <input type="text" placeholder="Destination location code" onChange={(e)=>setDestCode(e.target.value)} value="BKK" />
+                <input type="date" placeholder={new Date().toLocaleString()} onChange={(e)=>setDepartDate(e.target.value)} value="2022-11-01" />
+                <input type="number" placeholder="Number of adults" onChange={(e)=>setNumAdults(e.target.value as string)} value="1" />
+                <button type="button" onClick={()=>getFlightInfo()}>Submit</button>
+                {loadingStatus === LoadingStatusTypes.GET_FLIGHTS_LOADING ? (
+                  <Text>Loading...</Text>
+                ) : (
+                  flights.map((flight) => (
+                    <FlightInfo flight={flight} key={flight.price} />
+                  ))
+                )}
+              </Tile>
+            </TileLockup>
           </Section>
           <AddCommentDialog
             countryId={advice.country.countryId}
@@ -250,14 +284,20 @@ const CountryReport = ({ advice, country }: CountryReportProps) => {
             toggleOpen={() => setCommentDialog(false)}
           />
         </Content>
+        <ReviewBox reviews={advice.country.reviews} averageRating={advice.countryRating} />
       </Container>
-      {selectedArticle ? (
-        <ArticleDialog
-          article={selectedArticle}
-          isOpen={isArticleDialogOpen}
-          toggleOpen={() => setIsArticleDialogOpen(false)}
-        />
-      ) : null}
+      {
+        selectedArticle
+        ? (
+          <ArticleDialog
+            article={selectedArticle}
+            isOpen={isArticleDialogOpen}
+            toggleOpen={() => setIsArticleDialogOpen(false)}
+          />
+)
+        : null
+      }
+
     </FlexLayout>
   );
 };

@@ -7,6 +7,7 @@ import { CountryRepository } from "../../repositories/Country.repository";
 import { string } from "@hapi/joi";
 import { IAdviceAllSuccessResponse } from "IApiResponses";
 import { ReviewEntity } from "../../entity/Review.entity";
+import { convertCountryEntityToInterface } from "../../converters/Country.converter";
 
 export class CountryService {
   private logger = getLogger();
@@ -47,7 +48,7 @@ export class CountryService {
 
     return {
       countryRating,
-      country,
+      country: convertCountryEntityToInterface(country),
       data,
       log: getLog(new Date()),
     };

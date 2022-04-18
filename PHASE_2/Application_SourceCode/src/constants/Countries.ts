@@ -18,6 +18,7 @@ export const USA: Country = {
   coords: [],
   advice: usaAdvice,
   comments: [],
+  reviews: []
 };
 
 export const amadeusMock: AmadeusData = {
