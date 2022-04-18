@@ -22,7 +22,10 @@ import { useHistory } from "react-router-dom";
 import ArticleDialog from "src/pages/Articles/ArticleDialog/ArticleDialog";
 import { VectorMap } from "@react-jvectormap/core";
 import { worldMill } from "@react-jvectormap/world";
-import { IFocus, ISeries, ISVGElementStyleAttributes } from "@react-jvectormap/core/dist/types";
+import {
+  ISeries,
+  ISVGElementStyleAttributes,
+} from "@react-jvectormap/core/dist/types";
 import { selectAdvice } from "src/logic/redux/reducers/adviceSlice/adviceSlice";
 import ArticleResult from "../ArticleResult/ArticleResult";
 import Flights from "../Flights/Flights";
@@ -41,15 +44,25 @@ import CommentCard from "../Comment/Comment";
 import AddCommentDialog from "../AddCommentDialog/AddCommentDialog";
 import jvmCountries from "../SearchBar/countries";
 
+interface IFocus {
+  scale: number;
+  x: number;
+  y: number;
+  region?: string;
+  lat?: number;
+  lng?: number;
+  animate?: boolean;
+}
+
 type CountryReportProps = {
   advice: IAdviceSpecificSuccessResponse;
   country: string;
 };
 
-const CountryReport = ({ advice, country }: CountryReportProps) => {  
+const CountryReport = ({ advice, country }: CountryReportProps) => {
   let countryCode: string | undefined;
   let adviceLvl: string | undefined;
-  
+
   const dispatch = useDispatch();
   const history = useHistory();
 
@@ -127,18 +140,18 @@ const CountryReport = ({ advice, country }: CountryReportProps) => {
   };
 
   Object.entries(jvmCountries).forEach((entry) => {
-    const currCountry = entry[1]['name']
+    const currCountry = entry[1]["name"];
 
     if (currCountry === country) {
-      const [countryName] = entry
-      countryCode = countryName 
+      const [countryName] = entry;
+      countryCode = countryName;
     }
   });
 
   const AdviceLevel: {
     [key: string]: string;
   } = {
-    null : "#5dbc60",
+    null: "#5dbc60",
     "Do not travel": "#e95757",
     "Exercise a high degree of caution": "#f6d34e",
     "Reconsider your need to travel": "#f1902c",
@@ -148,8 +161,8 @@ const CountryReport = ({ advice, country }: CountryReportProps) => {
     [key: string]: number;
   } = {};
   all?.countries.forEach((curr) => {
-    if (countryCode === curr['country']) {
-      adviceLvl = curr['adviceLevel']
+    if (countryCode === curr["country"]) {
+      adviceLvl = curr["adviceLevel"];
       values[countryCode] = AdviceLevel[adviceLvl] as unknown as number;
     }
   });
@@ -196,7 +209,7 @@ const CountryReport = ({ advice, country }: CountryReportProps) => {
                     onClick={bookmarkCountry}
                   />
                 )}
-                <div style={{width: "300px", height: "300px"}}>
+                <div style={{ width: "300px", height: "300px" }}>
                   <VectorMap
                     map={worldMill}
                     focusOn={selectedRegion}

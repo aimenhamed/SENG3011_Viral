@@ -6,6 +6,8 @@ import { FetchWrapper } from "../../modules/FetchWrapper";
 import { CountryRepository } from "../../repositories/Country.repository";
 import { string } from "@hapi/joi";
 import { IAdviceAllSuccessResponse } from "IApiResponses";
+import { ReviewEntity } from "../../entity/Review.entity";
+import { convertCountryEntityToInterface } from "../../converters/Country.converter";
 
 export class CountryService {
   private logger = getLogger();
@@ -29,12 +31,24 @@ export class CountryService {
       throw new HTTPError(internalServerError);
     }
 
+    let total = 0;
+    country.reviews.forEach((element: ReviewEntity) => {
+      total = +total + +element.rating;
+    });
+
+    let countryRating: number = total / country.reviews.length;
+
+    if (country.reviews.length == 0) {
+      countryRating = 0;
+    }
+
     this.logger.info(
       `Successfully retrieved info for country ${countryName}, responding to client`
     );
 
     return {
-      country,
+      countryRating,
+      country: convertCountryEntityToInterface(country),
       data,
       log: getLog(new Date()),
     };
