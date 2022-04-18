@@ -1,6 +1,7 @@
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
+// import { ViralPage } from "src/pages/Home/Home";
 import * as stringSimilarity from "string-similarity";
 import { BestMatch } from "string-similarity";
 import jvmCountries from "./countries";
@@ -14,6 +15,9 @@ const SearchBar: React.FC<SearchProps> = ({ setHeading }) => {
   const [searchResults, setSearchResults] = useState<stringSimilarity.Rating[]>(
     []
   );
+  // const [viralPage, setViralPage] = useState<ViralPage>(ViralPage.MAP);
+  // const [country, setCountry] = useState<string>("");
+
 
   const searchResultTxtStyle = {
     color: "white",
@@ -58,6 +62,11 @@ const SearchBar: React.FC<SearchProps> = ({ setHeading }) => {
     setHeading(newCountry);
   };
 
+  // const goToCountry = (countryName: string) => {
+  //   setCountry(countryName);
+  //   setViralPage(ViralPage.COUNTRY);
+  // };
+
   return (
     <div>
       <div id="search">
@@ -93,7 +102,7 @@ const SearchBar: React.FC<SearchProps> = ({ setHeading }) => {
               onKeyDown={() => adjustHomePage(result.target)}
               id={result.target}
               style={searchResultDivStyle}
-              onClick={() => adjustHomePage(result.target)}
+              onClick={() => searchRegion(result.target)}
             >
               <p style={searchResultTxtStyle}>{result.target}</p>
             </div>
