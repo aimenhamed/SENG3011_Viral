@@ -14,6 +14,9 @@ import {
   selectAdvice,
 } from "src/logic/redux/reducers/adviceSlice/adviceSlice";
 import { useAppSelector } from "src/logic/redux/hooks";
+import { MapContainer, MapPageHeader, MapPagePaddedContainer, MapPageParentContainer } from "./style";
+import { ViralPage } from "../Home/Home";
+import Country from "../Country/Country";
 
 type MapProps = {
   countryClick: (countryName: string) => void;
@@ -29,6 +32,9 @@ const AdviceLevel: {
 };
 
 const Map = ({ countryClick }: MapProps) => {
+  const [country, setCountry] = useState<string>("");
+  const [viralPage, setViralPage] = useState<ViralPage>(ViralPage.MAP);
+
   const dispatch = useDispatch();
 
   const { all } = useAppSelector(selectAdvice);
@@ -36,12 +42,11 @@ const Map = ({ countryClick }: MapProps) => {
   const values: {
     [key: string]: number;
   } = {};
-  all?.countries.forEach((country) => {
-    const countryCode = country.country;
-    const advLvl = country.adviceLevel;
+  all?.countries.forEach((currCountry) => {
+    const countryCode = currCountry.country;
+    const advLvl = currCountry.adviceLevel;
     values[countryCode] = AdviceLevel[advLvl] as unknown as number;
   });
-  const [heading, setHeading] = useState("Select a destination");
 
   const regionStyle: ISVGElementStyleAttributes = {
     initial: {
@@ -63,8 +68,8 @@ const Map = ({ countryClick }: MapProps) => {
   }, []);
 
   const regionClick = (e: Event, c: string) => {
-    const country = Object.entries(jvmCountries).filter((obj) => obj[0] === c);
-    countryClick(country[0][1]["name"]);
+    const currCountry = Object.entries(jvmCountries).filter((obj) => obj[0] === c);
+    countryClick(currCountry[0][1]["name"]);
     const regionHoverTips = document.getElementsByClassName("jvectormap-tip");
     if (regionHoverTips[0].parentNode != null) {
       while (regionHoverTips.length > 0) {
@@ -73,42 +78,42 @@ const Map = ({ countryClick }: MapProps) => {
     }
   };
 
+  const goToCountry = (countryName: string) => {
+    setCountry(countryName);
+    setViralPage(ViralPage.COUNTRY);
+    console.log(countryName)
+  };
+
   return (
-    <div style={{ display: "flex", width: "100%" }}>
-      <div
-        style={{
-          width: "100%",
-          height: "100vh",
-          paddingRight: "50px",
-          paddingLeft: "50px",
-          boxSizing: "border-box",
-        }}
-      >
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            alignItems: "baseline",
-            justifyContent: "space-between",
-          }}
-        >
-          <div>
-            <h1>{heading}</h1>
-          </div>
-          <SearchBar setHeading={setHeading} />
-        </div>
-        <div id="mapDiv" style={{ height: "80vh", paddingTop: "20px" }}>
-          <VectorMap
-            map={worldMill}
-            onRegionClick={(e, c) => regionClick(e, c)}
-            backgroundColor="white"
-            regionStyle={regionStyle}
-            series={seriesStyle}
-          />
-          <Legend />
-        </div>
-      </div>
-    </div>
+    <MapPageParentContainer>
+      {viralPage === ViralPage.COUNTRY && (
+      <Country
+        countryName={country}
+      />
+              )}
+      {viralPage !== ViralPage.COUNTRY && (
+
+
+        <MapPagePaddedContainer>
+          <MapPageHeader>
+            <div>
+              <h1>Select a destination</h1>
+            </div>
+            <SearchBar countryClick={goToCountry} />
+          </MapPageHeader>
+          <MapContainer>
+            <VectorMap
+              map={worldMill}
+              onRegionClick={(e, c) => regionClick(e, c)}
+              backgroundColor="white"
+              regionStyle={regionStyle}
+              series={seriesStyle}
+            />
+            <Legend />
+          </MapContainer>
+        </MapPagePaddedContainer>
+)}
+    </MapPageParentContainer>
   );
 };
 

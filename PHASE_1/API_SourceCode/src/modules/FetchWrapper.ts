@@ -4,8 +4,8 @@ import {
   AmadeusFlightResponse,
   AmadeusResponse,
 } from "../interfaces/IFetchResponses";
-import { SimpleConsoleLogger } from "typeorm";
-import { getMockCountryDiseases } from "../utils/testData";
+// import { SimpleConsoleLogger } from "typeorm";
+// import { getMockCountryDiseases } from "../utils/testData";
 
 export enum RequestPaths {
   AMADEUS,
@@ -67,28 +67,28 @@ export class FetchWrapper {
 
   async getCountryDiseases(countryCode: string): Promise<any> {
     try {
-      // protect key while in development
-      return getMockCountryDiseases();
-      // await this.getToken();
-      // const path = getRequestPath(RequestPaths.AMADEUS, countryCode);
-      // const request = {
-      //   options: {
-      //     headers: {
-      //       Authorization: `Bearer ${this.accessToken}`,
-      //     },
-      //   },
-      // };
+      // // protect key while in development
+      // return getMockCountryDiseases();
+      await this.getToken();
+      const path = getRequestPath(RequestPaths.AMADEUS, countryCode);
+      const request = {
+        options: {
+          headers: {
+            Authorization: `Bearer ${this.accessToken}`,
+          },
+        },
+      };
 
-      // const res = await got.get(path, {
-      //   ...request.options,
-      //   retry: {
-      //     methods: ["GET"],
-      //     limit: 3,
-      //   },
-      // });
+      const res = await got.get(path, {
+        ...request.options,
+        retry: {
+          methods: ["GET"],
+          limit: 3,
+        },
+      });
 
-      // const diseaseResponse: AmadeusResponse = JSON.parse(res.body);
-      // return diseaseResponse;
+      const diseaseResponse: AmadeusResponse = JSON.parse(res.body);
+      return diseaseResponse;
     } catch (err: any) {
       this.logger.error(
         `An error occurred when getting diseases for country ${countryCode}: ${formatError(
