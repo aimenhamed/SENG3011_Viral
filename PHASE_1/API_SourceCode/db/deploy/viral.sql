@@ -93,4 +93,12 @@ CREATE TABLE public.review (
     CONSTRAINT unique_user_country UNIQUE (created_by, country)
 )
 
+CREATE TABLE public.review_users (
+    review_id uuid NOT NULL,
+    user_id uuid NOT NULL,
+    CONSTRAINT pk_review_id_user_id PRIMARY KEY (review_id,user_id),
+    CONSTRAINT fk_review_users_review_id FOREIGN KEY (review_id) references public.review(review_id),
+    CONSTRAINT fk_review_users_user_id FOREIGN KEY (user_id) references public.user(user_id)
+)
+
 COMMIT;

@@ -1,5 +1,5 @@
 import { SimpleCountry } from "ICountry";
-import { UserOnly } from "IUser";
+import { UserOnly, User } from "IUser";
 
 export interface Review {
   reviewId: string;
@@ -9,6 +9,7 @@ export interface Review {
   title: string;
   mainText: string;
   date: Date;
+  upvotedBy: UserOnly[];
 }
 
 export interface ReviewNoCountry {
@@ -18,4 +19,5 @@ export interface ReviewNoCountry {
   title: string;
   mainText: string;
   date: Date;
+  upvotedBy: UserOnly[];
 }

@@ -42,7 +42,10 @@ describe("Country service", () => {
         .fn()
         .mockReturnValue(getMockCountryDiseases());
 
+      const countryRating = 0;
+
       expect(service.getCountryInfo(country.name)).resolves.toEqual({
+        countryRating,
         country,
         data: getMockCountryDiseases(),
         log: {
