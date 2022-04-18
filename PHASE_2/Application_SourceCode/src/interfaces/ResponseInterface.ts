@@ -5,6 +5,7 @@ import {
   IAdviceOnly,
   Comment,
   Country,
+  Review,
 } from "./ViralInterface";
 
 export interface ApiError {
@@ -107,6 +108,7 @@ export interface IUserUpdateSuccessResponse {
 }
 
 export interface IAdviceSpecificSuccessResponse {
+  countryRating: number;
   country: Country;
   data: AmadeusResponse;
   log: Log;
@@ -201,4 +203,38 @@ export interface IFlightQuery {
   destinationLocationCode: string;
   departureDate: string;
   adults: string;
+}
+
+export interface IPostReviewRequestBody {
+  countryId: string,
+  userId: string,
+  rating: number,
+  title: string,
+  mainText: string,
+}
+
+export interface IPostReviewSuccessResponse  {
+  review: Review;
+  log: Log;
+}
+
+export interface IDeleteReviewRequestBody {
+  userId: string,
+  reviewId: string,
+}
+
+export interface IDeleteReviewSuccessResponse {
+  log: Log;
+}
+
+export interface IPutUpvoteReviewRequestBody {
+  userId: string,
+  reviewId: string,
+  status: boolean,
+}
+
+export interface IPutUpvoteReviewSuccessResponse {
+  user: User,
+  review: Review,
+  log: Log,
 }

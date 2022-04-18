@@ -2,6 +2,8 @@ import {
   Column,
   Entity,
   JoinColumn,
+  JoinTable,
+  ManyToMany,
   ManyToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
@@ -17,7 +19,9 @@ export class ReviewEntity {
   @JoinColumn({ name: "created_by" })
   createdBy: UserEntity;
 
-  @ManyToOne(() => CountryEntity, (country) => country.countryId)
+  @ManyToOne(() => CountryEntity, (country) => country.countryId, {
+    eager: true,
+  })
   @JoinColumn({ name: "country" })
   country: CountryEntity;
 
@@ -32,4 +36,18 @@ export class ReviewEntity {
 
   @Column("timestamp", { name: "created_date" })
   date: Date;
+
+  @ManyToMany(() => UserEntity, { eager: true })
+  @JoinTable({
+    name: "review_users",
+    joinColumn: {
+      name: "review_id",
+      referencedColumnName: "reviewId",
+    },
+    inverseJoinColumn: {
+      name: "user_id",
+      referencedColumnName: "userId",
+    },
+  })
+  upvotedBy: UserEntity[];
 }

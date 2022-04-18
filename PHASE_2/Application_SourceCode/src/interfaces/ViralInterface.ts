@@ -5,6 +5,14 @@ export interface Country {
   coords: number[];
   advice: Advice;
   comments: Comment[];
+  reviews: Review[];
+}
+
+export interface SimpleCountry  {
+  countryId: string;
+  name: string;
+  code: string;
+  coords: number[];
 }
 
 export interface Advice {
@@ -46,6 +54,12 @@ export interface User {
   bookmarkedArticles: Article[];
 }
 
+export interface UserOnly {
+  userId: string;
+  name: string;
+  email: string;
+}
+
 export interface Comment {
   commentId: string;
   createdBy: User;
@@ -60,4 +74,14 @@ export interface Flight {
   arrivalTime: string;
   duration: string;
   price: number;
+}
+
+export interface Review {
+  reviewId: string;
+  createdBy: UserOnly;
+  rating: number;
+  title: string;
+  mainText: string;
+  date: Date;
+  upvotedBy: UserOnly[];
 }

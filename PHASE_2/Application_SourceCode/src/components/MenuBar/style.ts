@@ -186,7 +186,7 @@ export const MenuBarIcon = styled.div`
   
 `;
 
-export const MenuOptionText = styled.text`
+export const MenuOptionText = styled.div`
   font-weight: bold;
   color: black;
   font-size: 15px;

@@ -163,24 +163,30 @@ const CountryReport = ({ advice, country }: CountryReportProps) => {
               </TileLockup>
 
               <TileLockup>
-                <InjectionIcon><FontAwesomeIcon icon={AllIcons.faSyringe} /></InjectionIcon>
-                <div style={{position: "relative", textAlign: "left", display: "flex"}} />
-                <TitleText>
-                  Vaccine Requirements
-                </TitleText>
+                <InjectionIcon>
+                  <FontAwesomeIcon icon={AllIcons.faSyringe} />
+                </InjectionIcon>
+                <div
+                  style={{
+                    position: "relative",
+                    textAlign: "left",
+                    display: "flex",
+                  }}
+                />
+                <TitleText>Vaccine Requirements</TitleText>
                 <DropFlexBox>
                   <Collapsible>
                     <DropFlexBox1>
                       <Tile1>
-                        {advice.data.data.areaAccessRestriction.diseaseVaccination
-                      .qualifiedVaccines ? (
-                      renderText(
-                        advice.data.data.areaAccessRestriction.diseaseVaccination
-                          .qualifiedVaccines
-                      )
-                    ) : (
-                      <Text>No required vaccines to travel.</Text>
-                  )}
+                        {advice.data.data.areaAccessRestriction
+                          .diseaseVaccination.qualifiedVaccines ? (
+                          renderText(
+                            advice.data.data.areaAccessRestriction
+                              .diseaseVaccination.qualifiedVaccines
+                          )
+                        ) : (
+                          <Text>No required vaccines to travel.</Text>
+                        )}
                       </Tile1>
                     </DropFlexBox1>
                   </Collapsible>
@@ -189,8 +195,15 @@ const CountryReport = ({ advice, country }: CountryReportProps) => {
             </SubSection>
             <SubSection>
               <TileLockup>
-                <Text bold fontSize="1.125rem" position="relative" align="center">
-                  <VirusIcon><FontAwesomeIcon icon={AllIcons.faVirus} /></VirusIcon>
+                <Text
+                  bold
+                  fontSize="1.125rem"
+                  position="relative"
+                  align="center"
+                >
+                  <VirusIcon>
+                    <FontAwesomeIcon icon={AllIcons.faVirus} />
+                  </VirusIcon>
                   Articles
                 </Text>
                 <HorizontalTile>{showArticles()}</HorizontalTile>
@@ -255,7 +268,13 @@ const CountryReport = ({ advice, country }: CountryReportProps) => {
             <TileLockup style={{ width: "50%" }}>
               {/* <Text bold fontSize="1.125rem" align="center"> */}
               <AdviceIcon src={Advice} />
-              <div style={{position: "relative", textAlign: "left", display: "flex"}} />
+              <div
+                style={{
+                  position: "relative",
+                  textAlign: "left",
+                  display: "flex",
+                }}
+              />
               <TitleText1>
                 Travel Advice
                 {advice.country.advice && (

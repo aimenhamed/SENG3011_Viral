@@ -5,6 +5,7 @@ import BookmarkedCountries from "./pages/BookmarkedCountries/BookmarkedCountries
 import Home from "./pages/Home/Home";
 import LandingPage from "./pages/Landing/Landing";
 import SettingsPage from "./pages/Settings/Settings";
+import TestPage from "./pages/TestPage/TestPage";
 
 const Routes = () => {
 const DefaultRoutes = () => {
@@ -29,7 +30,7 @@ return (
 
   <Switch>
     <Route exact path="/" component={LandingPage} />
-
+    <Route path="/test" component={TestPage} />
     <Route component={DefaultRoutes} />
   </Switch>
 

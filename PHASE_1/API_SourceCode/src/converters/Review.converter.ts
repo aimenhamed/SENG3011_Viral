@@ -1,6 +1,9 @@
 import { Review, ReviewNoCountry } from "IReview";
 import { ReviewEntity } from "../entity/Review.entity";
-import { convertUserEntityToSimpleInterface } from "./User.converter";
+import {
+  convertUserEntityToInterface,
+  convertUserEntityToSimpleInterface,
+} from "./User.converter";
 import { convertCountryEntityToSimpleInterface } from "./Country.converter";
 
 export const convertReviewEntityToInterface = (
@@ -10,10 +13,13 @@ export const convertReviewEntityToInterface = (
     reviewId: entity.reviewId,
     createdBy: convertUserEntityToSimpleInterface(entity.createdBy),
     country: convertCountryEntityToSimpleInterface(entity.country),
-    rating: entity.rating,
+    rating: +entity.rating,
     title: entity.title,
     mainText: entity.mainText,
     date: entity.date,
+    upvotedBy: entity.upvotedBy.map((user) =>
+      convertUserEntityToSimpleInterface(user)
+    ),
   };
 };
 
@@ -23,9 +29,12 @@ export const convertReviewEntityToSimpleInterface = (
   return {
     reviewId: entity.reviewId,
     createdBy: convertUserEntityToSimpleInterface(entity.createdBy),
-    rating: entity.rating,
+    rating: +entity.rating,
     title: entity.title,
     mainText: entity.mainText,
     date: entity.date,
+    upvotedBy: entity.upvotedBy.map((user) =>
+      convertUserEntityToSimpleInterface(user)
+    ),
   };
 };
