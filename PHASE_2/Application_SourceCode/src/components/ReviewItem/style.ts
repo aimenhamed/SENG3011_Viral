@@ -17,6 +17,11 @@ export const ProfileBox = styled.div`
   align-items: center;
   justify-content: center;
   flex-direction: column;
+  max-width: 100px;
+`
+
+export const ProfileName  = styled.p`
+
 `
 
 export const ReviewInfo = styled.div`

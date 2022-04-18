@@ -1,8 +1,12 @@
 import Joi from "@hapi/joi";
 
 export const ReviewPostSchema = Joi.object({
-  countryId: Joi.string().required(),
-  userId: Joi.string(), // drop and use token instead
+  countryId: Joi.string()
+    .uuid({ version: ["uuidv4"]})
+    .required(),
+  userId: Joi.string()
+    .uuid({ version: ["uuidv4"]})
+    .required(),
   rating: Joi.number().required(),
   title: Joi.string().required(),
   mainText: Joi.string().required(),

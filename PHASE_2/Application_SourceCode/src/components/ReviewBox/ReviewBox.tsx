@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import StarRating from 'react-star-ratings';
 import { Review } from 'src/interfaces/ViralInterface'
+import { useAppSelector } from 'src/logic/redux/hooks';
+import { selectUser } from 'src/logic/redux/reducers/userSlice/userSlice';
 import { Filter } from '../common/image/imageIndex';
 import { Image } from '../common/image/Image';
 import Text from '../common/text/Text';
@@ -14,16 +16,28 @@ interface ReviewProps {
 }
 
 const ReviewBox = ({reviews, averageRating}: ReviewProps) => {
+  const { user } =  useAppSelector(selectUser);
+
   const [rating, setRating] = useState<number>(3);
   const [otherReviews, setOtherReviews] = useState<Review[]>();
   const [ownReview, setOwnReview] = useState<Review>();
   const [isNewReviewOpen, setNewReviewOpen] = useState<boolean>(false);
 
+
+
   useEffect(() => {
     setRating(averageRating);
-    setOtherReviews(reviews.filter((r) => r.createdBy.userId !== '0985fec7-f5ed-4c96-85f4-733627004ab4'));
-    setOwnReview(reviews.find((r) => r.createdBy.userId === '0985fec7-f5ed-4c96-85f4-733627004ab4'));
+    setOtherReviews(reviews.filter((r) => r.createdBy.userId !== user?.user.userId!));
+    setOwnReview(reviews.find((r) => r.createdBy.userId === user?.user.userId!));
   }, [])
+
+  const addOwnReview = (newReview: Review | undefined) => {
+    setOwnReview(newReview);
+  }
+
+  const deleteOwnReview = () => {
+    setOwnReview(undefined);
+  }
 
 
   const renderReviews = () => {
@@ -32,7 +46,7 @@ const ReviewBox = ({reviews, averageRating}: ReviewProps) => {
         <TitleBlock>
           <Text fontSize="2rem" bold noMargin style={{flexGrow: 2}}>Reviews</Text>
           <AveRatingDiv>
-            <Text fontSize="1rem" bold>{rating}/5</Text>
+            <Text fontSize="1rem" bold>{Math.round(rating * 10) / 10}/5</Text>
             <StarRating
               rating={rating}
               starRatedColor="#faaf00"
@@ -52,7 +66,7 @@ const ReviewBox = ({reviews, averageRating}: ReviewProps) => {
         )}
         </ReviewHolder>
         { ownReview
-        ? <ReviewItem review={ownReview} isOwnReview />
+        ? <ReviewItem review={ownReview} isOwnReview deleteSelf={deleteOwnReview} />
         : <CreateReviewBtn onClick={()=>setNewReviewOpen(true)}>Create New Review</CreateReviewBtn>
       }
       </>
@@ -64,7 +78,7 @@ const ReviewBox = ({reviews, averageRating}: ReviewProps) => {
       <GreenBox>
         {
           isNewReviewOpen
-          ? <CreateReview toggle={()=>setNewReviewOpen(false)} />
+          ? <CreateReview toggle={()=>setNewReviewOpen(false)} addReview={addOwnReview} />
           : renderReviews()
         }
       </GreenBox>

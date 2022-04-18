@@ -5,6 +5,14 @@ export interface Country {
   coords: number[];
   advice: Advice;
   comments: Comment[];
+  reviews: Review[];
+}
+
+export interface SimpleCountry  {
+  countryId: string;
+  name: string;
+  code: string;
+  coords: number[];
 }
 
 export interface Advice {
@@ -75,4 +83,5 @@ export interface Review {
   title: string;
   mainText: string;
   date: Date;
+  upvotedBy: UserOnly[];
 }

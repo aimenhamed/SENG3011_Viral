@@ -13,7 +13,7 @@ export const convertReviewEntityToInterface = (
     reviewId: entity.reviewId,
     createdBy: convertUserEntityToSimpleInterface(entity.createdBy),
     country: convertCountryEntityToSimpleInterface(entity.country),
-    rating: entity.rating,
+    rating: +entity.rating,
     title: entity.title,
     mainText: entity.mainText,
     date: entity.date,
@@ -29,7 +29,7 @@ export const convertReviewEntityToSimpleInterface = (
   return {
     reviewId: entity.reviewId,
     createdBy: convertUserEntityToSimpleInterface(entity.createdBy),
-    rating: entity.rating,
+    rating: +entity.rating,
     title: entity.title,
     mainText: entity.mainText,
     date: entity.date,
