@@ -132,7 +132,7 @@ export const reviewSlice = createSlice({
     });
     builder.addCase(deleteReviewDispatch.fulfilled, (state) => ({
       ...state,
-      reviewLoadingStatus: ReviewLoadingStatusTypes.DELETE_REVIEW_COMPLETED,   
+      reviewLoadingStatus: ReviewLoadingStatusTypes.DELETE_REVIEW_COMPLETED,
     }));
     builder.addCase(deleteReviewDispatch.pending, (state) => {
       state.reviewLoadingStatus = ReviewLoadingStatusTypes.DELETE_REVIEW_LOADING;
