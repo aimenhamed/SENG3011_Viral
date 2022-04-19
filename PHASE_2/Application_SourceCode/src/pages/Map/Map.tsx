@@ -14,6 +14,7 @@ import {
   selectAdvice,
 } from "src/logic/redux/reducers/adviceSlice/adviceSlice";
 import { useAppSelector } from "src/logic/redux/hooks";
+  import { useHistory } from "react-router-dom";
 import { MapContainer, MapPageHeader, MapPagePaddedContainer, MapPageParentContainer } from "./style";
 import { ViralPage } from "../Home/Home";
 import Country from "../Country/Country";
@@ -32,11 +33,7 @@ const AdviceLevel: {
 };
 
 const Map = ({ countryClick }: MapProps) => {
-  const [country, setCountry] = useState<string>("");
-  const [viralPage, setViralPage] = useState<ViralPage>(ViralPage.MAP);
-
   const dispatch = useDispatch();
-
   const { all } = useAppSelector(selectAdvice);
 
   const values: {
@@ -77,42 +74,26 @@ const Map = ({ countryClick }: MapProps) => {
       }
     }
   };
-
-  const goToCountry = (countryName: string) => {
-    setCountry(countryName);
-    setViralPage(ViralPage.COUNTRY);
-    console.log(countryName)
-  };
-
   return (
     <MapPageParentContainer>
-      {viralPage === ViralPage.COUNTRY && (
-      <Country
-        countryName={country}
-      />
-              )}
-      {viralPage !== ViralPage.COUNTRY && (
-
-
-        <MapPagePaddedContainer>
-          <MapPageHeader>
-            <div>
-              <h1>Select a destination</h1>
-            </div>
-            <SearchBar countryClick={goToCountry} />
-          </MapPageHeader>
-          <MapContainer>
-            <VectorMap
-              map={worldMill}
-              onRegionClick={(e, c) => regionClick(e, c)}
-              backgroundColor="white"
-              regionStyle={regionStyle}
-              series={seriesStyle}
-            />
-            <Legend />
-          </MapContainer>
-        </MapPagePaddedContainer>
-)}
+      <MapPagePaddedContainer>
+        <MapPageHeader>
+          <div>
+            <h1>Select a destination</h1>
+          </div>
+          <SearchBar countryClick={countryClick} />
+        </MapPageHeader>
+        <MapContainer>
+          <VectorMap
+            map={worldMill}
+            onRegionClick={(e, c) => regionClick(e, c)}
+            backgroundColor="white"
+            regionStyle={regionStyle}
+            series={seriesStyle}
+          />
+          <Legend />
+        </MapContainer>
+      </MapPagePaddedContainer>
     </MapPageParentContainer>
   );
 };

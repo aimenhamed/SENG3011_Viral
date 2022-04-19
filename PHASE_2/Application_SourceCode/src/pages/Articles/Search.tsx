@@ -78,10 +78,11 @@ const Articles = () => {
               Search
             </SearchButton>
           </div>
-          <div style={{ display: "flex", flexDirection: "column", width: "50%" }}>
-            <Text bold fontSize="1.5rem">
-              Results
-            </Text>
+          <Text bold fontSize="1.5rem">
+            Results
+          </Text>
+          <div style={{ display: "flex",flexWrap: 'wrap', gap: '10px'}}>
+
             {results.length === 0 ? (
               <Text>No results found.</Text>
           ) : (

@@ -12,7 +12,7 @@ export const convertCountryEntityToInterface = (
     name: entity.name,
     code: entity.code,
     coords: entity.coords,
-    advice: convertAdviceEntityToInterface(entity.advice),
+    advice: entity.advice && convertAdviceEntityToInterface(entity.advice),
     comments: entity.comments.map((c) =>
       convertCommentEntityToSimpleInterface(c)
     ),

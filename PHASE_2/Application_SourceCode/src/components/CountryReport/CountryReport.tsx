@@ -28,6 +28,7 @@ import {
   ISeries,
   ISVGElementStyleAttributes,
 } from "@react-jvectormap/core/dist/types";
+import { AdviceLevelColors } from "src/constants/adviceLevelColors";
 import ArticleResult from "../ArticleResult/ArticleResult";
 import Flights from "../Flights/Flights";
 import Text from "../common/text/Text";
@@ -151,7 +152,6 @@ const CountryReport = ({ advice, country }: CountryReportProps) => {
 
   Object.entries(jvmCountries).forEach((entry) => {
     const currCountry = entry[1]["name"];
-
     if (currCountry === country) {
       const [countryName] = entry;
       countryCode = countryName;
@@ -160,12 +160,7 @@ const CountryReport = ({ advice, country }: CountryReportProps) => {
 
   const AdviceLevel: {
     [key: string]: string;
-  } = {
-    null: "#5dbc60",
-    "Do not travel": "#e95757",
-    "Exercise a high degree of caution": "#f6d34e",
-    "Reconsider your need to travel": "#f1902c",
-  };
+  } = AdviceLevelColors;
 
   const values: {
     [key: string]: number;
@@ -209,7 +204,13 @@ const CountryReport = ({ advice, country }: CountryReportProps) => {
             {advice.country.advice.adviceLevel}
           </Tile>
         ) : (
-          <Tile style={{ textAlign: "left" }}>No advice found.</Tile>
+          <Tile
+            style={{
+              marginBottom: "16px",
+              background: AdviceLevel["Safe to travel"],
+            }}
+          >Safe to travel
+          </Tile>
         )}
         <Content>
           <Section id="left" style={{ marginRight: "2.5rem" }}>
@@ -217,13 +218,13 @@ const CountryReport = ({ advice, country }: CountryReportProps) => {
               <TileLockup>
                 {isBookmarked ? (
                   <BsHeartFill
-                    color="ff5c5c"
+                    color="#ff5c5c"
                     size="2rem"
                     onClick={bookmarkCountry}
                   />
                 ) : (
                   <BsHeart
-                    color="ff5c5c"
+                    color="#ff5c5c"
                     size="2rem"
                     onClick={bookmarkCountry}
                   />
@@ -254,11 +255,11 @@ const CountryReport = ({ advice, country }: CountryReportProps) => {
         </Content>
         <Collapsible
           aIcon={AllIcons.faHand}
-          title={`Travel Advice  - Last updated: ${advice.country.advice.lastUpdate}`}
+          title={`Travel Advice  - Last updated: ${advice.country.advice ? advice.country.advice.lastUpdate : 'N/A'}`}
         >
           <Tile style={{ textAlign: "left" }}>
             <Text fontSize="1.25rem" lineHeight="2rem">
-              {advice.country.advice.latestAdvice}
+              {advice.country.advice ? advice.country.advice.latestAdvice : 'No travel advice found.'}
             </Text>
           </Tile>
         </Collapsible>
