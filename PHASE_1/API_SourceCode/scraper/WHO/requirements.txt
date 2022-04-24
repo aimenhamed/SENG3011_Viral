@@ -1,0 +1,6 @@
+dateparser==1.1.0
+geograpy3==1.0.0
+html_text==0.5.2
+itemadapter==0.4.0
+Scrapy==2.5.1
+SQLAlchemy==1.4.31
