@@ -46,7 +46,6 @@ export class CommentService {
     this.logger.info(
       `Successfully posted new comment, with commentId: ${commentEntity.commentId}`
     );
-
     return {
       comment: convertCommentEntityToInterface(commentEntity),
       log: getLog(new Date()),
