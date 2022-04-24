@@ -155,28 +155,32 @@ describe("Review service", () => {
 
       const updatedReview = {
         ...review,
-        upvotedBy: [{
-          userId: user.userId,
-          name: user.name,
-          email: user.email,
-        }]
-      }
+        upvotedBy: [
+          {
+            userId: user.userId,
+            name: user.name,
+            email: user.email,
+          },
+        ],
+      };
       reviewRepository.saveReview = jest.fn().mockReturnValue(updatedReview);
       const status = true;
 
-      expect(service.upvoteReview({
-        userId: user.userId,
-        reviewId: review.reviewId,
-        status
-      })).resolves.toEqual({
+      expect(
+        service.upvoteReview({
+          userId: user.userId,
+          reviewId: review.reviewId,
+          status,
+        })
+      ).resolves.toEqual({
         review: convertReviewEntityToInterface(updatedReview),
         user,
         log: {
           ...baseLog,
           accessTime: expect.any(String),
-        }
-      })
-    })
+        },
+      });
+    });
 
     it("upvoting another review should resolve and return a successful upvote", () => {
       const service = reviewService();
@@ -187,28 +191,32 @@ describe("Review service", () => {
 
       const updatedReview = {
         ...review,
-        upvotedBy: [{
-          userId: user.userId,
-          name: user.name,
-          email: user.email,
-        }]
-      }
+        upvotedBy: [
+          {
+            userId: user.userId,
+            name: user.name,
+            email: user.email,
+          },
+        ],
+      };
       reviewRepository.saveReview = jest.fn().mockReturnValue(updatedReview);
       const status = true;
 
-      expect(service.upvoteReview({
-        userId: user.userId,
-        reviewId: review.reviewId,
-        status
-      })).resolves.toEqual({
+      expect(
+        service.upvoteReview({
+          userId: user.userId,
+          reviewId: review.reviewId,
+          status,
+        })
+      ).resolves.toEqual({
         review: convertReviewEntityToInterface(updatedReview),
         user,
         log: {
           ...baseLog,
           accessTime: expect.any(String),
-        }
-      })
-    })
+        },
+      });
+    });
 
     it("upvoting another review twice should resolve and return a successful upvote", () => {
       const service = reviewService();
@@ -219,41 +227,47 @@ describe("Review service", () => {
 
       const updatedReview = {
         ...review,
-        upvotedBy: [{
-          userId: user.userId,
-          name: user.name,
-          email: user.email,
-        }]
-      }
+        upvotedBy: [
+          {
+            userId: user.userId,
+            name: user.name,
+            email: user.email,
+          },
+        ],
+      };
       reviewRepository.saveReview = jest.fn().mockReturnValue(updatedReview);
       const status = true;
 
-      expect(service.upvoteReview({
-        userId: user.userId,
-        reviewId: review.reviewId,
-        status
-      })).resolves.toEqual({
+      expect(
+        service.upvoteReview({
+          userId: user.userId,
+          reviewId: review.reviewId,
+          status,
+        })
+      ).resolves.toEqual({
         review: convertReviewEntityToInterface(updatedReview),
         user,
         log: {
           ...baseLog,
           accessTime: expect.any(String),
-        }
-      })
+        },
+      });
 
-      expect(service.upvoteReview({
-        userId: user.userId,
-        reviewId: review.reviewId,
-        status
-      })).resolves.toEqual({
+      expect(
+        service.upvoteReview({
+          userId: user.userId,
+          reviewId: review.reviewId,
+          status,
+        })
+      ).resolves.toEqual({
         review: convertReviewEntityToInterface(updatedReview),
         user,
         log: {
           ...baseLog,
           accessTime: expect.any(String),
-        }
-      })
-    })
+        },
+      });
+    });
 
     it("throw 400 error if user does not exist", () => {
       const service = reviewService();
@@ -264,23 +278,27 @@ describe("Review service", () => {
 
       const updatedReview = {
         ...review,
-        upvotedBy: [{
-          userId: user.userId,
-          name: user.name,
-          email: user.email,
-        }]
-      }
+        upvotedBy: [
+          {
+            userId: user.userId,
+            name: user.name,
+            email: user.email,
+          },
+        ],
+      };
       reviewRepository.saveReview = jest.fn().mockReturnValue(updatedReview);
       const status = true;
 
       const errorResult = new HTTPError(badRequest);
 
-      expect(service.upvoteReview({
-        userId: 'unknown id',
-        reviewId: review.reviewId,
-        status
-      })).rejects.toThrow(errorResult)
-    })
+      expect(
+        service.upvoteReview({
+          userId: "unknown id",
+          reviewId: review.reviewId,
+          status,
+        })
+      ).rejects.toThrow(errorResult);
+    });
 
     it("throw 404 error if review does not exist", () => {
       const service = reviewService();
@@ -291,23 +309,27 @@ describe("Review service", () => {
 
       const updatedReview = {
         ...review,
-        upvotedBy: [{
-          userId: user.userId,
-          name: user.name,
-          email: user.email,
-        }]
-      }
+        upvotedBy: [
+          {
+            userId: user.userId,
+            name: user.name,
+            email: user.email,
+          },
+        ],
+      };
       reviewRepository.saveReview = jest.fn().mockReturnValue(updatedReview);
       const status = true;
 
       const errorResult = new HTTPError(notFoundError);
 
-      expect(service.upvoteReview({
-        userId: user.userId,
-        reviewId: 'unknown id',
-        status
-      })).rejects.toThrow(errorResult)
-    })
+      expect(
+        service.upvoteReview({
+          userId: user.userId,
+          reviewId: "unknown id",
+          status,
+        })
+      ).rejects.toThrow(errorResult);
+    });
 
     it("throw 500 error if review fails to save", () => {
       const service = reviewService();
@@ -318,27 +340,31 @@ describe("Review service", () => {
 
       const updatedReview = {
         ...review,
-        upvotedBy: [{
-          userId: user.userId,
-          name: user.name,
-          email: user.email,
-        }]
-      }
+        upvotedBy: [
+          {
+            userId: user.userId,
+            name: user.name,
+            email: user.email,
+          },
+        ],
+      };
       reviewRepository.saveReview = jest.fn().mockReturnValue(undefined);
       const status = true;
 
       const errorResult = new HTTPError(internalServerError);
 
-      expect(service.upvoteReview({
-        userId: user.userId,
-        reviewId: review.reviewId,
-        status
-      })).rejects.toThrow(errorResult)
-    })
-  })
+      expect(
+        service.upvoteReview({
+          userId: user.userId,
+          reviewId: review.reviewId,
+          status,
+        })
+      ).rejects.toThrow(errorResult);
+    });
+  });
 
   describe("deleteReview", () => {
-    it("should resolve and return nothing if successfully deleted", ()  => {
+    it("should resolve and return nothing if successfully deleted", () => {
       const service = reviewService();
       const user = getMockUsers()[0];
       const review = getMockReviews()[0];
@@ -346,19 +372,20 @@ describe("Review service", () => {
       reviewRepository.getReview = jest.fn().mockReturnValue(review);
       reviewRepository.deleteReview = jest.fn().mockReturnValue(review);
 
-
-      expect(service.deleteReview({
-        userId: user.userId,
-        reviewId: review.reviewId,
-      })).resolves.toEqual({
+      expect(
+        service.deleteReview({
+          userId: user.userId,
+          reviewId: review.reviewId,
+        })
+      ).resolves.toEqual({
         log: {
           ...baseLog,
-          accessTime: expect.any(String)
-        }
-      })
-    })
+          accessTime: expect.any(String),
+        },
+      });
+    });
 
-    it("should throw a 400 error if the user is not the creator", ()  => {
+    it("should throw a 400 error if the user is not the creator", () => {
       const service = reviewService();
       const user = getMockUsers()[1];
       const review = getMockReviews()[0];
@@ -366,15 +393,17 @@ describe("Review service", () => {
       reviewRepository.getReview = jest.fn().mockReturnValue(review);
       reviewRepository.deleteReview = jest.fn().mockReturnValue(review);
 
-      const errorResult = new HTTPError(badRequest)
+      const errorResult = new HTTPError(badRequest);
 
-      expect(service.deleteReview({
-        userId: user.userId,
-        reviewId: review.reviewId,
-      })).rejects.toThrow(errorResult)
-    })
+      expect(
+        service.deleteReview({
+          userId: user.userId,
+          reviewId: review.reviewId,
+        })
+      ).rejects.toThrow(errorResult);
+    });
 
-    it("should throw a 400 error if the user does not exist", ()  => {
+    it("should throw a 400 error if the user does not exist", () => {
       const service = reviewService();
       const user = getMockUsers()[0];
       const review = getMockReviews()[0];
@@ -382,15 +411,17 @@ describe("Review service", () => {
       reviewRepository.getReview = jest.fn().mockReturnValue(review);
       reviewRepository.deleteReview = jest.fn().mockReturnValue(review);
 
-      const errorResult = new HTTPError(badRequest)
+      const errorResult = new HTTPError(badRequest);
 
-      expect(service.deleteReview({
-        userId: 'unknown id',
-        reviewId: review.reviewId,
-      })).rejects.toThrow(errorResult)
-    })
+      expect(
+        service.deleteReview({
+          userId: "unknown id",
+          reviewId: review.reviewId,
+        })
+      ).rejects.toThrow(errorResult);
+    });
 
-    it("should throw a 404 error if the review does not exist", ()  => {
+    it("should throw a 404 error if the review does not exist", () => {
       const service = reviewService();
       const user = getMockUsers()[0];
       const review = getMockReviews()[0];
@@ -398,12 +429,14 @@ describe("Review service", () => {
       reviewRepository.getReview = jest.fn().mockReturnValue(undefined);
       reviewRepository.deleteReview = jest.fn().mockReturnValue(review);
 
-      const errorResult = new HTTPError(notFoundError)
+      const errorResult = new HTTPError(notFoundError);
 
-      expect(service.deleteReview({
-        userId: user.userId,
-        reviewId: 'unknown id',
-      })).rejects.toThrow(errorResult)
-    })
-  })
+      expect(
+        service.deleteReview({
+          userId: user.userId,
+          reviewId: "unknown id",
+        })
+      ).rejects.toThrow(errorResult);
+    });
+  });
 });
