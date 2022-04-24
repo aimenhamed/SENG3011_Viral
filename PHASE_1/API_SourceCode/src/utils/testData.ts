@@ -18,7 +18,6 @@ export const getReportEntity = (): ReportEntity => {
   const report = getMockReports()[0];
   const reportEntity = new ReportEntity();
   reportEntity.reportId = report.reportId;
-  reportEntity.articleId = "art-123";
   reportEntity.diseases = report.diseases;
   reportEntity.eventDate = report.eventDate;
   reportEntity.locations = report.locations;
@@ -623,7 +622,7 @@ export const getMockReviews = (): any[] => {
       title: "Trip to country 1",
       mainText: "I enjoyed my trip to country 1",
       date: Date.now(),
-      upvotedBy: getMockUsers()[1],
+      upvotedBy: [getMockUsers()[1]],
     },
     {
       reviewId: "review2",
