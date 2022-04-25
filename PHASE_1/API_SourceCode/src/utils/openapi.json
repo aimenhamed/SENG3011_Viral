@@ -314,7 +314,9 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "token": "type:\"string\"",
+                    "token": {
+                      "type": "string"
+                    },
                     "user": {
                       "$ref": "#/components/schemas/User"
                     }
